@@ -59,4 +59,4 @@ Tarsheeh.cv uses multiple AI agents that collaborate to handle different parts o
 Project in active development for Agenticthon.
 
 ## License
-To be added.
+MIT License
