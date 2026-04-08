@@ -1,6 +1,6 @@
 # API Contract, Tarsheeh.cv
 
-**Project:** Agenticthon 2026 — Team Nexus  
+**Project:** Agenticthon 2026, Team Nexus  
 **Phase:** 0 - Project Setup  
 **Status:** Draft - pending both team members' sign-off  
 **Base URL:** `https://<backend-url>`
@@ -26,7 +26,7 @@
 
 Accepts a job description and triggers the Intake Agent, which parses the input and returns a structured job profile.
 
-**Request body** — `application/json`
+**Request body**, `application/json`
 
 ```json
 {
@@ -35,7 +35,7 @@ Accepts a job description and triggers the Intake Agent, which parses the input 
 }
 ```
 
-**Success response** — `200 OK`
+**Success response**, `200 OK`
 
 ```json
 {
@@ -57,14 +57,14 @@ Accepts a job description and triggers the Intake Agent, which parses the input 
 
 Accepts multiple CV file uploads linked to a job ID and triggers the CV Analyzer agent for each candidate.
 
-**Request body** — `multipart/form-data`
+**Request body**, `multipart/form-data`
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `job_id` | string | The ID of the job these candidates are applying for |
 | `files` | file(s) | One or more CV files in PDF format |
 
-**Success response** — `200 OK`
+**Success response**, `200 OK`
 
 ```json
 {
@@ -79,7 +79,7 @@ Accepts multiple CV file uploads linked to a job ID and triggers the CV Analyzer
 | Code | Reason |
 |------|--------|
 | 400 | Invalid or unrecognised job_id |
-| 415 | Unsupported file type — PDF only |
+| 415 | Unsupported file type, PDF only |
 | 500 | CV Analyzer Agent failure |
 
 ---
@@ -94,7 +94,7 @@ Returns the current pipeline progress for a given job. Used by the frontend for 
 |-----------|------|-------------|
 | `job_id` | string | The ID of the job to check |
 
-**Success response** — `200 OK`
+**Success response**, `200 OK`
 
 ```json
 {
@@ -127,7 +127,7 @@ Returns the full ranked candidate list and all individual scorecards once the pi
 |-----------|------|-------------|
 | `job_id` | string | The ID of the completed job |
 
-**Success response** — `200 OK`
+**Success response**, `200 OK`
 
 ```json
 {
@@ -151,7 +151,7 @@ Returns the full ranked candidate list and all individual scorecards once the pi
 | Code | Reason |
 |------|--------|
 | 404 | Job not found |
-| 409 | Results not ready — pipeline still processing |
+| 409 | Results not ready, pipeline still processing |
 
 ---
 
@@ -165,7 +165,7 @@ Returns a downloadable PDF report containing the full hiring pipeline output for
 |-----------|------|-------------|
 | `job_id` | string | The ID of the completed job |
 
-**Success response** — `200 OK`
+**Success response**, `200 OK`
 
 ```
 Content-Type: application/pdf
@@ -177,7 +177,7 @@ Body: binary PDF file stream
 | Code | Reason |
 |------|--------|
 | 404 | Job not found |
-| 409 | Report not ready — pipeline still processing |
+| 409 | Report not ready, pipeline still processing |
 
 ---
 
@@ -191,7 +191,7 @@ Returns a list of tailored interview questions generated for a specific candidat
 |-----------|------|-------------|
 | `candidate_id` | string | The ID of the candidate |
 
-**Success response** — `200 OK`
+**Success response**, `200 OK`
 
 ```json
 {
@@ -209,7 +209,7 @@ Returns a list of tailored interview questions generated for a specific candidat
 | Code | Reason |
 |------|--------|
 | 404 | Candidate not found |
-| 409 | Questions not ready — pipeline still processing |
+| 409 | Questions not ready, pipeline still processing |
 
 ---
 
@@ -223,4 +223,4 @@ Returns a list of tailored interview questions generated for a specific candidat
 
 ---
 
-*Team Nexus — Agenticthon 2026 — For internal planning use only*
+*Team Nexus, Agenticthon 2026, For internal planning use only*
