@@ -2,7 +2,7 @@
 
 **Project:** Agenticthon 2026, Team Nexus  
 **Phase:** 0 - Project Setup  
-**Status:** Draft - pending both team members' sign-off  
+**Status:** Draft - Agreed 
 **Base URL:** `https://<backend-url>`
 
 > This document defines all endpoint names, request shapes, and response shapes agreed upon before development begins. Neither side should change this contract without informing the other teammate.
