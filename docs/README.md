@@ -7,8 +7,8 @@ Built for the **Agenticthon** hackathon under the **Multi-Agent Systems** track.
 
 ## Team
 **Nexus | روابط**  
-- **Maisara** — Team Leader, Co-founder
-- **Osama** — Team Member, Co-founder
+- **Maisara** | Team Leader, Co-founder
+- **Osama** | Team Member, Co-founder
 
 ## Problem
 Small and growing businesses often do not have the time, tools, or specialized HR resources needed to review candidates efficiently. Manual screening is slow, inconsistent, and difficult to scale.
@@ -40,9 +40,9 @@ Tarsheeh.cv uses multiple AI agents that collaborate to handle different parts o
 - **Frontend:** Next.js, Tailwind CSS
 
 ## Project Structure
-- `backend/` — API, agents, RAG, and core logic
-- `frontend/` — web interface
-- `docs/` — documentation and planning materials
+- `backend/`: API, agents, RAG, and core logic
+- `frontend/`: web interface
+- `docs/`: documentation and planning materials
 
 ## Development Roadmap
 - Phase 0: Project setup and infrastructure
