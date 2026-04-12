@@ -1,0 +1,9 @@
+{
+    "dependencies": [
+        "."
+    ],
+    "graphs": {
+        "tarsheeh": "./agents/graph.py:graph"
+    },
+    "env": ".env"
+}
