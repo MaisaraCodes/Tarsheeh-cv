@@ -220,3 +220,6 @@ build/
 
 # LangGraph Studio
 .langgraph_api/
+
+# Claude Code context (local only)
+CLAUDE.md

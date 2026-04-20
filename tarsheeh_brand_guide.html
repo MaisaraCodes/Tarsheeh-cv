@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarsheeh.cv — Visual Identity System 2026</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/300.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/600.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/300.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/500.css" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --noir:        #0C0A07;
+    --noir-2:      #141109;
+    --noir-3:      #1C180F;
+    --noir-4:      #242015;
+    --gold:        #B8922E;
+    --gold-light:  #D4AE5A;
+    --gold-pale:   #EDD38A;
+    --gold-dim:    rgba(184,146,46,0.18);
+    --gold-faint:  rgba(184,146,46,0.08);
+    --ivory:       #F2EBD9;
+    --ivory-dim:   rgba(242,235,217,0.7);
+    --muted:       #7A7060;
+    --muted-light: #A89880;
+    --white:       #FAF6EE;
+    --serif:       'Cormorant Garamond', Georgia, serif;
+    --sans:        'DM Sans', system-ui, sans-serif;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--noir);
+    color: var(--ivory);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── LAYOUT ─── */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2.5rem 6rem;
+  }
+
+  .section {
+    border-top: 1px solid var(--gold-dim);
+    padding: 4rem 0;
+  }
+
+  .section:first-of-type { border-top: none; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-num {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--ivory);
+    letter-spacing: 0.05em;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 5rem 2.5rem;
+    position: relative;
+  }
+
+  .cover-corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+  }
+  .cover-corner.tl { top: 3rem; left: 3rem; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .cover-corner.tr { top: 3rem; right: 3rem; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+  .cover-corner.bl { bottom: 3rem; left: 3rem; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .cover-corner.br { bottom: 3rem; right: 3rem; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+  .cover-rule {
+    width: 56px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 2.5rem;
+  }
+
+  .cover-wordmark {
+    font-family: var(--serif);
+    font-size: 72px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--gold-pale);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .cover-wordmark span { color: var(--gold); font-weight: 400; }
+
+  .cover-tagline {
+    font-size: 10px;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 1.75rem;
+  }
+
+  .cover-meta {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── LABEL ─── */
+  .label {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ─── COLOUR SYSTEM ─── */
+  .palette-primary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    margin-bottom: 0.75rem;
+  }
+
+  .palette-secondary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 0.75rem;
+  }
+
+  .swatch-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .swatch-color {
+    height: 80px;
+  }
+
+  .swatch-info {
+    background: var(--noir-3);
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--gold-dim);
+    border-top: none;
+  }
+
+  .swatch-name {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-light);
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+  }
+
+  .swatch-values { display: flex; flex-direction: column; gap: 2px; }
+
+  .swatch-hex {
+    font-size: 11px;
+    color: var(--ivory);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .swatch-rgb {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+  }
+
+  .swatch-role {
+    font-size: 10px;
+    color: var(--gold);
+    margin-top: 0.4rem;
+    display: block;
+    font-style: italic;
+  }
+
+  .colour-usage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 2rem;
+  }
+
+  .usage-card {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    padding: 1.5rem;
+  }
+
+  .usage-card h4 {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--gold-light);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  .usage-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .usage-card ul li {
+    font-size: 12px;
+    color: var(--muted-light);
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--gold-faint);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .usage-card ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .type-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .type-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 140px;
+    align-items: baseline;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--gold-faint);
+    gap: 2rem;
+  }
+
+  .type-row:last-child { border-bottom: none; }
+
+  .type-meta-cell {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .type-meta-cell strong {
+    display: block;
+    color: var(--gold-light);
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+  }
+
+  .type-spec-cell {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .font-specimen {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    padding: 2rem 2rem;
+    margin-bottom: 2px;
+  }
+
+  .specimen-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .specimen-display {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 42px;
+    color: var(--ivory);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .specimen-alpha {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .specimen-sans-display {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--ivory);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .specimen-sans-para {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted-light);
+    line-height: 1.75;
+    max-width: 520px;
+  }
+
+  /* ─── BRAND COPY ─── */
+  .copy-block {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    border-left: 3px solid var(--gold);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2px;
+  }
+
+  .copy-block-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .copy-block-text {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--ivory);
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+  }
+
+  .copy-block-text.large {
+    font-size: 34px;
+    letter-spacing: 0.01em;
+  }
+
+  .copy-block-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 0.75rem;
+    font-style: italic;
+  }
+
+  .phrase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .phrase-card {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    padding: 1.5rem;
+  }
+
+  .phrase-card .phrase-cat {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .phrase-card .phrase-text {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ivory);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .phrase-card .phrase-sub {
+    font-size: 11px;
+    color: var(--muted-light);
+    line-height: 1.65;
+  }
+
+  .microcopy-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+  }
+
+  .microcopy-table th {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gold-dim);
+    background: var(--noir-2);
+  }
+
+  .microcopy-table td {
+    font-size: 12px;
+    color: var(--ivory-dim);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--gold-faint);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  .microcopy-table td:first-child {
+    color: var(--gold-light);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    width: 160px;
+    white-space: nowrap;
+  }
+
+  .microcopy-table tr:last-child td { border-bottom: none; }
+
+  /* ─── LOGO RULES ─── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2rem;
+  }
+
+  .logo-demo {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 180px;
+  }
+
+  .logo-demo.light {
+    background: var(--white);
+  }
+
+  .logo-demo-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 1.25rem;
+  }
+
+  .demo-wordmark-lg {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--gold-pale);
+    line-height: 1;
+  }
+
+  .demo-wordmark-lg span { color: var(--gold); font-weight: 400; }
+
+  .demo-wordmark-sm {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--gold-pale);
+    line-height: 1;
+  }
+
+  .demo-wordmark-sm span { color: var(--gold); font-weight: 400; }
+
+  .demo-wordmark-light {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: #4A3A1A;
+    line-height: 1;
+  }
+
+  .demo-wordmark-light span { color: var(--gold); font-weight: 400; }
+
+  .logo-rules-list {
+    list-style: none;
+    padding: 0;
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+  }
+
+  .logo-rules-list li {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gold-faint);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .logo-rules-list li:last-child { border-bottom: none; }
+
+  .logo-rules-list li .rule-key {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 400;
+    padding-top: 0.1rem;
+  }
+
+  .logo-rules-list li .rule-val {
+    color: var(--muted-light);
+  }
+
+  /* ─── COMPONENTS ─── */
+  .components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .comp-demo {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    padding: 2rem;
+  }
+
+  .comp-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--noir);
+    background: var(--gold);
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--gold);
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    background: transparent;
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--gold-dim);
+    cursor: pointer;
+    margin-right: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-ghost {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    padding: 0.75rem 2rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--gold-dim);
+    text-underline-offset: 3px;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Badges / Tags */
+  .badge-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+
+  .badge {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.875rem;
+    font-weight: 400;
+  }
+
+  .badge-gold { color: var(--gold); border: 1px solid var(--gold-dim); background: var(--gold-faint); }
+  .badge-muted { color: var(--muted-light); border: 1px solid rgba(122,112,96,0.2); background: rgba(122,112,96,0.06); }
+  .badge-ivory { color: var(--ivory); border: 1px solid rgba(242,235,217,0.15); background: rgba(242,235,217,0.05); }
+
+  /* Input */
+  .input-demo {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--ivory);
+    background: var(--noir-2);
+    border: 1px solid var(--gold-dim);
+    border-bottom: 1px solid var(--gold);
+    padding: 0.875rem 1rem;
+    width: 100%;
+    outline: none;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-label-demo {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Card */
+  .candidate-card {
+    background: var(--noir-2);
+    border: 1px solid var(--gold-dim);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .candidate-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gold-faint);
+  }
+
+  .c-name {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--ivory);
+    letter-spacing: 0.04em;
+  }
+
+  .c-score {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+
+  .c-meta {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.875rem;
+  }
+
+  .c-bar-wrap {
+    height: 1px;
+    background: rgba(184,146,46,0.12);
+    margin-bottom: 0.875rem;
+    position: relative;
+  }
+
+  .c-bar-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .c-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+  /* Score indicator */
+  .score-breakdown {
+    margin-top: 0.875rem;
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.3rem 0;
+  }
+
+  .score-row-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    width: 120px;
+    flex-shrink: 0;
+  }
+
+  .score-row-bar {
+    flex: 1;
+    height: 1px;
+    background: var(--gold-faint);
+    position: relative;
+  }
+
+  .score-row-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 1px;
+    background: var(--gold-light);
+  }
+
+  .score-row-num {
+    font-size: 11px;
+    color: var(--muted-light);
+    width: 30px;
+    text-align: right;
+  }
+
+  /* ─── SPACING TOKENS ─── */
+  .spacing-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+  }
+
+  .spacing-block {
+    background: var(--noir-3);
+    border: 1px solid var(--gold-dim);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .spacing-vis {
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+  }
+
+  .spacing-token {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--gold-light);
+    font-family: 'Courier New', monospace;
+    display: block;
+  }
+
+  .spacing-val {
+    font-size: 9px;
+    color: var(--muted);
+    display: block;
+  }
+
+  /* ─── DIVIDER ─── */
+  .rule-gold {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto;
+    width: 100%;
+    opacity: 0.4;
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: #fff; color: #111; }
+    .cover { min-height: auto; padding: 4rem 2.5rem; }
+    .cover-wordmark { color: #4A3A1A; font-size: 52px; }
+    .cover-wordmark span { color: var(--gold); }
+    .page { padding-bottom: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover" id="cover">
+    <div class="cover-corner tl"></div>
+    <div class="cover-corner tr"></div>
+    <div class="cover-corner bl"></div>
+    <div class="cover-corner br"></div>
+
+    <div class="cover-rule"></div>
+    <div class="cover-wordmark">TARSHEEH<span>.CV</span></div>
+    <div class="cover-tagline">Visual Identity System &nbsp;·&nbsp; Trial 2 &nbsp;·&nbsp; 2026</div>
+
+    <div class="cover-meta">Team Nexus &nbsp;·&nbsp; Agenticthon 2026 &nbsp;·&nbsp; Internal Use Only</div>
+  </div>
+
+  <!-- ─── 01 BRAND ESSENCE ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Brand Essence</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-bottom:2rem;">
+      <div class="usage-card">
+        <h4>Mission</h4>
+        <p style="font-size:13px; color:var(--muted-light); line-height:1.7;">
+          We strive to make professional recruitment accessible to businesses that cannot afford a full HR team,
+          and effortless for those that already have one.
+        </p>
+      </div>
+      <div class="usage-card">
+        <h4>Personality</h4>
+        <ul>
+          <li>Precise, not clinical</li>
+          <li>Confident, not arrogant</li>
+          <li>Intelligent, not overwhelming</li>
+          <li>Premium, not exclusionary</li>
+          <li>Efficient, not rushed</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>Brand Voice</h4>
+        <ul>
+          <li>Declarative and direct</li>
+          <li>Minimal punctuation flourish</li>
+          <li>Never uses jargon</li>
+          <li>Serif tone in headlines</li>
+          <li>Calm authority in body copy</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="copy-block" style="border-left-width:1px; border-left-color:var(--gold-dim);">
+      <span class="copy-block-label">Brand Positioning Statement</span>
+      <p class="copy-block-text" style="font-size:16px; color:var(--muted-light); line-height:1.75;">
+        Recruitment should not require a dedicated team to do well. Tarsheeh.cv is a multi-agent AI platform that 
+        makes the entire process Something to businesses can run without the overhead of a full HR operation team,
+        and effortless for those that already have one. It reads every CV, evaluates every candidate against your
+        job profile, and returns a ranked shortlist with full reasoning in minutes, not days.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── 02 COLOUR SYSTEM ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Colour System</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">Primary Palette</span>
+    <div class="palette-primary">
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#0C0A07; border:1px solid rgba(255,255,255,0.06);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Deep Noir</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#0C0A07</span>
+            <span class="swatch-rgb">rgb(12, 10, 7)</span>
+          </div>
+          <span class="swatch-role">Primary Background</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#1C180F;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Charcoal Warm</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#1C180F</span>
+            <span class="swatch-rgb">rgb(28, 24, 15)</span>
+          </div>
+          <span class="swatch-role">Surface / Card</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#B8922E;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Gold</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#B8922E</span>
+            <span class="swatch-rgb">rgb(184, 146, 46)</span>
+          </div>
+          <span class="swatch-role">Brand Accent</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#D4AE5A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Gold Light</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#D4AE5A</span>
+            <span class="swatch-rgb">rgb(212, 174, 90)</span>
+          </div>
+          <span class="swatch-role">Scores / Numbers</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#F2EBD9;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Warm Ivory</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#F2EBD9</span>
+            <span class="swatch-rgb">rgb(242, 235, 217)</span>
+          </div>
+          <span class="swatch-role">Primary Text</span>
+        </div>
+      </div>
+    </div>
+
+    <span class="label" style="margin-top:2rem;">Supporting Palette</span>
+    <div class="palette-secondary">
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#141109; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Noir 2</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#141109</span>
+            <span class="swatch-rgb">rgb(20, 17, 9)</span>
+          </div>
+          <span class="swatch-role">Input Background</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#EDD38A; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Gold Pale</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#EDD38A</span>
+            <span class="swatch-rgb">rgb(237, 211, 138)</span>
+          </div>
+          <span class="swatch-role">Logo / Display Text</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#7A7060; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Muted Warm</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#7A7060</span>
+            <span class="swatch-rgb">rgb(122, 112, 96)</span>
+          </div>
+          <span class="swatch-role">Secondary Text / Labels</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="colour-usage">
+      <div class="usage-card">
+        <h4>Gold: When to Use</h4>
+        <ul>
+          <li>Logo and wordmark accent (.cv)</li>
+          <li>Decorative rules, thin dividers, corner marks</li>
+          <li>Primary button fill</li>
+          <li>Active border on focused inputs</li>
+          <li>Section number labels</li>
+          <li>Score bars and progress indicators</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>Gold: When Not to Use</h4>
+        <ul>
+          <li>Large filled background areas</li>
+          <li>Body paragraph text</li>
+          <li>Error or warning states (use red/amber)</li>
+          <li>More than one element per screen without breathing room</li>
+          <li>Borders wider than 1px unless primary CTA</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <span class="label">Opacity Tokens (for borders, fills, overlays)</span>
+      <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+        <table class="microcopy-table">
+          <thead>
+            <tr>
+              <th>Token Name</th>
+              <th>Value</th>
+              <th>Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Gold Dim</td><td style="font-family:monospace; font-size:11px;">rgba(184,146,46, 0.18)</td><td>Default card borders, section rules</td></tr>
+            <tr><td>Gold Faint</td><td style="font-family:monospace; font-size:11px;">rgba(184,146,46, 0.08)</td><td>Row dividers, inner separators</td></tr>
+            <tr><td>Gold Hover</td><td style="font-family:monospace; font-size:11px;">rgba(184,146,46, 0.35)</td><td>Border on hover state</td></tr>
+            <tr><td>Ivory Dim</td><td style="font-family:monospace; font-size:11px;">rgba(242,235,217, 0.70)</td><td>Secondary body text on dark bg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 03 TYPOGRAPHY ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Typography</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:2rem;">
+      <div class="font-specimen">
+        <span class="specimen-label">Display — Cormorant Garamond</span>
+        <div class="specimen-display">TARSHEEH.CV</div>
+        <div style="font-family:var(--serif); font-size:22px; font-weight:300; color:var(--ivory); margin-bottom:0.5rem; letter-spacing:0.03em;">
+          Hire with precision.
+        </div>
+        <div class="specimen-alpha" style="margin-bottom:0.75rem;">
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+          abcdefghijklmnopqrstuvwxyz &nbsp; 0123456789
+        </div>
+        <div style="display:flex; gap:1.5rem;">
+          <div>
+            <span style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px;">Light 300</span>
+            <span style="font-family:var(--serif); font-size:16px; font-weight:300; color:var(--ivory-dim);">Specimen</span>
+          </div>
+          <div>
+            <span style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px;">Regular 400</span>
+            <span style="font-family:var(--serif); font-size:16px; font-weight:400; color:var(--ivory-dim);">Specimen</span>
+          </div>
+          <div>
+            <span style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px;">Medium 500</span>
+            <span style="font-family:var(--serif); font-size:16px; font-weight:500; color:var(--ivory-dim);">Specimen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="font-specimen">
+        <span class="specimen-label">Interface — DM Sans</span>
+        <div class="specimen-sans-display">Interface &amp; Body</div>
+        <div class="specimen-sans-para" style="margin-bottom:0.75rem;">
+          Every CV is screened, scored, and ranked automatically.
+          Your team sees only the candidates worth their time.
+        </div>
+        <div class="specimen-alpha" style="font-family:var(--sans); font-weight:300; margin-bottom:0.75rem;">
+          ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+          abcdefghijklmnopqrstuvwxyz &nbsp; 0123456789
+        </div>
+        <div style="display:flex; gap:1.5rem;">
+          <div>
+            <span style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px;">Light 300</span>
+            <span style="font-family:var(--sans); font-size:14px; font-weight:300; color:var(--ivory-dim);">Specimen</span>
+          </div>
+          <div>
+            <span style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px;">Regular 400</span>
+            <span style="font-family:var(--sans); font-size:14px; font-weight:400; color:var(--ivory-dim);">Specimen</span>
+          </div>
+          <div>
+            <span style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px;">Medium 500</span>
+            <span style="font-family:var(--sans); font-size:14px; font-weight:500; color:var(--ivory-dim);">Specimen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <span class="label">Type Scale</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+      <div class="type-scale">
+        <div class="type-row" style="padding: 1.5rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Logo / Wordmark</strong>Cormorant, Light 300<br>Letter-spacing 0.2em</div>
+          <div style="font-family:var(--serif); font-size:52px; font-weight:300; color:var(--gold-pale); letter-spacing:0.2em; line-height:1;">Tarsheeh</div>
+          <div class="type-spec-cell">52px / 300<br>ls: 0.2em</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Hero Headline</strong>Cormorant, Light 300<br>Letter-spacing 0.02em</div>
+          <div style="font-family:var(--serif); font-size:36px; font-weight:300; color:var(--ivory); letter-spacing:0.02em; line-height:1.15;">Hire with precision.</div>
+          <div class="type-spec-cell">36px / 300<br>ls: 0.02em</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Section Heading</strong>Cormorant, Light 300<br>Letter-spacing 0.05em</div>
+          <div style="font-family:var(--serif); font-size:26px; font-weight:300; color:var(--ivory); letter-spacing:0.05em;">Colour System</div>
+          <div class="type-spec-cell">26px / 300<br>ls: 0.05em</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Card Title</strong>Cormorant, Regular 400<br>Letter-spacing 0.03em</div>
+          <div style="font-family:var(--serif); font-size:20px; font-weight:400; color:var(--ivory); letter-spacing:0.03em;">Senior Product Designer</div>
+          <div class="type-spec-cell">20px / 400<br>ls: 0.03em</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Body Copy</strong>DM Sans, Light 300<br>Line-height 1.75</div>
+          <div style="font-family:var(--sans); font-size:14px; font-weight:300; color:var(--muted-light); line-height:1.75; max-width:360px;">Every candidate is evaluated, scored, and ranked automatically so your team can focus on what only humans can decide.</div>
+          <div class="type-spec-cell">14px / 300<br>lh: 1.75</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>UI Label</strong>DM Sans, Regular 400<br>Letter-spacing 0.2em</div>
+          <div style="font-family:var(--sans); font-size:10px; font-weight:400; color:var(--muted); letter-spacing:0.3em; text-transform:uppercase;">Candidate Score</div>
+          <div class="type-spec-cell">10px / 400<br>ls: 0.3em / UC</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Score / Number</strong>Cormorant, Light 300<br>Color: Gold Light</div>
+          <div style="font-family:var(--serif); font-size:42px; font-weight:300; color:var(--gold-light); line-height:1;">94</div>
+          <div class="type-spec-cell">42px / 300<br>color: gold-light</div>
+        </div>
+        <div class="type-row" style="padding:1.25rem 1.5rem;">
+          <div class="type-meta-cell"><strong>Button / CTA</strong>DM Sans, Regular 400<br>Letter-spacing 0.2em</div>
+          <div style="font-family:var(--sans); font-size:11px; font-weight:400; color:var(--noir); background:var(--gold); padding:0.6rem 1.5rem; display:inline-block; letter-spacing:0.2em; text-transform:uppercase;">Post a Role</div>
+          <div class="type-spec-cell">11px / 400<br>ls: 0.2em / UC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 04 BRAND COPY ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Brand Copy &amp; Phrases</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">Primary Tagline &amp; Hero Copy</span>
+
+    <div class="copy-block" style="margin-bottom:2px;">
+      <span class="copy-block-label">Primary Tagline — Landing Page Hero</span>
+      <div class="copy-block-text large">Hire with precision.<br>Lead with confidence.</div>
+      <p class="copy-block-note">Used as the primary headline across the landing page, slide deck cover, and presentation opener. Always set in Cormorant Garamond Light 300.</p>
+    </div>
+
+    <div class="copy-block" style="margin-bottom:2px;">
+      <span class="copy-block-label">Platform Tagline — Logo Lockup</span>
+      <div class="copy-block-text">Intelligent Talent Acquisition</div>
+      <p class="copy-block-note">Appears beneath the wordmark in the logo lockup. All caps, DM Sans Light, letter-spacing 0.45em, in Muted Warm (#7A7060).</p>
+    </div>
+
+    <div class="copy-block" style="margin-bottom:2rem;">
+      <span class="copy-block-label">Sub-Headline — Supporting the Hero</span>
+      <div class="copy-block-text" style="font-size:16px; font-family:var(--sans); font-weight:300; color:var(--muted-light); line-height:1.75;">
+        Tarsheeh.cv screens every candidate, scores every CV, and delivers your shortlist —
+        ranked, reasoned, and ready — in minutes.
+      </div>
+      <p class="copy-block-note">Used directly beneath the hero headline. DM Sans Light 300, 14–16px depending on context.</p>
+    </div>
+
+    <span class="label">Feature Phrases — UI &amp; Presentation</span>
+    <div class="phrase-grid" style="margin-bottom:2rem;">
+      <div class="phrase-card">
+        <span class="phrase-cat">Screening &amp; Analysis</span>
+        <div class="phrase-text">"Every CV, analysed in seconds."</div>
+        <div class="phrase-sub">Used on the candidate upload screen and in the presentation's feature slide. Describes the CV Analyzer agent.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">Ranking Output</span>
+        <div class="phrase-text">"Ranked. Reasoned. Ready."</div>
+        <div class="phrase-sub">Used on the results dashboard and as a section header in the PDF report. Three words, three full stops. Never compress to two.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">Interview Questions</span>
+        <div class="phrase-text">"Questions that reveal character, not just competence."</div>
+        <div class="phrase-sub">Used on the candidate detail screen and in the presentation's interview agent section.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">Value Proposition</span>
+        <div class="phrase-text">"From job post to shortlist, without the noise."</div>
+        <div class="phrase-sub">Used in pitch decks, slide 2 (problem + solution), and landing page secondary copy block.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">Speed &amp; Efficiency</span>
+        <div class="phrase-text">"Your next hire, surfaced automatically."</div>
+        <div class="phrase-sub">Used as a secondary tagline variant in social posts, presentation footers, and the PDF report cover.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">Report &amp; Output</span>
+        <div class="phrase-text">"A complete picture. One page. One decision."</div>
+        <div class="phrase-sub">Used on the report download screen and as the PDF report's inside cover line.</div>
+      </div>
+    </div>
+
+    <span class="label">UI Microcopy — Interface Strings</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+      <table class="microcopy-table">
+        <thead>
+          <tr>
+            <th>Context</th>
+            <th>Copy String</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Primary CTA</td><td>Post a Role</td><td>Landing page and nav. Never "Submit Job" or "Add Listing".</td></tr>
+          <tr><td>Secondary CTA</td><td>Upload CVs</td><td>Upload screen entry point.</td></tr>
+          <tr><td>Results CTA</td><td>View Shortlist</td><td>After pipeline completes. Links to results dashboard.</td></tr>
+          <tr><td>Report CTA</td><td>Download Report</td><td>Appears on report screen and results dashboard.</td></tr>
+          <tr><td>Processing — Stage 1</td><td>Reading the role description...</td><td>Intake Agent active. Shown in live trace panel.</td></tr>
+          <tr><td>Processing — Stage 2</td><td>Screening candidates...</td><td>CV Analyzer Agent active.</td></tr>
+          <tr><td>Processing — Stage 3</td><td>Ranking results...</td><td>Ranking Agent active.</td></tr>
+          <tr><td>Processing — Stage 4</td><td>Preparing questions...</td><td>Interview Agent active.</td></tr>
+          <tr><td>Processing — Stage 5</td><td>Compiling your report...</td><td>Report Agent active.</td></tr>
+          <tr><td>Complete State</td><td>Your shortlist is ready.</td><td>Shown after pipeline completes. Not "Done" or "Finished".</td></tr>
+          <tr><td>Empty — No Candidates</td><td>No candidates yet. Upload CVs to begin.</td><td>Shown on empty results state.</td></tr>
+          <tr><td>Error State</td><td>Something went wrong. Try again or contact support.</td><td>Generic error fallback.</td></tr>
+          <tr><td>Score Label</td><td>Match Score</td><td>Above numeric score on candidate cards.</td></tr>
+          <tr><td>Rank Label</td><td>Rank</td><td>Single word. Shown as #01, #02 format.</td></tr>
+          <tr><td>Upload Placeholder</td><td>Drop CVs here, or click to browse</td><td>Drag-and-drop upload zone.</td></tr>
+          <tr><td>Job Input Placeholder</td><td>Paste your job description here...</td><td>Textarea on job setup screen.</td></tr>
+          <tr><td>Nav — Logo Link</td><td>TARSHEEH.CV</td><td>Always all caps. Links to landing page.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <span class="label">Presentation &amp; Pitch Copy</span>
+      <div style="display:grid; grid-template-columns:1fr; gap:2px;">
+        <div class="copy-block" style="border-left-color:var(--gold-dim); border-left-width:1px;">
+          <span class="copy-block-label">Slide 1 — Opening</span>
+          <div class="copy-block-text" style="font-size:18px;">
+            "Hiring managers spend 30% of their week reading CVs. Most of that time is wasted on candidates
+            who were never right for the role. Tarsheeh.cv exists to give that time back."
+          </div>
+        </div>
+        <div class="copy-block" style="border-left-color:var(--gold-dim); border-left-width:1px;">
+          <span class="copy-block-label">Slide 2 — The Problem</span>
+          <div class="copy-block-text" style="font-size:18px;">
+            "Screening is slow, subjective, and inconsistent. Two managers reading the same CV reach
+            different conclusions. The best candidate often does not make it past the first filter."
+          </div>
+        </div>
+        <div class="copy-block" style="border-left-color:var(--gold-dim); border-left-width:1px;">
+          <span class="copy-block-label">Slide 3 — The Solution</span>
+          <div class="copy-block-text" style="font-size:18px;">
+            "Tarsheeh.cv reads every CV, scores every candidate against the job profile,
+            and returns a ranked shortlist with full reasoning. Post a role. Upload CVs.
+            Receive your shortlist in minutes."
+          </div>
+        </div>
+        <div class="copy-block" style="border-left-color:var(--gold-dim); border-left-width:1px;">
+          <span class="copy-block-label">Slide 4 — Architecture / Agents</span>
+          <div class="copy-block-text" style="font-size:18px;">
+            "Six specialised agents, orchestrated by LangGraph. Each one handles a distinct step:
+            parsing the role, analysing CVs, ranking candidates, generating interview questions,
+            and compiling the final report."
+          </div>
+        </div>
+        <div class="copy-block" style="border-left-color:var(--gold-dim); border-left-width:1px;">
+          <span class="copy-block-label">Closing Line — Pitch</span>
+          <div class="copy-block-text" style="font-size:20px; color:var(--gold-light);">
+            "Less noise. Better hires. Tarsheeh.cv."
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 05 LOGO RULES ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Logo &amp; Mark</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">Logo Variants</span>
+    <div class="logo-grid" style="margin-bottom:2rem;">
+      <div class="logo-demo">
+        <div class="demo-wordmark-lg">TARSHEEH<span>.CV</span></div>
+        <div class="logo-demo-label">Primary — On Dark</div>
+      </div>
+      <div class="logo-demo light">
+        <div class="demo-wordmark-light">TARSHEEH<span>.CV</span></div>
+        <div class="logo-demo-label" style="color:#7A7060;">Primary — On Light</div>
+      </div>
+      <div class="logo-demo" style="min-height:120px;">
+        <div class="demo-wordmark-sm">TARSHEEH<span>.CV</span></div>
+        <div style="font-size:8px; letter-spacing:0.45em; text-transform:uppercase; color:var(--muted); margin-top:0.75rem;">Intelligent Talent Acquisition</div>
+        <div class="logo-demo-label">With Tagline Lockup</div>
+      </div>
+      <div class="logo-demo" style="min-height:120px; flex-direction:row; gap:1.5rem; align-items:center; justify-content:center;">
+        <div style="width:2px; height:36px; background:var(--gold);"></div>
+        <div>
+          <div style="font-family:var(--serif); font-size:20px; font-weight:300; letter-spacing:0.15em; color:var(--gold-pale);">TARSHEEH<span style="color:var(--gold); font-weight:400;">.CV</span></div>
+          <div style="font-size:8px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); margin-top:4px;">Agenticthon 2026</div>
+        </div>
+        <div class="logo-demo-label" style="position:absolute; bottom:1.25rem; left:0; right:0; text-align:center;">Presentation Lockup</div>
+      </div>
+    </div>
+
+    <span class="label">Logo Rules</span>
+    <ul class="logo-rules-list">
+      <li><span class="rule-key">Font</span><span class="rule-val">Cormorant Garamond, font-weight 300 for "TARSHEEH", font-weight 400 for ".CV"</span></li>
+      <li><span class="rule-key">Letter-spacing</span><span class="rule-val">0.2em on the full wordmark. Never reduce below 0.15em.</span></li>
+      <li><span class="rule-key">Colour — Dark</span><span class="rule-val">"TARSHEEH" in Gold Pale (#EDD38A), ".CV" in Gold (#B8922E)</span></li>
+      <li><span class="rule-key">Colour — Light</span><span class="rule-val">"TARSHEEH" in #4A3A1A (dark warm brown), ".CV" in Gold (#B8922E)</span></li>
+      <li><span class="rule-key">Clear Space</span><span class="rule-val">Minimum clear space equal to the height of the letter "T" on all sides</span></li>
+      <li><span class="rule-key">Minimum Size</span><span class="rule-val">16px font-size minimum for digital. Never scale below legibility of the full stop.</span></li>
+      <li><span class="rule-key">Never Do</span><span class="rule-val">Do not rotate, stretch, recolour to non-brand colours, apply glow or shadow effects, or separate "TARSHEEH" from ".CV" onto different lines.</span></li>
+      <li><span class="rule-key">Corner Mark</span><span class="rule-val">The bracket corner motif (18–28px, 1px gold line) may accompany the logo on hero sections and cover pages. Never use it as a standalone logo replacement.</span></li>
+    </ul>
+  </div>
+
+  <!-- ─── 06 UI COMPONENTS ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">UI Components</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="components-grid" style="margin-bottom:2px;">
+
+      <div class="comp-demo">
+        <span class="comp-label">Buttons</span>
+        <div>
+          <div class="btn-primary">Post a Role</div>
+          <div class="btn-primary">Upload CVs</div>
+        </div>
+        <div>
+          <div class="btn-secondary">View Shortlist</div>
+          <div class="btn-secondary">Download Report</div>
+        </div>
+        <div>
+          <div class="btn-ghost">Cancel</div>
+        </div>
+        <div style="margin-top:1rem; font-size:11px; color:var(--muted); line-height:1.6;">
+          Primary: Gold fill, Noir text, 1px Gold border<br>
+          Secondary: Transparent, Gold Light text, 1px Gold Dim border<br>
+          Ghost: Transparent, Muted text, gold underline
+        </div>
+      </div>
+
+      <div class="comp-demo">
+        <span class="comp-label">Badges &amp; Tags</span>
+        <div class="badge-row">
+          <span class="badge badge-gold">Processing</span>
+          <span class="badge badge-gold">Completed</span>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-muted">Pending</span>
+          <span class="badge badge-muted">Archived</span>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-ivory">Python</span>
+          <span class="badge badge-ivory">Leadership</span>
+          <span class="badge badge-ivory">6 yrs exp</span>
+        </div>
+        <div style="margin-top:1rem; font-size:11px; color:var(--muted); line-height:1.6;">
+          Gold: Active pipeline states<br>
+          Muted: Neutral / inactive states<br>
+          Ivory: Skill tags and metadata
+        </div>
+      </div>
+
+      <div class="comp-demo">
+        <span class="comp-label">Form Input</span>
+        <label class="input-label-demo">Job Title</label>
+        <input class="input-demo" type="text" value="Senior Product Designer" readonly>
+        <label class="input-label-demo" style="margin-top:0.5rem;">Company</label>
+        <input class="input-demo" type="text" placeholder="Enter company name...">
+        <div style="margin-top:1rem; font-size:11px; color:var(--muted); line-height:1.6;">
+          Background: Noir 2 (#141109)<br>
+          Active border-bottom: Gold (#B8922E)<br>
+          Label: 9px, 0.25em tracking, Muted Warm
+        </div>
+      </div>
+
+      <div class="comp-demo">
+        <span class="comp-label">Candidate Card</span>
+        <div class="candidate-card">
+          <div class="candidate-card-header">
+            <div>
+              <div class="c-name">Sarah Al-Mansouri</div>
+              <div class="c-meta">UX Lead &nbsp;·&nbsp; 7 years</div>
+            </div>
+            <div>
+              <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); text-align:right; margin-bottom:2px;">Match Score</div>
+              <div class="c-score">94</div>
+            </div>
+          </div>
+          <div class="c-bar-wrap"><div class="c-bar-fill" style="width:94%"></div></div>
+          <div class="score-breakdown">
+            <div class="score-row">
+              <span class="score-row-label">Technical Skills</span>
+              <div class="score-row-bar"><div class="score-row-fill" style="width:96%"></div></div>
+              <span class="score-row-num">96</span>
+            </div>
+            <div class="score-row">
+              <span class="score-row-label">Experience</span>
+              <div class="score-row-bar"><div class="score-row-fill" style="width:88%"></div></div>
+              <span class="score-row-num">88</span>
+            </div>
+            <div class="score-row">
+              <span class="score-row-label">Culture Fit</span>
+              <div class="score-row-bar"><div class="score-row-fill" style="width:92%"></div></div>
+              <span class="score-row-num">92</span>
+            </div>
+          </div>
+          <div class="c-tags" style="margin-top:0.875rem;">
+            <span class="badge badge-ivory">Figma</span>
+            <span class="badge badge-ivory">Research</span>
+            <span class="badge badge-ivory">Systems</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim); padding:2rem; margin-top:2px;">
+      <span class="comp-label">Processing Trace Panel — Live Agent States</span>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:2px;">
+        <div style="background:var(--noir-2); border:1px solid var(--gold); padding:1rem; text-align:center;">
+          <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem;">Active</div>
+          <div style="font-family:var(--serif); font-size:15px; font-weight:300; color:var(--ivory); margin-bottom:0.4rem;">Intake</div>
+          <div style="font-size:10px; color:var(--muted);">Reading role...</div>
+        </div>
+        <div style="background:var(--noir-2); border:1px solid var(--gold-faint); padding:1rem; text-align:center; opacity:0.5;">
+          <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Pending</div>
+          <div style="font-family:var(--serif); font-size:15px; font-weight:300; color:var(--ivory); margin-bottom:0.4rem;">Screening</div>
+          <div style="font-size:10px; color:var(--muted);">Awaiting...</div>
+        </div>
+        <div style="background:var(--noir-2); border:1px solid var(--gold-faint); padding:1rem; text-align:center; opacity:0.5;">
+          <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Pending</div>
+          <div style="font-family:var(--serif); font-size:15px; font-weight:300; color:var(--ivory); margin-bottom:0.4rem;">Ranking</div>
+          <div style="font-size:10px; color:var(--muted);">Awaiting...</div>
+        </div>
+        <div style="background:var(--noir-2); border:1px solid var(--gold-faint); padding:1rem; text-align:center; opacity:0.5;">
+          <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Pending</div>
+          <div style="font-family:var(--serif); font-size:15px; font-weight:300; color:var(--ivory); margin-bottom:0.4rem;">Interview</div>
+          <div style="font-size:10px; color:var(--muted);">Awaiting...</div>
+        </div>
+        <div style="background:var(--noir-2); border:1px solid var(--gold-faint); padding:1rem; text-align:center; opacity:0.5;">
+          <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Pending</div>
+          <div style="font-family:var(--serif); font-size:15px; font-weight:300; color:var(--ivory); margin-bottom:0.4rem;">Report</div>
+          <div style="font-size:10px; color:var(--muted);">Awaiting...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 07 SPACING & GRID ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Spacing &amp; Grid</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">Spacing Scale</span>
+    <div class="spacing-grid" style="margin-bottom:2rem;">
+      <div class="spacing-block">
+        <div class="spacing-vis" style="width:4px; height:4px;"></div>
+        <span class="spacing-token">xs</span>
+        <span class="spacing-val">4px</span>
+      </div>
+      <div class="spacing-block">
+        <div class="spacing-vis" style="width:8px; height:8px;"></div>
+        <span class="spacing-token">sm</span>
+        <span class="spacing-val">8px</span>
+      </div>
+      <div class="spacing-block">
+        <div class="spacing-vis" style="width:16px; height:16px;"></div>
+        <span class="spacing-token">md</span>
+        <span class="spacing-val">16px</span>
+      </div>
+      <div class="spacing-block">
+        <div class="spacing-vis" style="width:24px; height:24px;"></div>
+        <span class="spacing-token">lg</span>
+        <span class="spacing-val">24px</span>
+      </div>
+      <div class="spacing-block">
+        <div class="spacing-vis" style="width:40px; height:40px;"></div>
+        <span class="spacing-token">xl</span>
+        <span class="spacing-val">40px</span>
+      </div>
+      <div class="spacing-block">
+        <div class="spacing-vis" style="width:64px; height:64px;"></div>
+        <span class="spacing-token">2xl</span>
+        <span class="spacing-val">64px</span>
+      </div>
+    </div>
+
+    <span class="label">Border Rules</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+      <table class="microcopy-table">
+        <thead>
+          <tr><th>Element</th><th>Border Rule</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Card Default</td><td style="font-family:monospace; font-size:11px;">1px solid rgba(184,146,46,0.18)</td><td>All card and panel borders</td></tr>
+          <tr><td>Card Hover</td><td style="font-family:monospace; font-size:11px;">1px solid rgba(184,146,46,0.35)</td><td>On hover or active state</td></tr>
+          <tr><td>Section Divider</td><td style="font-family:monospace; font-size:11px;">1px solid rgba(184,146,46,0.18)</td><td>Horizontal rules between sections</td></tr>
+          <tr><td>Input — Default</td><td style="font-family:monospace; font-size:11px;">border-bottom: 1px solid Gold Dim</td><td>Bottom-only underline style</td></tr>
+          <tr><td>Input — Active</td><td style="font-family:monospace; font-size:11px;">border-bottom: 1px solid #B8922E</td><td>Gold on focus</td></tr>
+          <tr><td>Score Bar</td><td style="font-family:monospace; font-size:11px;">height: 1px, bg: Gold Faint</td><td>Progress bar track is 1px, not thick</td></tr>
+          <tr><td>Corner Mark</td><td style="font-family:monospace; font-size:11px;">1px solid #B8922E</td><td>18–28px L-bracket corner decorations</td></tr>
+          <tr><td>Row Divider</td><td style="font-family:monospace; font-size:11px;">1px solid rgba(184,146,46,0.08)</td><td>Table row and list item separators</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid var(--gold-dim); padding: 2.5rem 0; display:flex; justify-content:space-between; align-items:center;">
+    <div style="font-family:var(--serif); font-size:18px; font-weight:300; letter-spacing:0.15em; color:var(--gold-pale);">
+      TARSHEEH<span style="color:var(--gold); font-weight:400;">.CV</span>
+    </div>
+    <div style="font-size:9px; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); text-align:right; line-height:1.8;">
+      Visual Identity System — Trial 2<br>
+      Team Nexus &nbsp;·&nbsp; Agenticthon 2026<br>
+      Internal Use Only
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TARSHEEH.CV — دليل الهوية البصرية النسخة العربية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;500;600&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/300.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/300.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/400.css" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --noir:        #0C0A07;
+    --noir-2:      #141109;
+    --noir-3:      #1C180F;
+    --noir-4:      #242015;
+    --gold:        #B8922E;
+    --gold-light:  #D4AE5A;
+    --gold-pale:   #EDD38A;
+    --gold-dim:    rgba(184,146,46,0.18);
+    --gold-faint:  rgba(184,146,46,0.08);
+    --gold-hover:  rgba(184,146,46,0.35);
+    --ivory:       #F2EBD9;
+    --ivory-dim:   rgba(242,235,217,0.7);
+    --muted:       #7A7060;
+    --muted-light: #A89880;
+    --white:       #FAF6EE;
+    --ar-display:  'Amiri', 'Traditional Arabic', serif;
+    --ar-sans:     'Cairo', 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+    --en-serif:    'Cormorant Garamond', Georgia, serif;
+    --en-sans:     'DM Sans', system-ui, sans-serif;
+  }
+
+  html { font-size: 16px; direction: rtl; }
+
+  body {
+    background: var(--noir);
+    color: var(--ivory);
+    font-family: var(--ar-sans);
+    font-weight: 300;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ltr {
+    direction: ltr;
+    unicode-bidi: embed;
+    display: inline-block;
+    text-align: left;
+  }
+
+  /* ─── LAYOUT ─── */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2.5rem 6rem;
+  }
+
+  .section {
+    border-top: 1px solid var(--gold-dim);
+    padding: 4rem 0;
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-num {
+    font-family: var(--en-serif);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    flex-shrink: 0;
+    direction: ltr;
+  }
+
+  .section-title {
+    font-family: var(--ar-display);
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--ivory);
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 5rem 2.5rem;
+    position: relative;
+  }
+
+  .cover-corner { position: absolute; width: 28px; height: 28px; }
+  .cover-corner.tl { top: 3rem; right: 3rem; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+  .cover-corner.tr { top: 3rem; left: 3rem; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .cover-corner.bl { bottom: 3rem; right: 3rem; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+  .cover-corner.br { bottom: 3rem; left: 3rem; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+
+  .cover-rule { width: 56px; height: 1px; background: var(--gold); margin: 0 auto 2.5rem; }
+
+  .cover-wordmark {
+    font-family: var(--en-serif);
+    font-size: 72px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--gold-pale);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    direction: ltr;
+  }
+  .cover-wordmark span { color: var(--gold); font-weight: 400; }
+
+  .cover-tagline-ar {
+    font-family: var(--ar-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--muted-light);
+    margin-top: 1.25rem;
+    letter-spacing: 0;
+  }
+
+  .cover-sub {
+    font-family: var(--ar-sans);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-top: 1rem;
+    font-weight: 300;
+  }
+
+  .cover-meta {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--ar-sans);
+    font-weight: 300;
+  }
+
+  /* ─── LABELS ─── */
+  .label {
+    font-family: var(--ar-sans);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ─── COLOUR ─── */
+  .palette-primary { display: grid; grid-template-columns: repeat(5,1fr); gap: 2px; margin-bottom: 0.75rem; }
+  .palette-secondary { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-bottom: 0.75rem; }
+
+  .swatch-block { display: flex; flex-direction: column; }
+  .swatch-color { height: 80px; }
+  .swatch-info { background: var(--noir-3); padding: 0.75rem 0.875rem; border: 1px solid var(--gold-dim); border-top: none; }
+  .swatch-name { font-size: 10px; color: var(--muted-light); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+  .swatch-values { display: flex; flex-direction: column; gap: 2px; }
+  .swatch-hex { font-size: 11px; color: var(--ivory); font-family: 'Courier New', monospace; direction: ltr; text-align: left; }
+  .swatch-rgb { font-size: 10px; color: var(--muted); font-family: 'Courier New', monospace; direction: ltr; text-align: left; }
+  .swatch-role { font-size: 10px; color: var(--gold); margin-top: 0.4rem; display: block; font-style: normal; font-family: var(--ar-sans); }
+
+  .usage-card { background: var(--noir-3); border: 1px solid var(--gold-dim); padding: 1.5rem; }
+  .usage-card h4 { font-family: var(--ar-display); font-size: 18px; font-weight: 400; color: var(--gold-light); margin-bottom: 0.75rem; }
+  .usage-card p { font-size: 13px; color: var(--muted-light); line-height: 1.8; }
+  .usage-card ul { list-style: none; padding: 0; }
+  .usage-card ul li {
+    font-size: 12px; color: var(--muted-light); padding: 0.3rem 0;
+    border-bottom: 1px solid var(--gold-faint);
+    padding-right: 1rem; position: relative;
+  }
+  .usage-card ul li::before {
+    content: '—'; position: absolute; right: 0;
+    color: var(--gold); font-size: 10px;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .font-specimen { background: var(--noir-3); border: 1px solid var(--gold-dim); padding: 2rem; margin-bottom: 2px; }
+  .specimen-label { font-size: 10px; color: var(--muted); margin-bottom: 1rem; display: block; font-family: var(--ar-sans); }
+
+  .type-scale-table { width: 100%; border-collapse: collapse; }
+  .type-scale-table th {
+    font-size: 10px; color: var(--muted); font-weight: 400;
+    padding: 0.6rem 1.25rem; text-align: right;
+    border-bottom: 1px solid var(--gold-dim);
+    background: var(--noir-2); font-family: var(--ar-sans);
+  }
+  .type-scale-table td {
+    padding: 1.25rem 1.25rem; border-bottom: 1px solid var(--gold-faint);
+    vertical-align: middle;
+  }
+  .type-scale-table tr:last-child td { border-bottom: none; }
+  .type-meta-ar { font-size: 10px; color: var(--muted); line-height: 1.7; font-family: var(--ar-sans); }
+  .type-meta-ar strong { display: block; color: var(--gold-light); margin-bottom: 0.2rem; font-weight: 400; }
+  .type-spec-ar { font-size: 10px; color: var(--muted); font-family: 'Courier New', monospace; text-align: left; direction: ltr; line-height: 1.7; white-space: nowrap; }
+
+  /* ─── COPY BLOCKS ─── */
+  .copy-block {
+    background: var(--noir-3); border: 1px solid var(--gold-dim);
+    border-right: 3px solid var(--gold);
+    padding: 1.75rem 2rem; margin-bottom: 2px;
+  }
+  .copy-block-label { font-size: 10px; color: var(--gold); margin-bottom: 0.75rem; display: block; font-family: var(--ar-sans); }
+  .copy-block-text { font-family: var(--ar-display); font-size: 26px; font-weight: 400; color: var(--ivory); line-height: 1.65; }
+  .copy-block-text.large { font-size: 38px; line-height: 1.5; }
+  .copy-block-note { font-size: 11px; color: var(--muted); margin-top: 0.75rem; line-height: 1.7; font-family: var(--ar-sans); }
+
+  .phrase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .phrase-card { background: var(--noir-3); border: 1px solid var(--gold-dim); padding: 1.5rem; }
+  .phrase-cat { font-size: 10px; color: var(--muted); margin-bottom: 1rem; display: block; font-family: var(--ar-sans); }
+  .phrase-text { font-family: var(--ar-display); font-size: 20px; font-weight: 400; color: var(--ivory); line-height: 1.6; margin-bottom: 0.75rem; }
+  .phrase-sub { font-size: 11px; color: var(--muted-light); line-height: 1.75; font-family: var(--ar-sans); }
+
+  /* ─── MICROCOPY TABLE ─── */
+  .microcopy-table { width: 100%; border-collapse: collapse; }
+  .microcopy-table th {
+    font-size: 10px; color: var(--muted); font-weight: 400; padding: 0.6rem 1rem;
+    text-align: right; border-bottom: 1px solid var(--gold-dim);
+    background: var(--noir-2); font-family: var(--ar-sans);
+  }
+  .microcopy-table td {
+    font-size: 12px; color: var(--ivory-dim); padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--gold-faint); vertical-align: top; line-height: 1.65;
+  }
+  .microcopy-table td:first-child { color: var(--gold-light); font-size: 11px; width: 170px; }
+  .microcopy-table tr:last-child td { border-bottom: none; }
+  .microcopy-table .val-ar { font-family: var(--ar-sans); font-size: 13px; color: var(--ivory); }
+  .microcopy-table .val-note { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── LOGO ─── */
+  .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 2rem; }
+  .logo-demo {
+    background: var(--noir-3); border: 1px solid var(--gold-dim); padding: 2.5rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; min-height: 180px; position: relative;
+  }
+  .logo-demo.light { background: var(--white); }
+  .logo-demo-label { font-size: 10px; color: var(--muted); margin-top: 1.25rem; font-family: var(--ar-sans); }
+
+  .logo-rules-list { list-style: none; padding: 0; background: var(--noir-3); border: 1px solid var(--gold-dim); }
+  .logo-rules-list li {
+    display: grid; grid-template-columns: 140px 1fr; gap: 1.5rem;
+    padding: 1rem 1.5rem; border-bottom: 1px solid var(--gold-faint);
+    font-size: 12px; line-height: 1.65; direction: rtl;
+  }
+  .logo-rules-list li:last-child { border-bottom: none; }
+  .logo-rules-list li .rule-key { font-size: 10px; color: var(--gold-light); font-weight: 400; padding-top: 0.1rem; font-family: var(--ar-sans); }
+  .logo-rules-list li .rule-val { color: var(--muted-light); font-family: var(--ar-sans); font-size: 12px; }
+
+  /* ─── UI COMPONENTS ─── */
+  .comp-demo { background: var(--noir-3); border: 1px solid var(--gold-dim); padding: 2rem; }
+  .comp-label { font-size: 10px; color: var(--muted); margin-bottom: 1.25rem; display: block; font-family: var(--ar-sans); }
+
+  .btn-primary-ar {
+    display: inline-block; font-family: var(--ar-sans); font-size: 12px; font-weight: 400;
+    color: var(--noir); background: var(--gold); padding: 0.75rem 1.75rem;
+    border: 1px solid var(--gold); cursor: pointer; margin-left: 0.75rem; margin-bottom: 0.75rem;
+  }
+  .btn-secondary-ar {
+    display: inline-block; font-family: var(--ar-sans); font-size: 12px; font-weight: 400;
+    color: var(--gold-light); background: transparent; padding: 0.75rem 1.75rem;
+    border: 1px solid var(--gold-dim); cursor: pointer; margin-left: 0.75rem; margin-bottom: 0.75rem;
+  }
+  .btn-ghost-ar {
+    display: inline-block; font-family: var(--ar-sans); font-size: 12px;
+    color: var(--muted); background: transparent; padding: 0.75rem 1.75rem;
+    border: 1px solid transparent; cursor: pointer; text-decoration: underline;
+    text-decoration-color: var(--gold-dim); text-underline-offset: 3px; margin-bottom: 0.75rem;
+  }
+
+  .badge { font-size: 10px; padding: 0.35rem 0.875rem; font-family: var(--ar-sans); font-weight: 400; display: inline-block; }
+  .badge-gold { color: var(--gold); border: 1px solid var(--gold-dim); background: var(--gold-faint); }
+  .badge-muted { color: var(--muted-light); border: 1px solid rgba(122,112,96,0.2); background: rgba(122,112,96,0.06); }
+  .badge-ivory { color: var(--ivory); border: 1px solid rgba(242,235,217,0.15); background: rgba(242,235,217,0.05); }
+  .badge-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; justify-content: flex-end; }
+
+  .input-demo-ar {
+    font-family: var(--ar-sans); font-size: 13px; font-weight: 300; color: var(--ivory);
+    background: var(--noir-2); border: 1px solid var(--gold-dim);
+    border-bottom: 1px solid var(--gold); padding: 0.875rem 1rem;
+    width: 100%; outline: none; direction: rtl; text-align: right; margin-bottom: 0.5rem;
+  }
+  .input-label-ar { font-size: 10px; color: var(--muted); display: block; margin-bottom: 0.5rem; font-family: var(--ar-sans); }
+
+  /* ─── RTL CANDIDATE CARD ─── */
+  .rtl-card { background: var(--noir-2); border: 1px solid var(--gold-dim); padding: 1.25rem 1.5rem; }
+  .rtl-card-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--gold-faint); }
+  .rtl-c-name { font-family: var(--ar-display); font-size: 19px; font-weight: 400; color: var(--ivory); }
+  .rtl-c-meta { font-size: 11px; color: var(--muted); margin-bottom: 0.875rem; font-family: var(--ar-sans); }
+  .rtl-c-score { font-family: var(--en-serif); font-size: 28px; font-weight: 300; color: var(--gold-light); line-height: 1; direction: ltr; }
+  .rtl-score-label { font-size: 9px; color: var(--muted); margin-bottom: 2px; font-family: var(--ar-sans); text-align: left; }
+  .c-bar-wrap { height: 1px; background: rgba(184,146,46,0.12); margin-bottom: 0.875rem; position: relative; }
+  .c-bar-fill { position: absolute; right: 0; top: 0; height: 1px; background: var(--gold); }
+  .score-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.3rem 0; }
+  .score-row-label { font-size: 10px; color: var(--muted); width: 120px; flex-shrink: 0; font-family: var(--ar-sans); text-align: right; }
+  .score-row-bar { flex: 1; height: 1px; background: var(--gold-faint); position: relative; }
+  .score-row-fill { position: absolute; right: 0; top: 0; height: 1px; background: var(--gold-light); }
+  .score-row-num { font-size: 11px; color: var(--muted-light); width: 30px; text-align: left; direction: ltr; font-family: var(--en-serif); }
+
+  /* ─── RTL RANKING LIST ─── */
+  .ranking-list { background: var(--noir-2); border: 1px solid var(--gold-dim); padding: 1.5rem; }
+  .ranking-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 1.25rem; border-bottom: 1px solid var(--gold-dim); margin-bottom: 0.75rem; }
+  .ranking-job-title { font-family: var(--ar-display); font-size: 22px; font-weight: 400; color: var(--ivory); line-height: 1.4; }
+  .ranking-job-meta { font-size: 11px; color: var(--muted); margin-top: 0.4rem; font-family: var(--ar-sans); }
+  .top-score-box { text-align: left; }
+  .top-score-num { font-family: var(--en-serif); font-size: 34px; font-weight: 300; color: var(--gold-light); line-height: 1; display: block; direction: ltr; }
+  .top-score-lbl { font-size: 9px; color: var(--muted); display: block; margin-top: 3px; font-family: var(--ar-sans); text-align: left; }
+
+  .ranking-row { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--gold-faint); }
+  .ranking-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .rank-num-ar { font-family: var(--en-serif); font-size: 16px; font-weight: 300; color: var(--muted); flex-shrink: 0; direction: ltr; min-width: 28px; text-align: right; }
+  .rank-num-ar.top { color: var(--gold-light); }
+  .rank-name-ar { font-family: var(--ar-display); font-size: 16px; font-weight: 400; color: var(--ivory); flex: 1; margin: 0 1rem; }
+  .rank-bar-wrap { width: 80px; height: 1px; background: rgba(184,146,46,0.15); position: relative; margin-left: 0.75rem; }
+  .rank-bar-fill { position: absolute; right: 0; top: 0; height: 1px; background: var(--gold); }
+  .rank-score { font-family: var(--en-serif); font-size: 13px; color: var(--muted-light); font-weight: 300; min-width: 28px; text-align: left; direction: ltr; }
+
+  /* ─── PROCESSING PANEL RTL ─── */
+  .trace-panel { display: grid; grid-template-columns: repeat(5,1fr); gap: 2px; }
+  .trace-step { background: var(--noir-2); border: 1px solid var(--gold-faint); padding: 1rem; text-align: center; }
+  .trace-step.active { border-color: var(--gold); }
+  .trace-status { font-size: 9px; color: var(--muted); margin-bottom: 0.5rem; display: block; font-family: var(--ar-sans); }
+  .trace-status.active-lbl { color: var(--gold); }
+  .trace-name-ar { font-family: var(--ar-display); font-size: 16px; font-weight: 400; color: var(--ivory); margin-bottom: 0.4rem; }
+  .trace-desc-ar { font-size: 10px; color: var(--muted); font-family: var(--ar-sans); line-height: 1.5; }
+
+  /* ─── SPACING ─── */
+  .spacing-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 2px; }
+  .spacing-block { background: var(--noir-3); border: 1px solid var(--gold-dim); padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-end; }
+  .spacing-vis { background: var(--gold-dim); border: 1px solid var(--gold); }
+  .spacing-token { font-size: 10px; color: var(--gold-light); font-family: 'Courier New', monospace; direction: ltr; text-align: left; width: 100%; }
+  .spacing-val { font-size: 9px; color: var(--muted); direction: ltr; text-align: left; width: 100%; }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    .cover { min-height: auto; padding: 4rem 2.5rem; }
+    .cover-wordmark { color: #4A3A1A; font-size: 52px; }
+    .page { padding-bottom: 2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-corner tl"></div>
+    <div class="cover-corner tr"></div>
+    <div class="cover-corner bl"></div>
+    <div class="cover-corner br"></div>
+    <div class="cover-rule"></div>
+    <div class="cover-wordmark ltr">TARSHEEH<span>.CV</span></div>
+    <div class="cover-tagline-ar">دليل الهوية البصرية النسخة العربية</div>
+    <div class="cover-sub">تجربة ٢ &nbsp;·&nbsp; ٢٠٢٦</div>
+    <div class="cover-meta">فريق روابط &nbsp;·&nbsp; أجنتكثون ٢٠٢٦ &nbsp;·&nbsp; للاستخدام الداخلي فقط</div>
+  </div>
+
+  <!-- ─── 01 الجوهر والهوية ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">الجوهر والهوية</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-bottom:2rem;">
+      <div class="usage-card">
+        <h4>الرسالة</h4>
+        <p>
+          نسعى إلى أن نجعل عملية التوظيف بشكل احترافي متاحة للشركات الناشئة اللاتي قد لا تملك فريق موارد بشرية،
+          وأن نجعلها سلسة وسريعة لأولائك الذين لديهم.
+        </p>
+      </div>
+      <div class="usage-card">
+        <h4>شخصية العلامة</h4>
+        <ul>
+          <li>دقيق، بدون برود</li>
+          <li>واثق، بدون متعجرف</li>
+          <li>ذكي، لا مُربك</li>
+          <li>راقٍ، لا نخبوي</li>
+          <li>فعّال، لا متسرّع</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>صوت العلامة</h4>
+        <ul>
+          <li>أسلوب ردود واضح ومباشر</li>
+          <li>بعيد عن المصطلحات التقنية</li>
+          <li>لا زخرفة في الترقيم</li>
+          <li>سلطة هادئة في العناوين</li>
+          <li>الإيجازية في لغة الواجهة</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="copy-block" style="border-right-width:1px; border-right-color:var(--gold-dim);">
+      <span class="copy-block-label">بيان تموضع العلامة التجارية</span>
+      <p style="font-family:var(--ar-sans); font-size:14px; color:var(--muted-light); line-height:1.9;">
+        لا ينبغي أن يتطلب التوظيف فريقًا مخصصًا للقيام به بشكل احترافي. تُعد
+        Tarsheeh.cv
+        منصة ذكاء اصطناعي متعددة الوكلاء تجعل العملية بأكملها شيئًا يمكن للشركات الناشئة أن تنجزه
+        دون الحاجة إلى تكاليف فريق موارد بشرية كامل، وبشكل سهل وسلس لمن لديهم فريق بالفعل.
+        تقوم المنصة بقراءة كل سيرة ذاتية، وتقييم كل مرشح وفقًا لمتطلبات الوظيفة لديك،
+        وتُرجع قائمة مختصرة مرتبة مع شرح كامل خلال دقائق معدودة، وليس أيامًا طويلة.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── 02 منظومة الألوان ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">منظومة الألوان</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">اللوحة الأساسية</span>
+    <div class="palette-primary">
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#0C0A07; border:1px solid rgba(255,255,255,0.06);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">أسود عميق</span>
+          <div class="swatch-values"><span class="swatch-hex">#0C0A07</span><span class="swatch-rgb">rgb(12, 10, 7)</span></div>
+          <span class="swatch-role">الخلفية الرئيسية</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#1C180F;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">فحمي دافئ</span>
+          <div class="swatch-values"><span class="swatch-hex">#1C180F</span><span class="swatch-rgb">rgb(28, 24, 15)</span></div>
+          <span class="swatch-role">الأسطح والبطاقات</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#B8922E;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">الذهبي</span>
+          <div class="swatch-values"><span class="swatch-hex">#B8922E</span><span class="swatch-rgb">rgb(184, 146, 46)</span></div>
+          <span class="swatch-role">لون العلامة المميز</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#D4AE5A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">ذهبي فاتح</span>
+          <div class="swatch-values"><span class="swatch-hex">#D4AE5A</span><span class="swatch-rgb">rgb(212, 174, 90)</span></div>
+          <span class="swatch-role">الأرقام والدرجات</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#F2EBD9;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">العاجي الدافئ</span>
+          <div class="swatch-values"><span class="swatch-hex">#F2EBD9</span><span class="swatch-rgb">rgb(242, 235, 217)</span></div>
+          <span class="swatch-role">النص الرئيسي</span>
+        </div>
+      </div>
+    </div>
+
+    <span class="label" style="margin-top:2rem;">اللوحة المساندة</span>
+    <div class="palette-secondary">
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#141109; height:60px;"></div>
+        <div class="swatch-info"><span class="swatch-name">أسود ٢</span><div class="swatch-values"><span class="swatch-hex">#141109</span></div><span class="swatch-role">خلفية حقول الإدخال</span></div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#EDD38A; height:60px;"></div>
+        <div class="swatch-info"><span class="swatch-name">ذهبي شاحب</span><div class="swatch-values"><span class="swatch-hex">#EDD38A</span></div><span class="swatch-role">الشعار والعناوين الكبيرة</span></div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#7A7060; height:60px;"></div>
+        <div class="swatch-info"><span class="swatch-name">رمادي دافئ</span><div class="swatch-values"><span class="swatch-hex">#7A7060</span></div><span class="swatch-role">النص الثانوي والتسميات</span></div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:2rem;">
+      <div class="usage-card">
+        <h4>الذهبي: متى يستخدم</h4>
+        <ul>
+          <li>الشعار والعلامة المائية</li>
+          <li>الخطوط الفاصلة وعلامات الزوايا</li>
+          <li>زر الاستدعاء الرئيسي</li>
+          <li>حدود حقول الإدخال عند التركيز</li>
+          <li>أرقام الأقسام والتسميات</li>
+          <li>أشرطة الدرجات ومؤشرات التقدم</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>الذهبي: متى تتجنبه</h4>
+        <ul>
+          <li>المساحات الكبيرة المملوءة بالخلفية</li>
+          <li>نص الفقرات الأساسية</li>
+          <li>حالات الخطأ والتحذير</li>
+          <li>أكثر من عنصر واحد دون مسافة تنفس</li>
+          <li>حدود أسمك من ١px إلا لزر الاستدعاء</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 03 الطباعة والخطوط ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">الطباعة والخطوط</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:2rem;">
+
+      <div class="font-specimen">
+        <span class="specimen-label">خط العناوين — Amiri (أميري)</span>
+        <div style="font-family:'Amiri',serif; font-size:46px; font-weight:400; color:var(--ivory); line-height:1.3; margin-bottom:0.75rem;">
+          وظّف بدقة.
+        </div>
+        <div style="font-family:'Amiri',serif; font-size:20px; color:var(--muted-light); line-height:1.6; margin-bottom:0.75rem;">
+          استقطاب المواهب بذكاء اصطناعي
+        </div>
+        <div style="font-family:'Amiri',serif; font-size:14px; color:var(--muted); margin-bottom:1rem; line-height:1.8; direction:rtl;">
+          أبجدهوزحطيكلمنسعفصقرشتثخذضظغ
+        </div>
+        <div style="display:flex; gap:1.5rem; justify-content:flex-end;">
+          <div style="text-align:right;">
+            <span style="font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">Regular 400</span>
+            <span style="font-family:'Amiri',serif;font-size:16px;color:var(--ivory-dim);">عيّنة</span>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">Bold 700</span>
+            <span style="font-family:'Amiri',serif;font-size:16px;font-weight:700;color:var(--ivory-dim);">عيّنة</span>
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gold-faint);font-size:11px;color:var(--muted);line-height:1.7;font-family:var(--ar-sans);">
+          يُستخدم في العناوين الرئيسية، الشعار العربي، والمقولات البارزة. خط كلاسيكي بجماليات تُذكّر بـ Cormorant في المنظومة الإنجليزية.
+        </div>
+      </div>
+
+      <div class="font-specimen">
+        <span class="specimen-label">خط الواجهة — Cairo (كايرو)</span>
+        <div style="font-family:'Cairo',sans-serif; font-size:32px; font-weight:300; color:var(--ivory); line-height:1.4; margin-bottom:0.75rem;">
+          الواجهة والنصوص
+        </div>
+        <div style="font-family:'Cairo',sans-serif; font-size:13px; font-weight:300; color:var(--muted-light); line-height:1.9; margin-bottom:0.75rem;">
+          كل مرشح يُقيَّم، ويُدرَّج، ويُرتَّب تلقائياً حتى يتفرّغ فريقك لما لا يقدر عليه إلا الإنسان.
+        </div>
+        <div style="font-family:'Cairo',sans-serif; font-size:13px; color:var(--muted); margin-bottom:1rem; direction:rtl;">
+          أبجدهوزحطيكلمنسعفصقرشتثخذضظغ
+        </div>
+        <div style="display:flex; gap:1.5rem; justify-content:flex-end;">
+          <div style="text-align:right;"><span style="font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">Light 300</span><span style="font-family:'Cairo',sans-serif;font-size:14px;font-weight:300;color:var(--ivory-dim);">عيّنة</span></div>
+          <div style="text-align:right;"><span style="font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">Regular 400</span><span style="font-family:'Cairo',sans-serif;font-size:14px;font-weight:400;color:var(--ivory-dim);">عيّنة</span></div>
+          <div style="text-align:right;"><span style="font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">Medium 500</span><span style="font-family:'Cairo',sans-serif;font-size:14px;font-weight:500;color:var(--ivory-dim);">عيّنة</span></div>
+        </div>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gold-faint);font-size:11px;color:var(--muted);line-height:1.7;font-family:var(--ar-sans);">
+          يُستخدم في واجهة المستخدم، نصوص الأزرار، التسميات، نصوص الجسم، والمعلومات التفصيلية. يعادل DM Sans في المنظومة الإنجليزية.
+        </div>
+      </div>
+    </div>
+
+    <span class="label">مقياس الخطوط العربي</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+      <table class="type-scale-table">
+        <thead>
+          <tr>
+            <th>المستوى</th>
+            <th>مثال</th>
+            <th style="text-align:left; direction:ltr;">المواصفات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="type-meta-ar"><strong>شعار الصفحة</strong>Amiri / 400<br>وزن العنوان الأبرز</div></td>
+            <td><div style="font-family:'Amiri',serif;font-size:42px;font-weight:400;color:var(--gold-pale);line-height:1.3;">وظّف بدقة.</div></td>
+            <td><div class="type-spec-ar">42px / 400<br>lh: 1.3</div></td>
+          </tr>
+          <tr>
+            <td><div class="type-meta-ar"><strong>عنوان القسم</strong>Amiri / 400<br>رؤوس الأقسام</div></td>
+            <td><div style="font-family:'Amiri',serif;font-size:30px;font-weight:400;color:var(--ivory);">منظومة الألوان</div></td>
+            <td><div class="type-spec-ar">30px / 400<br>lh: 1.5</div></td>
+          </tr>
+          <tr>
+            <td><div class="type-meta-ar"><strong>عنوان البطاقة</strong>Amiri / 400<br>عناوين المحتوى</div></td>
+            <td><div style="font-family:'Amiri',serif;font-size:20px;font-weight:400;color:var(--ivory);">مصمم واجهات أول</div></td>
+            <td><div class="type-spec-ar">20px / 400<br>lh: 1.6</div></td>
+          </tr>
+          <tr>
+            <td><div class="type-meta-ar"><strong>نص الجسم</strong>Cairo / 300<br>المحتوى التفسيري</div></td>
+            <td><div style="font-family:'Cairo',sans-serif;font-size:14px;font-weight:300;color:var(--muted-light);line-height:1.9;max-width:360px;">كل مرشح يُقيَّم تلقائياً حتى يتفرّغ فريقك للقرارات التي تحتاج حكمة بشرية.</div></td>
+            <td><div class="type-spec-ar">14px / 300<br>lh: 1.9</div></td>
+          </tr>
+          <tr>
+            <td><div class="type-meta-ar"><strong>تسمية الواجهة</strong>Cairo / 400<br>تسميات الحقول</div></td>
+            <td><div style="font-family:'Cairo',sans-serif;font-size:10px;font-weight:400;color:var(--muted);">درجة التوافق</div></td>
+            <td><div class="type-spec-ar">10px / 400</div></td>
+          </tr>
+          <tr>
+            <td><div class="type-meta-ar"><strong>الدرجات والأرقام</strong>Cormorant / 300<br>الأرقام دائماً لاتيني</div></td>
+            <td><div style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:var(--gold-light);line-height:1;direction:ltr;">94</div></td>
+            <td><div class="type-spec-ar">42px / 300<br>dir: ltr</div></td>
+          </tr>
+          <tr>
+            <td><div class="type-meta-ar"><strong>زر الاستدعاء</strong>Cairo / 400<br>نصوص الأزرار</div></td>
+            <td><div style="font-family:'Cairo',sans-serif;font-size:12px;font-weight:400;color:var(--noir);background:var(--gold);padding:0.6rem 1.5rem;display:inline-block;">انشر وظيفة</div></td>
+            <td><div class="type-spec-ar">12px / 400</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim); padding:1.5rem; margin-top:2px;">
+      <span class="label" style="margin-bottom:1rem;">ملاحظات المطوّرين — RTL</span>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px;">
+        <div style="background:var(--noir-2); padding:1.25rem; border:1px solid var(--gold-faint);">
+          <div style="font-size:10px;color:var(--gold-light);margin-bottom:0.75rem;font-family:var(--ar-sans);">إعداد الاتجاه</div>
+          <pre style="font-family:'Courier New',monospace;font-size:11px;color:var(--muted-light);direction:ltr;text-align:left;line-height:1.7;">&lt;html lang="ar" dir="rtl"&gt;
+
+body {
+  direction: rtl;
+  font-family: 'Cairo', sans-serif;
+}
+
+.en-only { direction: ltr; }</pre>
+        </div>
+        <div style="background:var(--noir-2); padding:1.25rem; border:1px solid var(--gold-faint);">
+          <div style="font-size:10px;color:var(--gold-light);margin-bottom:0.75rem;font-family:var(--ar-sans);">اتجاه أشرطة التقدم</div>
+          <pre style="font-family:'Courier New',monospace;font-size:11px;color:var(--muted-light);direction:ltr;text-align:left;line-height:1.7;">.score-bar-fill {
+  /* RTL: fill from right */
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* Scores stay LTR */
+.score-num {
+  direction: ltr;
+  font-family: 'Cormorant', serif;
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 04 النصوص والعبارات ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">النصوص والعبارات</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">الشعار الرئيسي ونص الغلاف</span>
+
+    <div class="copy-block" style="margin-bottom:2px;">
+      <span class="copy-block-label">الشعار الرئيسي — صفحة الهبوط</span>
+      <div class="copy-block-text large">وظّف بدقة.<br>قُد بثقة.</div>
+      <p class="copy-block-note">يُستخدم كعنوان رئيسي في صفحة الهبوط، غلاف مجموعة الشرائح، ومقدمة العرض. يُعرض دائماً بخط Amiri وزن 400.</p>
+    </div>
+
+    <div class="copy-block" style="margin-bottom:2px;">
+      <span class="copy-block-label">شعار المنصة — تحت الشعار البصري</span>
+      <div class="copy-block-text">منصة ذكية لاستقطاب المواهب</div>
+      <p class="copy-block-note">يظهر أسفل الشعار البصري. Cairo وزن 300، تتباعد الحروف، لون رمادي دافئ (#7A7060).</p>
+    </div>
+
+    <div class="copy-block" style="margin-bottom:2rem;">
+      <span class="copy-block-label">العنوان المساند</span>
+      <div class="copy-block-text" style="font-size:17px;font-family:var(--ar-sans);font-weight:300;color:var(--muted-light);line-height:1.9;">
+        في
+        ترشيح.cv
+        تُفحص كل سيرة ذاتية، ويقيَّم كل مرشح، وتُسلَّم في النهاية قائمتك المختصرة؛ مرتَّبةً، مُبرَّرة، وجاهزة في دقائق قليلة.
+      </div>
+      <p class="copy-block-note">يُستخدم مباشرةً تحت الشعار الرئيسي. Cairo Light وزن 300، ١٤–١٦px حسب السياق.</p>
+    </div>
+
+    <span class="label">عبارات الميزات — الواجهة والشرائح</span>
+    <div class="phrase-grid" style="margin-bottom:2rem;">
+      <div class="phrase-card">
+        <span class="phrase-cat">الفرز والتحليل</span>
+        <div class="phrase-text">"كل سيرة ذاتية، تُحلَّل في ثوانٍ."</div>
+        <div class="phrase-sub">تُستخدم في شاشة رفع السير الذاتية وفي شريحة الميزات بالعرض. تصف وكيل محلل السيرة الذاتية.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">مخرجات الترتيب</span>
+        <div class="phrase-text">"مرتَّبون. مُحَلَّلون. جاهزون."</div>
+        <div class="phrase-sub">تُستخدم على لوحة النتائج وكعنوان قسم في تقرير PDF. ثلاث كلمات، ثلاث نقاط. لا تختصرها إلى اثنتين.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">أسئلة المقابلة</span>
+        <div class="phrase-text">"أسئلة تكشف الشخصية، لا الكفاءة وحدها."</div>
+        <div class="phrase-sub">تُستخدم في شاشة تفاصيل المرشح وفي قسم وكيل المقابلة بالعرض.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">القيمة المقدَّمة</span>
+        <div class="phrase-text">"من نشر الوظيفة إلى القائمة المختصرة، بلا ضوضاء."</div>
+        <div class="phrase-sub">تُستخدم في مجموعات الشرائح، الشريحة الثانية (المشكلة والحل)، وكتلة النص الثانوية في صفحة الهبوط.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">السرعة والكفاءة</span>
+        <div class="phrase-text">"مرشّحك القادم، يظهر تلقائياً."</div>
+        <div class="phrase-sub">تُستخدم كنسخة بديلة من الشعار في المنشورات، تذييل الشرائح، وغلاف تقرير PDF.</div>
+      </div>
+      <div class="phrase-card">
+        <span class="phrase-cat">التقرير والمخرجات</span>
+        <div class="phrase-text">"صورة كاملة. صفحة واحدة. قرار واحد."</div>
+        <div class="phrase-sub">تُستخدم في شاشة تحميل التقرير وكسطر غلاف داخلي في تقرير PDF.</div>
+      </div>
+    </div>
+
+    <span class="label">النصوص الدقيقة — سلاسل الواجهة</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+      <table class="microcopy-table">
+        <thead>
+          <tr>
+            <th>السياق</th>
+            <th>النص العربي</th>
+            <th>ملاحظات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>زر الاستدعاء الرئيسي</td><td><span class="val-ar">انشر وظيفة</span></td><td class="val-note">صفحة الهبوط وشريط التنقل. لا تستخدم "أضف إعلاناً".</td></tr>
+          <tr><td>زر رفع السيرة</td><td><span class="val-ar">رفع السير الذاتية</span></td><td class="val-note">نقطة دخول شاشة الرفع.</td></tr>
+          <tr><td>زر القائمة المختصرة</td><td><span class="val-ar">عرض القائمة المختصرة</span></td><td class="val-note">بعد اكتمال المعالجة.</td></tr>
+          <tr><td>زر التقرير</td><td><span class="val-ar">تحميل التقرير</span></td><td class="val-note">في شاشة التقرير ولوحة النتائج.</td></tr>
+          <tr><td>المرحلة ١ — المعالجة</td><td><span class="val-ar">جارٍ قراءة وصف الوظيفة...</span></td><td class="val-note">وكيل الاستقبال نشط.</td></tr>
+          <tr><td>المرحلة ٢ — المعالجة</td><td><span class="val-ar">جارٍ فرز المرشحين...</span></td><td class="val-note">وكيل تحليل السير نشط.</td></tr>
+          <tr><td>المرحلة ٣ — المعالجة</td><td><span class="val-ar">جارٍ ترتيب النتائج...</span></td><td class="val-note">وكيل الترتيب نشط.</td></tr>
+          <tr><td>المرحلة ٤ — المعالجة</td><td><span class="val-ar">جارٍ إعداد الأسئلة...</span></td><td class="val-note">وكيل المقابلة نشط.</td></tr>
+          <tr><td>المرحلة ٥ — المعالجة</td><td><span class="val-ar">جارٍ تجميع تقريرك...</span></td><td class="val-note">وكيل التقرير نشط.</td></tr>
+          <tr><td>حالة الاكتمال</td><td><span class="val-ar">قائمتك المختصرة جاهزة.</span></td><td class="val-note">لا تستخدم "تم" أو "انتهى".</td></tr>
+          <tr><td>حالة فارغة</td><td><span class="val-ar">لا يوجد مرشحون بعد. ارفع السير الذاتية للبدء.</span></td><td class="val-note">شاشة النتائج الفارغة.</td></tr>
+          <tr><td>حالة الخطأ</td><td><span class="val-ar">حدث خطأ ما. أعد المحاولة أو تواصل مع الدعم.</span></td><td class="val-note">رسالة الخطأ العامة.</td></tr>
+          <tr><td>تسمية الدرجة</td><td><span class="val-ar">نسبة التوافق</span></td><td class="val-note">فوق الرقم في بطاقات المرشحين.</td></tr>
+          <tr><td>تسمية الترتيب</td><td><span class="val-ar">الترتيب</span></td><td class="val-note">كلمة واحدة. يُعرض بصيغة #01، #02.</td></tr>
+          <tr><td>منطقة الرفع</td><td><span class="val-ar">أفلت السير الذاتية هنا، أو انقر للاستعراض</span></td><td class="val-note">منطقة السحب والإفلات.</td></tr>
+          <tr><td>حقل الوصف</td><td><span class="val-ar">الصق وصف الوظيفة هنا...</span></td><td class="val-note">منطقة النص في شاشة الوظيفة.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <span class="label">نصوص العرض والتقديم</span>
+      <div style="display:grid; grid-template-columns:1fr; gap:2px;">
+        <div class="copy-block" style="border-right-color:var(--gold-dim); border-right-width:1px;">
+          <span class="copy-block-label">شريحة ١ — الافتتاح</span>
+          <div class="copy-block-text" style="font-size:18px;">"يُمضي مديروا التوظيف ٣٠٪ من أسبوعهم في قراءة السير الذاتية. معظم ذلك الوقت يضيع على مرشحين لم يكونوا مناسبين أصلاً.
+            Tarsheeh.cv موجودة لإعادة هذا الوقت."</div>
+        </div>
+        <div class="copy-block" style="border-right-color:var(--gold-dim); border-right-width:1px;">
+          <span class="copy-block-label">شريحة ٢ — المشكلة</span>
+          <div class="copy-block-text" style="font-size:18px;">"الفرز اليدوي بطيء، يتأثر بالنفس البشرية، وغير متسق. مديران يقرآن السيرة الذاتية ذاتها يصلان إلى استنتاجين مختلفين. أفضل المرشحين كثيراً ما يُحذَفون قبل المرحلة الأولى."</div>
+        </div>
+        <div class="copy-block" style="border-right-color:var(--gold-dim); border-right-width:1px;">
+          <span class="copy-block-label">شريحة ٣ — الحل</span>
+          <div class="copy-block-text" style="font-size:18px;">"على Tarshee.cv تقرأ كل سيرة ذاتية، ويقيَّم كل مرشح مقابل متطلبات الوظيفة، وتُعيد إليك قائمة مرتبة مع تحليل وتعليل كامل. انشيء وظيفة. ارفع السير ذاتية. استلم قائمتك في دقائق."</div>
+        </div>
+        <div class="copy-block" style="border-right-color:var(--gold-dim); border-right-width:1px;">
+          <span class="copy-block-label">شريحة ٤ — المعمارية والوكلاء</span>
+          <div class="copy-block-text" style="font-size:18px;">"ستة وكلاء متخصصون، تُنسّقهم LangGraph. كل وكيل مسؤول عن خطوة محددة: تحليل الوظيفة، فحص السير الذاتية، ترتيب المرشحين، توليد أسئلة المقابلة، وتجميع التقرير النهائي."</div>
+        </div>
+        <div class="copy-block" style="border-right-color:var(--gold-dim); border-right-width:1px;">
+          <span class="copy-block-label">السطر الختامي — التقديم</span>
+          <div class="copy-block-text" style="font-size:26px; color:var(--gold-light);">"أخطاء أقل. توظيف أفضل. ترشيح.cv"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 05 الشعار والعلامة ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">الشعار والعلامة</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">متغيرات الشعار</span>
+    <div class="logo-grid" style="margin-bottom:2rem;">
+      <div class="logo-demo">
+        <div style="font-family:var(--en-serif);font-size:38px;font-weight:300;letter-spacing:0.2em;color:var(--gold-pale);line-height:1;direction:ltr;">TARSHEEH<span style="color:var(--gold);font-weight:400;">.CV</span></div>
+        <div class="logo-demo-label">الأساسي — على خلفية داكنة</div>
+      </div>
+      <div class="logo-demo light">
+        <div style="font-family:var(--en-serif);font-size:38px;font-weight:300;letter-spacing:0.2em;color:#4A3A1A;line-height:1;direction:ltr;">TARSHEEH<span style="color:var(--gold);font-weight:400;">.CV</span></div>
+        <div class="logo-demo-label" style="color:#7A7060;">الأساسي — على خلفية فاتحة</div>
+      </div>
+      <div class="logo-demo" style="min-height:120px;">
+        <div style="font-family:var(--en-serif);font-size:26px;font-weight:300;letter-spacing:0.2em;color:var(--gold-pale);direction:ltr;">TARSHEEH<span style="color:var(--gold);font-weight:400;">.CV</span></div>
+        <div style="font-family:var(--ar-sans);font-size:10px;color:var(--muted);margin-top:0.75rem;letter-spacing:0.1em;font-weight:300;">منصة ذكية لاستقطاب المواهب</div>
+        <div class="logo-demo-label">مع الشعار النصي العربي</div>
+      </div>
+      <div class="logo-demo" style="min-height:120px;flex-direction:row;gap:1.5rem;align-items:center;justify-content:center;">
+        <div style="width:2px;height:36px;background:var(--gold);"></div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--en-serif);font-size:20px;font-weight:300;letter-spacing:0.15em;color:var(--gold-pale);direction:ltr;">TARSHEEH<span style="color:var(--gold);font-weight:400;">.CV</span></div>
+          <div style="font-family:var(--ar-sans);font-size:9px;color:var(--muted);margin-top:4px;">فريق روابط · أجنتكثون ٢٠٢٦</div>
+        </div>
+        <div class="logo-demo-label" style="position:absolute;bottom:1.25rem;left:0;right:0;text-align:center;">قفل الشرائح التقديمية</div>
+      </div>
+    </div>
+
+    <span class="label">قواعد الشعار</span>
+    <ul class="logo-rules-list">
+      <li><span class="rule-key">الشعار البصري</span><span class="rule-val">TARSHEEH.CV يبقى دائماً بالإنجليزية. لا يُترجَم الاسم إلى العربية تحت أي ظرف.</span></li>
+      <li><span class="rule-key">الخط</span><span class="rule-val">Cormorant Garamond وزن 300 لـ"TARSHEEH"، وزن 400 لـ".CV"</span></li>
+      <li><span class="rule-key">التباعد</span><span class="rule-val">0.2em على كامل العلامة. لا يقل عن 0.15em أبداً.</span></li>
+      <li><span class="rule-key">اللون — داكن</span><span class="rule-val">"TARSHEEH" بلون ذهبي شاحب (#EDD38A)، ".CV" بلون ذهبي (#B8922E)</span></li>
+      <li><span class="rule-key">اتجاه الكتابة</span><span class="rule-val">dir="ltr" دائماً على عنصر الشعار حتى في الصفحات العربية RTL.</span></li>
+      <li><span class="rule-key">المسافة الحرة</span><span class="rule-val">مسافة حرة لا تقل عن ارتفاع حرف "T" من جميع الجهات.</span></li>
+      <li><span class="rule-key">الحجم الأدنى</span><span class="rule-val">16px كحد أدنى رقمياً. لا تصغير دون وضوح كامل للنقطة.</span></li>
+      <li><span class="rule-key">محظور</span><span class="rule-val">لا تدوير، لا تمديد، لا إعادة تلوين، لا تأثيرات توهج أو ظل، لا فصل "TARSHEEH" عن ".CV".</span></li>
+    </ul>
+  </div>
+
+  <!-- ─── 06 معاينة الواجهة بالعربية ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">معاينة الواجهة — RTL</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">قائمة المرشحين — تخطيط RTL</span>
+    <div class="ranking-list" style="margin-bottom:2px;">
+      <div class="ranking-header">
+        <div>
+          <div class="ranking-job-title">مصمم منتج أول</div>
+          <div class="ranking-job-meta">أكسنتشر &nbsp;·&nbsp; الرياض، المملكة العربية السعودية</div>
+        </div>
+        <div class="top-score-box">
+          <span class="top-score-lbl">أعلى درجة</span>
+          <span class="top-score-num">94</span>
+        </div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num-ar top">01</div>
+        <div class="rank-name-ar">سارة المنصوري</div>
+        <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:90%;"></div></div>
+        <div class="rank-score">94</div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num-ar">02</div>
+        <div class="rank-name-ar">ريم خالد</div>
+        <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:80%;"></div></div>
+        <div class="rank-score">84</div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num-ar">03</div>
+        <div class="rank-name-ar">لارا فاروق</div>
+        <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:72%;"></div></div>
+        <div class="rank-score">76</div>
+      </div>
+      <div class="ranking-row">
+        <div class="rank-num-ar">04</div>
+        <div class="rank-name-ar">نورة الراشدي</div>
+        <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:66%;"></div></div>
+        <div class="rank-score">70</div>
+      </div>
+    </div>
+
+    <span class="label" style="margin-top:2rem;">بطاقة المرشح التفصيلية — RTL</span>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:2px;">
+      <div class="rtl-card">
+        <div class="rtl-card-header">
+          <div>
+            <div class="rtl-c-name">سارة المنصوري</div>
+            <div class="rtl-c-meta">قائدة تجربة المستخدم &nbsp;·&nbsp; ٧ سنوات</div>
+          </div>
+          <div style="text-align:left;">
+            <div class="rtl-score-label">نسبة التوافق</div>
+            <div class="rtl-c-score">94</div>
+          </div>
+        </div>
+        <div class="c-bar-wrap"><div class="c-bar-fill" style="width:94%;"></div></div>
+        <div>
+          <div class="score-row">
+            <span class="score-row-label">المهارات التقنية</span>
+            <div class="score-row-bar"><div class="score-row-fill" style="width:96%;"></div></div>
+            <span class="score-row-num">96</span>
+          </div>
+          <div class="score-row">
+            <span class="score-row-label">الخبرة العملية</span>
+            <div class="score-row-bar"><div class="score-row-fill" style="width:88%;"></div></div>
+            <span class="score-row-num">88</span>
+          </div>
+          <div class="score-row">
+            <span class="score-row-label">الملاءمة الثقافية</span>
+            <div class="score-row-bar"><div class="score-row-fill" style="width:92%;"></div></div>
+            <span class="score-row-num">92</span>
+          </div>
+        </div>
+        <div class="badge-row" style="margin-top:0.875rem;">
+          <span class="badge badge-ivory">Figma</span>
+          <span class="badge badge-ivory">أبحاث المستخدم</span>
+          <span class="badge badge-ivory">أنظمة التصميم</span>
+        </div>
+      </div>
+
+      <div class="comp-demo" style="display:flex;flex-direction:column;gap:0.5rem;">
+        <span class="comp-label">نموذج نشر وظيفة — RTL</span>
+        <label class="input-label-ar">مسمى الوظيفة</label>
+        <input class="input-demo-ar" type="text" value="مصمم منتج أول" readonly>
+        <label class="input-label-ar" style="margin-top:0.5rem;">وصف الوظيفة</label>
+        <textarea class="input-demo-ar" rows="4" style="resize:none;" readonly>نبحث عن مصمم منتج أول لقيادة تجربة المستخدم في منصتنا...</textarea>
+        <div style="margin-top:0.5rem;">
+          <div class="btn-primary-ar">انشر وظيفة</div>
+          <div class="btn-secondary-ar">معاينة</div>
+        </div>
+      </div>
+    </div>
+
+    <span class="label" style="margin-top:2rem;">لوحة تتبع الوكلاء المباشر — RTL</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim); padding:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <div style="font-family:var(--ar-display);font-size:18px;color:var(--ivory);">معالجة الطلب</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--gold);"></div>
+          <span style="font-size:11px;color:var(--gold);font-family:var(--ar-sans);">جارٍ المعالجة</span>
+        </div>
+      </div>
+      <div class="trace-panel">
+        <div class="trace-step active">
+          <span class="trace-status active-lbl">نشط</span>
+          <div class="trace-name-ar">الاستقبال</div>
+          <div class="trace-desc-ar">جارٍ قراءة الوظيفة...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.45;">
+          <span class="trace-status">في الانتظار</span>
+          <div class="trace-name-ar">الفرز</div>
+          <div class="trace-desc-ar">في انتظار...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.45;">
+          <span class="trace-status">في الانتظار</span>
+          <div class="trace-name-ar">الترتيب</div>
+          <div class="trace-desc-ar">في انتظار...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.45;">
+          <span class="trace-status">في الانتظار</span>
+          <div class="trace-name-ar">المقابلة</div>
+          <div class="trace-desc-ar">في انتظار...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.45;">
+          <span class="trace-status">في الانتظار</span>
+          <div class="trace-name-ar">التقرير</div>
+          <div class="trace-desc-ar">في انتظار...</div>
+        </div>
+      </div>
+      <div style="margin-top:1.25rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:10px;color:var(--muted);font-family:var(--ar-sans);">التقدم الكلي</span>
+          <span style="font-size:11px;color:var(--gold-light);font-family:var(--en-serif);direction:ltr;">20%</span>
+        </div>
+        <div style="height:1px;background:var(--gold-faint);">
+          <div style="height:1px;width:20%;background:var(--gold);"></div>
+        </div>
+      </div>
+    </div>
+
+    <span class="label" style="margin-top:2rem;">الأزرار والعناصر</span>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
+      <div class="comp-demo">
+        <span class="comp-label">الأزرار</span>
+        <div>
+          <div class="btn-primary-ar">انشر وظيفة</div>
+          <div class="btn-primary-ar">رفع السير الذاتية</div>
+        </div>
+        <div>
+          <div class="btn-secondary-ar">عرض القائمة</div>
+          <div class="btn-secondary-ar">تحميل التقرير</div>
+        </div>
+        <div><div class="btn-ghost-ar">إلغاء</div></div>
+      </div>
+      <div class="comp-demo">
+        <span class="comp-label">الشارات والوسوم</span>
+        <div class="badge-row"><span class="badge badge-gold">جارٍ المعالجة</span><span class="badge badge-gold">مكتمل</span></div>
+        <div class="badge-row"><span class="badge badge-muted">في الانتظار</span><span class="badge badge-muted">مؤرشف</span></div>
+        <div class="badge-row">
+          <span class="badge badge-ivory">Python</span>
+          <span class="badge badge-ivory">قيادة الفرق</span>
+          <span class="badge badge-ivory">٦ سنوات</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 07 المسافات والشبكة ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">المسافات والشبكة</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">مقياس المسافات</span>
+    <div class="spacing-grid" style="margin-bottom:2rem;">
+      <div class="spacing-block"><div class="spacing-vis" style="width:4px;height:4px;"></div><span class="spacing-token">xs</span><span class="spacing-val">4px</span></div>
+      <div class="spacing-block"><div class="spacing-vis" style="width:8px;height:8px;"></div><span class="spacing-token">sm</span><span class="spacing-val">8px</span></div>
+      <div class="spacing-block"><div class="spacing-vis" style="width:16px;height:16px;"></div><span class="spacing-token">md</span><span class="spacing-val">16px</span></div>
+      <div class="spacing-block"><div class="spacing-vis" style="width:24px;height:24px;"></div><span class="spacing-token">lg</span><span class="spacing-val">24px</span></div>
+      <div class="spacing-block"><div class="spacing-vis" style="width:40px;height:40px;"></div><span class="spacing-token">xl</span><span class="spacing-val">40px</span></div>
+      <div class="spacing-block"><div class="spacing-vis" style="width:64px;height:64px;"></div><span class="spacing-token">2xl</span><span class="spacing-val">64px</span></div>
+    </div>
+
+    <span class="label">قواعد الحدود</span>
+    <div style="background:var(--noir-3); border:1px solid var(--gold-dim);">
+      <table class="microcopy-table">
+        <thead><tr><th>العنصر</th><th>قاعدة الحد</th><th>ملاحظات</th></tr></thead>
+        <tbody>
+          <tr><td>البطاقة الافتراضية</td><td style="font-family:monospace;font-size:11px;direction:ltr;text-align:left;">1px solid rgba(184,146,46,0.18)</td><td class="val-note">حدود جميع البطاقات والألواح</td></tr>
+          <tr><td>البطاقة عند التمرير</td><td style="font-family:monospace;font-size:11px;direction:ltr;text-align:left;">1px solid rgba(184,146,46,0.35)</td><td class="val-note">عند hover أو الحالة النشطة</td></tr>
+          <tr><td>حقل الإدخال — افتراضي</td><td style="font-family:monospace;font-size:11px;direction:ltr;text-align:left;">border-bottom: 1px solid Gold Dim</td><td class="val-note">نمط الخط السفلي فقط</td></tr>
+          <tr><td>حقل الإدخال — نشط</td><td style="font-family:monospace;font-size:11px;direction:ltr;text-align:left;">border-bottom: 1px solid #B8922E</td><td class="val-note">ذهبي عند التركيز</td></tr>
+          <tr><td>شريط الدرجة</td><td style="font-family:monospace;font-size:11px;direction:ltr;text-align:left;">height: 1px, fill from right (RTL)</td><td class="val-note">الشريط يمتلئ من اليمين في RTL</td></tr>
+          <tr><td>علامة الزاوية</td><td style="font-family:monospace;font-size:11px;direction:ltr;text-align:left;">1px solid #B8922E, 18–28px</td><td class="val-note">تُعكس الزوايا في RTL</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid var(--gold-dim);padding:2.5rem 0;display:flex;justify-content:space-between;align-items:center;flex-direction:row-reverse;">
+    <div style="font-family:var(--en-serif);font-size:18px;font-weight:300;letter-spacing:0.15em;color:var(--gold-pale);direction:ltr;">
+      TARSHEEH<span style="color:var(--gold);font-weight:400;">.CV</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:right;line-height:1.9;font-family:var(--ar-sans);">
+      دليل الهوية البصرية — النسخة العربية — تجربة ٢<br>
+      فريق روابط &nbsp;·&nbsp; أجنتكثون ٢٠٢٦<br>
+      للاستخدام الداخلي فقط
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

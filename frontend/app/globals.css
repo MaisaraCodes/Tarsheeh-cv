@@ -1,0 +1,73 @@
+@import '@fontsource/cormorant-garamond/300.css';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/dm-sans/300.css';
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+
+@import "tailwindcss";
+
+@theme {
+  /* ── Colors ── */
+  --color-noir:         #0C0A07;
+  --color-noir-2:       #141109;
+  --color-noir-3:       #1C180F;
+  --color-noir-4:       #242015;
+  --color-gold:         #B8922E;
+  --color-gold-light:   #D4AE5A;
+  --color-gold-pale:    #EDD38A;
+  --color-ivory:        #F2EBD9;
+  --color-muted:        #7A7060;
+  --color-muted-light:  #A89880;
+  --color-warm-white:   #FAF6EE;
+
+  /* ── Font families ── */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+
+  /* ── Spacing ── */
+  --spacing-brand-xs:  4px;
+  --spacing-brand-sm:  8px;
+  --spacing-brand-md:  16px;
+  --spacing-brand-lg:  24px;
+  --spacing-brand-xl:  40px;
+  --spacing-brand-2xl: 64px;
+
+  /* ── Letter-spacing ──
+     tracking-display  0.02em  hero headline, large display serif
+     tracking-heading  0.05em  section headings (26px serif)
+     tracking-wide     0.15em  secondary metadata labels, rule keys
+     tracking-logo     0.20em  wordmark, CTA buttons, section numbers
+     tracking-meta     0.25em  cover metadata, table headers
+     tracking-label    0.30em  9px uppercase component labels
+     tracking-badge    0.35em  badge and tag text
+     tracking-tagline  0.45em  platform tagline sub-wordmark
+  */
+  --tracking-display:  0.02em;
+  --tracking-heading:  0.05em;
+  --tracking-wide:     0.15em;
+  --tracking-logo:     0.20em;
+  --tracking-meta:     0.25em;
+  --tracking-label:    0.30em;
+  --tracking-badge:    0.35em;
+  --tracking-tagline:  0.45em;
+}
+
+/* Opacity tokens — in :root so they are accessible as CSS variables
+   in inline styles and outside Tailwind utilities (e.g. score bar fills). */
+:root {
+  --gold-dim:   rgba(184, 146, 46, 0.18);
+  --gold-faint: rgba(184, 146, 46, 0.08);
+  --gold-hover: rgba(184, 146, 46, 0.35);
+  --ivory-dim:  rgba(242, 235, 217, 0.70);
+}
+
+body {
+  background: var(--color-noir);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
