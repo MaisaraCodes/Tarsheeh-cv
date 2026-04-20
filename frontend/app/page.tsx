@@ -1,22 +1,172 @@
-import { TAGLINES } from "@/lib/brand";
+import Link from "next/link";
+import { COPY, TAGLINES, PHRASES } from "@/lib/brand";
+
+const PIPELINE_STAGES = ["Intake", "Screening", "Ranking", "Interview", "Report"] as const;
+
+const FEATURE_CARDS = [
+  {
+    phrase: PHRASES.screening,
+    sub: "Every candidate evaluated against the same criteria, without fatigue or bias.",
+  },
+  {
+    phrase: PHRASES.ranking,
+    sub: "A scored shortlist with clear reasoning, not a pile of files to sort through.",
+  },
+  {
+    phrase: PHRASES.interview,
+    sub: "Tailored questions for each candidate, ready before the first interview is booked.",
+  },
+] as const;
+
+function SectionHeader({
+  num,
+  title,
+}: {
+  num: string;
+  title: string;
+}) {
+  return (
+    <div className="flex items-baseline gap-6 mb-12">
+      <span className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0">
+        {num}
+      </span>
+      <h2 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        {title}
+      </h2>
+      <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-      <p className="font-serif text-7xl tracking-logo leading-none">
-        <span className="font-light text-gold-pale">TARSHEEH</span>
-        <span className="font-normal text-gold">.CV</span>
-      </p>
+    <div className="flex flex-col">
+      {/* ── Hero ── */}
+      <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center">
+        <p className="font-serif text-7xl tracking-logo leading-none">
+          <span className="font-light text-gold-pale">TARSHEEH</span>
+          <span className="font-normal text-gold">.CV</span>
+        </p>
 
-      <div className="w-14 h-px bg-gold my-brand-xl" />
+        <div className="w-14 h-px bg-gold my-brand-xl" />
 
-      <h1 className="font-serif text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line">
-        {TAGLINES.hero}
-      </h1>
+        <h1 className="font-serif text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line">
+          {TAGLINES.hero}
+        </h1>
 
-      <p className="mt-brand-lg font-sans text-sm font-light text-muted-light w-full max-w-lg text-center leading-[1.75]">
-        {TAGLINES.subHero}
-      </p>
+        <p className="mt-brand-lg font-sans text-sm font-light text-muted-light w-full max-w-lg text-center leading-[1.75]">
+          {TAGLINES.subHero}
+        </p>
+
+        <div className="flex items-center gap-4 mt-brand-xl">
+          <Link
+            href="/job"
+            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8"
+            style={{ border: "1px solid var(--color-gold)" }}
+          >
+            {COPY.ctaPrimary}
+          </Link>
+          <Link
+            href="#how-it-works"
+            className="font-sans text-[11px] font-normal uppercase tracking-logo text-muted py-3 px-8"
+            style={{
+              textDecoration: "underline",
+              textDecorationColor: "var(--gold-dim)",
+              textUnderlineOffset: "3px",
+            }}
+          >
+            Learn More
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Content sections ── */}
+      <div className="max-w-4xl mx-auto w-full px-6 pb-brand-2xl">
+
+        {/* 01 — The Problem */}
+        <section
+          id="problem"
+          className="py-16"
+          style={{ borderTop: "1px solid var(--gold-dim)" }}
+        >
+          <SectionHeader num="01" title="The Problem" />
+          <p className="font-serif text-[26px] font-light text-muted-light text-center w-full max-w-[32rem] mx-auto leading-relaxed">
+            Screening is slow, subjective, and inconsistent. Two managers
+            reading the same CV reach different conclusions. The best candidate
+            often does not make it past the first filter.
+          </p>
+        </section>
+
+        {/* 02 — How It Works */}
+        <section
+          id="how-it-works"
+          className="py-16"
+          style={{ borderTop: "1px solid var(--gold-dim)" }}
+        >
+          <SectionHeader num="02" title="How It Works" />
+          <p className="font-sans text-sm font-light text-muted-light text-center mb-8">
+            Five specialised agents work in sequence — from reading your job
+            description to compiling a ranked shortlist with interview
+            questions.
+          </p>
+          <div className="grid grid-cols-5 gap-[2px]">
+            {PIPELINE_STAGES.map((stage) => (
+              <div
+                key={stage}
+                className="bg-noir-2 text-center p-4"
+                style={{ border: "1px solid var(--gold-faint)" }}
+              >
+                <div className="font-serif text-[15px] font-light text-ivory">
+                  {stage}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 03 — What You Get */}
+        <section
+          id="features"
+          className="py-16"
+          style={{ borderTop: "1px solid var(--gold-dim)" }}
+        >
+          <SectionHeader num="03" title="What You Get" />
+          <div className="grid grid-cols-3 gap-[2px]">
+            {FEATURE_CARDS.map(({ phrase, sub }) => (
+              <div
+                key={phrase}
+                className="bg-noir-3 p-6"
+                style={{ border: "1px solid var(--gold-dim)" }}
+              >
+                <p className="font-serif text-[18px] font-light text-ivory leading-snug tracking-[0.02em] mb-3">
+                  {phrase}
+                </p>
+                <p className="font-sans text-xs font-light text-muted-light leading-relaxed">
+                  {sub}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Closing CTA ── */}
+        <section
+          className="py-16 flex flex-col items-center"
+          style={{ borderTop: "1px solid var(--gold-dim)" }}
+        >
+          <p className="font-serif text-[28px] font-light text-ivory tracking-heading mb-brand-xl">
+            Ready to hire with precision?
+          </p>
+          <Link
+            href="/job"
+            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8"
+            style={{ border: "1px solid var(--color-gold)" }}
+          >
+            {COPY.ctaPrimary}
+          </Link>
+        </section>
+
+      </div>
     </div>
   );
 }
