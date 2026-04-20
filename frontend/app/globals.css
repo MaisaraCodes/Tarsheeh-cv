@@ -27,12 +27,12 @@
   --font-sans:  'DM Sans', system-ui, sans-serif;
 
   /* ── Spacing ── */
-  --spacing-xs:  4px;
-  --spacing-sm:  8px;
-  --spacing-md:  16px;
-  --spacing-lg:  24px;
-  --spacing-xl:  40px;
-  --spacing-2xl: 64px;
+  --spacing-brand-xs:  4px;
+  --spacing-brand-sm:  8px;
+  --spacing-brand-md:  16px;
+  --spacing-brand-lg:  24px;
+  --spacing-brand-xl:  40px;
+  --spacing-brand-2xl: 64px;
 
   /* ── Letter-spacing ──
      tracking-display  0.02em  hero headline, large display serif
