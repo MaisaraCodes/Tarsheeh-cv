@@ -37,7 +37,7 @@ export default function JobPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto w-full px-6 py-brand-2xl">
+    <div className="animate-fade-up max-w-2xl mx-auto w-full px-6 py-brand-2xl">
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
@@ -94,7 +94,7 @@ export default function JobPage() {
             type="submit"
             disabled={isSubmitting}
             className={[
-              "font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8",
+              "font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75",
               isSubmitting ? "opacity-50 cursor-not-allowed" : "",
             ].join(" ")}
             style={{ border: "1px solid var(--color-gold)" }}

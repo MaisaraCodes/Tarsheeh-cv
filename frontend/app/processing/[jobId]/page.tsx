@@ -93,7 +93,7 @@ export default function ProcessingPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto w-full px-6 py-brand-2xl">
+    <div className="animate-fade-up max-w-4xl mx-auto w-full px-6 py-brand-2xl">
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
@@ -133,7 +133,7 @@ export default function ProcessingPage() {
               return (
                 <div
                   key={stage.key}
-                  className="bg-noir-2 p-4 flex flex-col justify-center items-center text-center min-h-[120px]"
+                  className="bg-noir-2 p-4 flex flex-col justify-center items-center text-center min-h-[120px] transition-all duration-500 ease-out"
                   style={{
                     border: isActive
                       ? "1px solid var(--color-gold)"
@@ -205,7 +205,7 @@ export default function ProcessingPage() {
             <div className="mt-brand-lg">
               <Link
                 href={`/results/${jobId}`}
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8"
+                className="inline-block font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
                 style={{ border: "1px solid var(--color-gold)" }}
               >
                 {COPY.ctaResults}
@@ -222,7 +222,7 @@ export default function ProcessingPage() {
             <div className="mt-brand-lg">
               <Link
                 href="/job"
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8"
+                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
                 style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
               >
                 Try again
@@ -239,7 +239,7 @@ export default function ProcessingPage() {
             <div className="mt-brand-lg">
               <Link
                 href="/job"
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8"
+                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
                 style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
               >
                 Try again

@@ -43,32 +43,32 @@ export default function Home() {
     <div className="flex flex-col">
       {/* ── Hero ── */}
       <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center">
-        <p className="font-serif text-7xl tracking-logo leading-none">
+        <p className="animate-hero-enter font-serif text-7xl tracking-logo leading-none">
           <span className="font-light text-gold-pale">TARSHEEH</span>
           <span className="font-normal text-gold">.CV</span>
         </p>
 
-        <div className="w-14 h-px bg-gold my-brand-xl" />
+        <div className="animate-fade-up w-14 h-px bg-gold my-brand-xl" style={{ animationDelay: '200ms' }} />
 
-        <h1 className="font-serif text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line">
+        <h1 className="animate-fade-up font-serif text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line" style={{ animationDelay: '400ms' }}>
           {TAGLINES.hero}
         </h1>
 
-        <p className="mt-brand-lg font-sans text-sm font-light text-muted-light w-full max-w-lg text-center leading-[1.75]">
+        <p className="animate-fade-up mt-brand-lg font-sans text-sm font-light text-muted-light w-full max-w-lg text-center leading-[1.75]" style={{ animationDelay: '600ms' }}>
           {TAGLINES.subHero}
         </p>
 
-        <div className="flex items-center gap-4 mt-brand-xl">
+        <div className="animate-fade-up flex items-center gap-4 mt-brand-xl" style={{ animationDelay: '800ms' }}>
           <Link
             href="/job"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8"
+            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
             style={{ border: "1px solid var(--color-gold)" }}
           >
             {COPY.ctaPrimary}
           </Link>
           <Link
             href="#how-it-works"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo text-muted py-3 px-8"
+            className="font-sans text-[11px] font-normal uppercase tracking-logo text-muted py-3 px-8 transition-colors duration-200 hover:text-ivory"
             style={{
               textDecoration: "underline",
               textDecorationColor: "var(--gold-dim)",
@@ -159,7 +159,7 @@ export default function Home() {
           </p>
           <Link
             href="/job"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8"
+            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
             style={{ border: "1px solid var(--color-gold)" }}
           >
             {COPY.ctaPrimary}
