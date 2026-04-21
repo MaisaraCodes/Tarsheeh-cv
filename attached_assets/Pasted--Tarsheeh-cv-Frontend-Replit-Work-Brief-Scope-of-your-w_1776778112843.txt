@@ -1,0 +1,56 @@
+# Tarsheeh.cv Frontend — Replit Work Brief
+
+## Scope of your work
+You are ONLY responsible for completing the Candidate Detail page and any minor polish. Do not touch:
+- /app/page.tsx (landing)
+- /app/job/page.tsx
+- /app/upload/[jobId]/page.tsx
+- /app/processing/[jobId]/page.tsx
+- /app/results/[jobId]/page.tsx
+- /app/layout.tsx
+- /app/globals.css
+- /components/Nav.tsx
+- /lib/*.ts (brand, api, mocks, types)
+- Any file outside /frontend
+
+Only create new files under /app/candidates/[candidateId]/page.tsx.
+
+## Project context
+- Multi-agent AI recruitment platform
+- Frontend: Next.js 16, TypeScript, Tailwind v4 (with @theme tokens)
+- Backend is separate (Python/FastAPI, not your concern)
+- Mock API is already built. Use lib/api.ts for all data fetching.
+
+## Brand rules (absolute)
+- Dark noir backgrounds (#0C0A07, #141109, #1C180F)
+- Gold accents (#B8922E, #D4AE5A, #EDD38A)
+- Ivory text (#F2EBD9)
+- Fonts: Cormorant Garamond (serif, headings), DM Sans (sans, body)
+- 1px hairline gold borders are the signature
+- No drop shadows, no thick borders, no generic shadcn defaults
+- Reference tarsheeh_brand_guide.html for the full design system
+
+## Required patterns to follow
+Match the existing pages exactly for:
+- Section header (number + title + gold-dim rule extending right)
+- Primary button (bg-gold, text-noir, 1px gold border, uppercase, tracking-logo)
+- Error color: #C97E7E
+- Animation: add `animate-fade-up` to top-level page wrapper
+
+## What NOT to do
+- Do not install new dependencies without asking
+- Do not invent new colors or spacing tokens
+- Do not add shadcn/ui components
+- Do not add loading spinners (use text "Loading..." in muted color)
+- Do not refactor existing code
+- Do not commit to main branch. Work on dev.
+
+## What to build
+See: docs/API_CONTRACT.md section "GET /questions/{candidate_id}"
+The candidate detail page should:
+- Route: /app/candidates/[candidateId]/page.tsx
+- Client component, use useParams for candidateId, useSearchParams for jobId
+- Load candidate data from getResults(jobId) — find by candidate_id
+- Load interview questions from getQuestions(candidateId)
+- Display: name, rank, score, summary, score breakdown bars, interview questions list
+- Back button linking to /results/[jobId]
