@@ -52,6 +52,10 @@
   --tracking-label:    0.30em;
   --tracking-badge:    0.35em;
   --tracking-tagline:  0.45em;
+
+  /* ── Animations ── */
+  --animate-fade-up: fade-up 600ms ease-out both;
+  --animate-hero-enter: hero-enter 1000ms ease-out both;
 }
 
 /* Opacity tokens — in :root so they are accessible as CSS variables
@@ -63,6 +67,10 @@
   --ivory-dim:  rgba(242, 235, 217, 0.70);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--color-noir);
   color: var(--color-ivory);
@@ -71,3 +79,26 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    letter-spacing: 0.35em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.2em;
+  }
+}
+

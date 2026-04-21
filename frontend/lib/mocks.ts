@@ -17,13 +17,13 @@ function delay(ms: number): Promise<void> {
 export async function mockPostJob(_body: JobRequest): Promise<JobResponse> {
   await delay(500);
   const job_id = "mock-" + crypto.randomUUID();
-  jobStartTimes.set(job_id, Date.now());
   return { job_id, status: "processing" };
 }
 
 export async function mockPostCandidates(formData: FormData): Promise<CandidatesResponse> {
   await delay(800);
   const job_id = formData.get("job_id") as string;
+  jobStartTimes.set(job_id, Date.now());
   const files = formData.getAll("files");
   return { job_id, candidates_queued: files.length, status: "processing" };
 }
