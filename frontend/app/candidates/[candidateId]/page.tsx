@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
@@ -28,7 +28,7 @@ export default function CandidateDetailPage() {
       .then(([resultsRes, questionsRes]) => {
         if (cancelled) return;
         const match = resultsRes.ranked_candidates.find(
-          (c) => c.candidate_id === candidateId
+          (c) => c.candidate_id === candidateId,
         );
         if (!match) {
           setError("Candidate not found in this shortlist.");
@@ -39,7 +39,9 @@ export default function CandidateDetailPage() {
       })
       .catch((err) => {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : "Failed to load candidate.");
+        setError(
+          err instanceof Error ? err.message : "Failed to load candidate.",
+        );
       });
 
     return () => {
@@ -52,7 +54,6 @@ export default function CandidateDetailPage() {
 
   return (
     <div className="animate-fade-up max-w-3xl mx-auto w-full px-6 py-brand-2xl">
-
       {/* Back link */}
       <Link
         href={backHref}
@@ -69,7 +70,10 @@ export default function CandidateDetailPage() {
         <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
           {candidate?.name ?? "Loading..."}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div
+          className="flex-1 h-px"
+          style={{ background: "var(--gold-dim)" }}
+        />
       </div>
 
       {/* Loading state */}
@@ -91,7 +95,10 @@ export default function CandidateDetailPage() {
             <Link
               href={backHref}
               className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
-              style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
+              style={{
+                border: "1px solid var(--gold-dim)",
+                color: "var(--color-muted-light)",
+              }}
             >
               Back to shortlist
             </Link>
@@ -133,7 +140,10 @@ export default function CandidateDetailPage() {
           </div>
 
           {/* Score bar */}
-          <div className="mt-brand-lg w-full relative" style={{ height: "1px", background: "var(--gold-faint)" }}>
+          <div
+            className="mt-brand-lg w-full relative"
+            style={{ height: "1px", background: "var(--gold-faint)" }}
+          >
             <div
               className="absolute top-0 left-0 bg-gold"
               style={{ width: `${candidate.score}%`, height: "1px" }}
@@ -172,7 +182,6 @@ export default function CandidateDetailPage() {
           </div>
         </>
       )}
-
     </div>
   );
 }
