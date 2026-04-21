@@ -81,5 +81,5 @@ workflow.add_edge("analyzer", "ranker")
 workflow.add_edge("ranker", END)
 
 # 4. Compile Graph
-# The compiled 'app' is the core Director called by the FastAPI Endpoint
-app = workflow.compile()
+# The compiled graph is invoked by the FastAPI endpoints
+graph = workflow.compile()

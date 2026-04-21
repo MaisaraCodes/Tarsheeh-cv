@@ -5,9 +5,11 @@ import os
 import uuid
 from dotenv import load_dotenv, find_dotenv
 
-# Load environment variables from backend/.env explicitly
-env_path = os.path.join(os.path.dirname(__file__), ".env")
-load_dotenv(env_path)
+# Load environment variables — check project root first, then backend/.env
+root_env = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+backend_env = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(root_env)
+load_dotenv(backend_env)
 
 # Confirm loading to Terminal (without exposing the keys)
 if os.getenv("OPENAI_API_KEY") or os.getenv("SUPABASE_URL"):
@@ -17,7 +19,7 @@ else:
 
 # Import the LangGraph graph
 from backend.agents.graph import graph
-from backend.utils.supabase_client import supabase
+from backend.utils.supabase_client import get_supabase
 
 # Create the FastAPI application instance
 app = FastAPI(
@@ -84,7 +86,7 @@ def create_job(job: JobRequest):
         final_status = result.get("status", "processing")
         parsed_profile = result.get("parsed_profile")
         
-        supabase.table("jobs").insert({
+        get_supabase().table("jobs").insert({
             "id": job_id,
             "title": result.get("job_title", job.title),
             "description": job.description,

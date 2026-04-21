@@ -17,23 +17,10 @@ from dotenv import load_dotenv
 from supabase import create_client, Client
 from openai import OpenAI
 
-# Load environment variables from backend/.env
+# Load environment variables from project root then backend/.env
 backend_dir = Path(__file__).parent.parent
+load_dotenv(backend_dir.parent / ".env")
 load_dotenv(backend_dir / ".env")
-
-# Initialize clients
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_ANON_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise ValueError("Missing Supabase credentials. Check SUPABASE_URL and SUPABASE_ANON_KEY in .env")
-
-if not OPENAI_API_KEY:
-    raise ValueError("Missing OpenAI credentials. Check OPENAI_API_KEY in .env")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Embedding model configuration (must match what was used for ingestion)
 EMBEDDING_MODEL = "text-embedding-3-small"
@@ -41,6 +28,30 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 # Quality thresholds
 DEFAULT_MATCH_COUNT = 5
 MIN_SIMILARITY_THRESHOLD = 0.3
+
+_supabase_client: Optional[Client] = None
+_openai_client: Optional[OpenAI] = None
+
+
+def _get_supabase() -> Client:
+    global _supabase_client
+    if _supabase_client is None:
+        url = os.getenv("SUPABASE_URL")
+        key = os.getenv("SUPABASE_ANON_KEY")
+        if not url or not key:
+            raise ValueError("Missing Supabase credentials. Check SUPABASE_URL and SUPABASE_ANON_KEY in .env")
+        _supabase_client = create_client(url, key)
+    return _supabase_client
+
+
+def _get_openai() -> OpenAI:
+    global _openai_client
+    if _openai_client is None:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("Missing OpenAI credentials. Check OPENAI_API_KEY in .env")
+        _openai_client = OpenAI(api_key=api_key)
+    return _openai_client
 
 
 def embed_query(query_text: str) -> List[float]:
@@ -54,7 +65,7 @@ def embed_query(query_text: str) -> List[float]:
         A list of 1536 floats representing the embedding
     """
     try:
-        response = openai_client.embeddings.create(
+        response = _get_openai().embeddings.create(
             model=EMBEDDING_MODEL,
             input=query_text
         )
@@ -107,7 +118,7 @@ def retrieve_context(
     
     # Call the Postgres function via Supabase RPC
     try:
-        response = supabase.rpc(
+        response = _get_supabase().rpc(
             "match_knowledge_base",
             {
                 "query_embedding": query_embedding,
