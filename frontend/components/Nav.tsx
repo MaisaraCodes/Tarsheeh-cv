@@ -1,21 +1,16 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import LanguageToggle from './LanguageToggle';
 
 export default function Nav() {
   const pathname = usePathname();
   const t = useTranslations('common');
-  const locale = useLocale();
-  const isRtl = locale === 'ar';
 
   return (
     <div
-      dir="ltr"
-      className={`max-w-4xl mx-auto flex items-center ${
-        isRtl ? 'gap-6 justify-start' : 'justify-between'
-      }`}
+      className="max-w-4xl mx-auto flex items-center justify-between"
     >
       <Link
         href="/"

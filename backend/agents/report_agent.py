@@ -235,30 +235,38 @@ def generate_report(
         ]
         # In RTL mode the value column should sit on the left and the label on
         # the right, so we swap column order and right-align the label cells.
-        if is_ar:
-            rows = [[_t(value, locale), _t(label, locale)] for label, value in rows_def]
-            col_widths = [4.4 * inch, 1.6 * inch]
-            label_col = 1
-            value_col = 0
-            label_align = "RIGHT"
-            value_align = "RIGHT"
-        else:
-            rows = [[label, value] for label, value in rows_def]
-            col_widths = [1.6 * inch, 4.4 * inch]
-            label_col = 0
-            value_col = 1
-            label_align = "LEFT"
-            value_align = "LEFT"
-
+        # Wrap each cell in a Paragraph so long values word-wrap inside the
+        # column instead of overflowing horizontally past the page margin.
         body_font = s["body"].fontName
+        body_size = 9
+        body_leading = 12
+
+        def _cell(text: str, color, align: int) -> Paragraph:
+            style = ParagraphStyle(
+                "cell",
+                fontName=body_font,
+                fontSize=body_size,
+                leading=body_leading,
+                textColor=color,
+                alignment=align,
+            )
+            return Paragraph(_t(text, locale), style)
+
+        if is_ar:
+            rows = [
+                [_cell(value, INK, TA_RIGHT), _cell(label, MUTED, TA_RIGHT)]
+                for label, value in rows_def
+            ]
+            col_widths = [4.4 * inch, 1.6 * inch]
+        else:
+            rows = [
+                [_cell(label, MUTED, TA_LEFT), _cell(value, INK, TA_LEFT)]
+                for label, value in rows_def
+            ]
+            col_widths = [1.6 * inch, 4.4 * inch]
+
         t = Table(rows, colWidths=col_widths)
         t.setStyle(TableStyle([
-            ("FONTNAME", (0, 0), (-1, -1), body_font),
-            ("FONTSIZE", (0, 0), (-1, -1), 9),
-            ("TEXTCOLOR", (label_col, 0), (label_col, -1), MUTED),
-            ("TEXTCOLOR", (value_col, 0), (value_col, -1), INK),
-            ("ALIGN", (label_col, 0), (label_col, -1), label_align),
-            ("ALIGN", (value_col, 0), (value_col, -1), value_align),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
             ("TOPPADDING", (0, 0), (-1, -1), 6),

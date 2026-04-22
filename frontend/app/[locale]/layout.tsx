@@ -34,12 +34,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             className="px-6 py-8"
             style={{ borderTop: '1px solid var(--gold-dim)' }}
           >
-            <div
-              dir="ltr"
-              className={`max-w-4xl mx-auto flex items-start ${
-                locale === 'ar' ? 'gap-12 justify-start' : 'justify-between'
-              }`}
-            >
+            <div className="max-w-4xl mx-auto flex items-start justify-between">
               <div>
                 <p
                   className="font-serif text-xl tracking-logo leading-none"
