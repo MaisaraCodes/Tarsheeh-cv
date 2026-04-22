@@ -47,7 +47,7 @@ export default function ProcessingPage() {
         if (cancelled) return;
         setStatus(res);
         if (res.status === "processing") {
-          timeoutId = setTimeout(poll, 500);
+          timeoutId = setTimeout(poll, 2000);
         }
       } catch (err) {
         if (cancelled) return;

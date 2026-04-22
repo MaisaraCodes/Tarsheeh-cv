@@ -32,12 +32,28 @@ _LANG_DIRECTIVE = {
 }
 
 
-def analyze_cv(job_profile: JobProfile, cv_text: str, locale: str = "en") -> CVAnalysisResult:
-    """Evaluate a CV against a Job Profile, producing reasoning in the requested locale."""
-    query = f"How to evaluate a candidate for {job_profile.title}? Key priorities: {', '.join(job_profile.priorities)}"
-    raw_results = retrieve_context(query_text=query, match_count=3)
-    rag_context = format_context_for_prompt(raw_results)
+def build_rag_context_for_job(job_profile: JobProfile) -> str:
+    """Run the RAG retrieval once for a job and return the formatted context.
 
+    Hoisted out of `analyze_cv` so a single retrieval can be shared across all
+    candidates for the same job (was previously running once per candidate with
+    the identical query — N redundant embedding + vector calls).
+    """
+    query = (
+        f"How to evaluate a candidate for {job_profile.title}? "
+        f"Key priorities: {', '.join(job_profile.priorities)}"
+    )
+    raw_results = retrieve_context(query_text=query, match_count=3)
+    return format_context_for_prompt(raw_results)
+
+
+def analyze_cv_with_context(
+    job_profile: JobProfile,
+    cv_text: str,
+    rag_context: str,
+    locale: str = "en",
+) -> CVAnalysisResult:
+    """Evaluate a CV against a Job Profile using a pre-built RAG context."""
     llm = ChatOpenAI(model="gpt-4o", temperature=0)
     parser = PydanticOutputParser(pydantic_object=CVAnalysisResult)
 
@@ -74,6 +90,16 @@ Your output must strictly adhere to the following data structure format:
         "rag_context": rag_context,
         "lang_directive": _LANG_DIRECTIVE.get(locale, _LANG_DIRECTIVE["en"]),
     })
+
+
+def analyze_cv(job_profile: JobProfile, cv_text: str, locale: str = "en") -> CVAnalysisResult:
+    """Backwards-compatible single-shot analyzer (computes its own RAG context).
+
+    Prefer `build_rag_context_for_job` + `analyze_cv_with_context` when scoring
+    multiple candidates for the same job to avoid redundant retrievals.
+    """
+    rag_context = build_rag_context_for_job(job_profile)
+    return analyze_cv_with_context(job_profile, cv_text, rag_context, locale=locale)
 
 
 if __name__ == "__main__":

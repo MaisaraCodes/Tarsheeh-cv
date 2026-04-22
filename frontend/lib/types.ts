@@ -45,3 +45,12 @@ export interface QuestionsResponse {
   job_id: string;
   questions: string[];
 }
+
+export interface CandidateDetail {
+  candidate_id: string;
+  job_id: string;
+  name: string;
+  score: number;
+  rank: number;
+  summary: string;
+}

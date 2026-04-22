@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from "@/i18n/navigation";
-import { getResults, getQuestions } from "@/lib/api";
-import type { RankedCandidate } from "@/lib/types";
+import { getCandidate, getQuestions } from "@/lib/api";
+import type { CandidateDetail } from "@/lib/types";
 
 export default function CandidateDetailPage() {
   const { candidateId } = useParams<{ candidateId: string }>();
@@ -16,7 +16,7 @@ export default function CandidateDetailPage() {
   const t = useTranslations('candidate');
   const tErr = useTranslations('errors');
 
-  const [candidate, setCandidate] = useState<RankedCandidate | null>(null);
+  const [candidate, setCandidate] = useState<CandidateDetail | null>(null);
   const [questions, setQuestions] = useState<string[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,17 +28,10 @@ export default function CandidateDetailPage() {
 
     let cancelled = false;
 
-    Promise.all([getResults(jobId), getQuestions(candidateId)])
-      .then(([resultsRes, questionsRes]) => {
+    Promise.all([getCandidate(candidateId, jobId), getQuestions(candidateId)])
+      .then(([candidateRes, questionsRes]) => {
         if (cancelled) return;
-        const match = resultsRes.ranked_candidates.find(
-          (c) => c.candidate_id === candidateId,
-        );
-        if (!match) {
-          setError(tErr('candidateNotFound'));
-          return;
-        }
-        setCandidate(match);
+        setCandidate(candidateRes);
         setQuestions(questionsRes.questions);
       })
       .catch((err) => {

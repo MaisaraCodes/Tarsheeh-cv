@@ -13,11 +13,21 @@ from langgraph.graph import StateGraph, START, END
 from backend.models.job import JobProfile
 from backend.models.cv import CVAnalysisResult
 from backend.models.ranking import RankedList
+from concurrent.futures import ThreadPoolExecutor
+
 from backend.agents.intake_agent import process_job_description
-from backend.agents.cv_analyzer import analyze_cv
+from backend.agents.cv_analyzer import (
+    analyze_cv,
+    analyze_cv_with_context,
+    build_rag_context_for_job,
+)
 from backend.agents.ranking_agent import rank_candidates
 from backend.agents.interview_agent import generate_questions
 from backend.agents.report_agent import generate_report
+
+# Bounded concurrency for parallel CV analysis. Keep modest to respect
+# OpenAI rate limits and avoid thundering-herd on the vector DB / LLM.
+_ANALYZER_MAX_WORKERS = 5
 
 
 # ---------------------------------------------------------------------------
@@ -67,6 +77,18 @@ def _intake_node(state: IntakeState) -> Dict[str, Any]:
     return {"job_profile": profile}
 
 
+def run_analyzer(state: AnalysisState) -> Dict[str, Any]:
+    """Public entry-point for the analyzer node — used by the upload route to
+    drive analyzer and ranker as separate steps so it can publish the
+    in-between stage transition to the DB."""
+    return _analyzer_node(state)
+
+
+def run_ranker(state: AnalysisState) -> Dict[str, Any]:
+    """Public entry-point for the ranker node (see `run_analyzer`)."""
+    return _ranker_node(state)
+
+
 def _analyzer_node(state: AnalysisState) -> Dict[str, Any]:
     print("--- [ANALYZER] scoring candidates ---")
     job_profile = state.get("job_profile")
@@ -77,18 +99,28 @@ def _analyzer_node(state: AnalysisState) -> Dict[str, Any]:
     if not candidates:
         raise ValueError("analysis_graph: no candidates supplied")
 
-    analyses: List[Dict[str, Any]] = []
-    for candidate in candidates:
+    # Single shared RAG retrieval for the job — same query was previously run
+    # once per candidate. Fetched here so every parallel worker reuses it.
+    rag_context = build_rag_context_for_job(job_profile)
+
+    def _score_one(candidate: Dict[str, str]) -> Dict[str, Any]:
         cid = candidate.get("id")
         name = candidate.get("name") or "Unnamed candidate"
         cv_text = candidate.get("cv_text", "")
         print(f"   - analyzing {name} ({cid}) [locale={locale}]")
-        result = analyze_cv(job_profile, cv_text, locale=locale)
-        analyses.append({
+        result = analyze_cv_with_context(job_profile, cv_text, rag_context, locale=locale)
+        return {
             "candidate_id": cid,
             "name": name,
             "analysis": result.model_dump(),
-        })
+        }
+
+    workers = min(_ANALYZER_MAX_WORKERS, max(1, len(candidates)))
+    if workers == 1:
+        analyses = [_score_one(c) for c in candidates]
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            analyses = list(pool.map(_score_one, candidates))
     return {"all_cv_analyses": analyses}
 
 
