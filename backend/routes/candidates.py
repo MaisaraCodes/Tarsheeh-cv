@@ -73,14 +73,47 @@ def _extract_pdf_text(data: bytes, filename: str) -> str:
         raise HTTPException(status_code=415, detail=f"Could not parse PDF '{filename}': {e}")
 
 
+# Postgres "undefined_column" SQLSTATE. PostgREST surfaces it as an APIError
+# whose `.code` is "42703". Tolerated so writes still succeed when the live DB
+# hasn't been migrated to add the optional `error_message` column.
+_PG_UNDEFINED_COLUMN = "42703"
+
+
+def _is_undefined_column_error(exc: Exception) -> bool:
+    return (
+        getattr(exc, "code", None) == _PG_UNDEFINED_COLUMN
+        or _PG_UNDEFINED_COLUMN in str(exc)
+    )
+
+
 def _upsert_job_results(sb, job_id: str, payload: dict) -> None:
-    """Insert-or-update a job_results row. Used to publish stage transitions."""
+    """Insert-or-update a job_results row. Used to publish stage transitions.
+
+    If `payload` references an optional column the live DB is missing (notably
+    `error_message`), we retry the write without that column so the core stage
+    state still lands. The dropped value is logged for observability.
+    """
     existing = sb.table("job_results").select("job_id").eq("job_id", job_id).limit(1).execute()
     full_payload = {"job_id": job_id, **payload}
-    if existing.data:
-        sb.table("job_results").update(payload).eq("job_id", job_id).execute()
-    else:
-        sb.table("job_results").insert(full_payload).execute()
+
+    def _do_write(p: dict) -> None:
+        if existing.data:
+            sb.table("job_results").update(p).eq("job_id", job_id).execute()
+        else:
+            sb.table("job_results").insert({"job_id": job_id, **p}).execute()
+
+    try:
+        _do_write(payload if existing.data else full_payload)
+    except Exception as e:
+        if _is_undefined_column_error(e) and "error_message" in payload:
+            print(
+                f"[CANDIDATES] job_results.error_message missing on live DB — "
+                f"retrying upsert without it (dropped: {payload.get('error_message')!r})"
+            )
+            slim = {k: v for k, v in payload.items() if k != "error_message"}
+            _do_write(slim if existing.data else {"job_id": job_id, **slim})
+        else:
+            raise
 
 
 def _run_analysis_pipeline(
