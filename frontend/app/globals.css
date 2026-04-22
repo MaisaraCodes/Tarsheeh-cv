@@ -5,6 +5,11 @@
 @import '@fontsource/dm-sans/300.css';
 @import '@fontsource/dm-sans/400.css';
 @import '@fontsource/dm-sans/500.css';
+@import '@fontsource/amiri/400.css';
+@import '@fontsource/amiri/700.css';
+@import '@fontsource/cairo/300.css';
+@import '@fontsource/cairo/400.css';
+@import '@fontsource/cairo/500.css';
 
 @import "tailwindcss";
 
@@ -68,6 +73,15 @@
   --ivory-dim:  rgba(242, 235, 217, 0.70);
 }
 
+/* RTL font overrides — when [dir="rtl"] is set on <html>, every component
+   using font-serif or font-sans Tailwind utilities automatically gets Arabic
+   fonts with no per-component changes. */
+[dir="rtl"] {
+  --font-serif: 'Amiri', serif;
+  --font-sans:  'Cairo', 'Tajawal', sans-serif;
+  line-height: 1.8;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -111,4 +125,3 @@ body {
     letter-spacing: 0.2em;
   }
 }
-

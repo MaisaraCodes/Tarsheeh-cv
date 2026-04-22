@@ -1,0 +1,38 @@
+{
+  "common": {
+    "ctaPrimary": "Post a Role"
+  },
+  "nav": {
+    "toggleLabel": "EN"
+  },
+  "landing": {
+    "hero": "Hire with precision.\nLead with confidence.",
+    "subHero": "Tarsheeh.cv screens every candidate, scores every CV, and delivers your shortlist \u2014 ranked, reasoned, and ready \u2014 in minutes.",
+    "ctaPrimary": "Post a Role",
+    "learnMore": "Learn More",
+    "missionNum": "01",
+    "missionTitle": "Our Mission",
+    "missionBody": "Recruitment should not require a dedicated team to do well. Tarsheeh.cv is a multi-agent AI platform that makes the entire process Something to businesses can run without the overhead of a full HR operation team, and effortless for those that already have one. It reads every CV, evaluates every candidate against your job profile, and returns a ranked shortlist with full reasoning in minutes, not days.",
+    "howItWorksNum": "02",
+    "howItWorksTitle": "How It Works",
+    "howItWorksIntro": "Five specialised agents read every CV, score every candidate against the job profile, and returns a ranked shortlist with full reasoning. Post a role. Upload CVs. Receive your shortlist in minutes.",
+    "featuresNum": "03",
+    "featuresTitle": "What You Get",
+    "closingCta": "Ready to hire with precision?",
+    "screeningPhrase": "Every CV, analysed in seconds.",
+    "screeningSub": "Every candidate evaluated against the same criteria, without fatigue or bias.",
+    "rankingPhrase": "Ranked. Reasoned. Ready.",
+    "rankingSub": "A scored shortlist with clear reasoning, not a pile of files to sort through.",
+    "interviewPhrase": "Questions that reveal character, not just competence.",
+    "interviewSub": "Tailored questions for each candidate, ready before the first interview is booked.",
+    "pipelineIntake": "Intake",
+    "pipelineScreening": "Screening",
+    "pipelineRanking": "Ranking",
+    "pipelineInterview": "Interview",
+    "pipelineReport": "Report"
+  },
+  "footer": {
+    "platform": "Intelligent Talent Acquisition",
+    "credits": "Team Nexus \u00b7 Agenticthon 2026 \u00b7 Internal Use Only"
+  }
+}
