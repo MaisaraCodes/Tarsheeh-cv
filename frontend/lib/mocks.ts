@@ -14,6 +14,15 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Read the active locale from the <html lang="..."> attribute, which is
+// set by the [locale]/layout.tsx server component on every render.
+// Mock funcs run in the browser, so this is reliable at call time.
+function activeLocale(): "ar" | "en" {
+  if (typeof document === "undefined") return "en";
+  const lang = document.documentElement.getAttribute("lang");
+  return lang === "ar" ? "ar" : "en";
+}
+
 export async function mockPostJob(_body: JobRequest): Promise<JobResponse> {
   await delay(500);
   const job_id = "mock-" + crypto.randomUUID();
@@ -44,13 +53,11 @@ export async function mockGetStatus(jobId: string): Promise<StatusResponse> {
   } else if (elapsed < 10) {
     return { job_id: jobId, stage: "report", progress: 95, status: "processing" };
   } else {
-    // stage remains "report" to match the last state machine node.
-    // After completion, stage is informational only — UI must branch on status, not stage.
     return { job_id: jobId, stage: "report", progress: 100, status: "complete" };
   }
 }
 
-const MOCK_CANDIDATES: RankedCandidate[] = [
+const MOCK_CANDIDATES_EN: RankedCandidate[] = [
   {
     candidate_id: "mock-candidate-1",
     name: "Sarah Al-Mansouri",
@@ -85,9 +92,61 @@ const MOCK_CANDIDATES: RankedCandidate[] = [
   },
 ];
 
+const MOCK_CANDIDATES_AR: RankedCandidate[] = [
+  {
+    candidate_id: "mock-candidate-1",
+    name: "سارة المنصوري",
+    score: 94,
+    rank: 1,
+    summary:
+      "خلفية استثنائية في تصميم المنتجات بثماني سنوات خبرة في التقنية المالية والتجارة الإلكترونية. تفكير منظومي قوي وسجل ثابت في إطلاق المنتجات على نطاق واسع.",
+  },
+  {
+    candidate_id: "mock-candidate-2",
+    name: "ريم خالد",
+    score: 84,
+    rank: 2,
+    summary:
+      "مصممة تجربة مستخدم أولى تمتلك خبرة عميقة في أبحاث المستخدمين. قادت تصميمًا متكاملًا لمنتج B2B SaaS يستخدمه أكثر من 40,000 مستخدم نشط.",
+  },
+  {
+    candidate_id: "mock-candidate-3",
+    name: "لارا فاروق",
+    score: 76,
+    rank: 3,
+    summary:
+      "مصممة عامة قوية بمهارات تعاون متعدد الفرق. مناسبة لفرق المنتجات السريعة الإيقاع؛ خبرتها محدودة في السياقات المؤسسية.",
+  },
+  {
+    candidate_id: "mock-candidate-4",
+    name: "نورة الراشدي",
+    score: 70,
+    rank: 4,
+    summary:
+      "مصممة من المستوى المتوسط تُظهر مسار نمو قوي. ملفها يبرز الحرفية البصرية؛ ستستفيد من تجارب أعمق في تأطير المشكلات المعقدة.",
+  },
+];
+
+const MOCK_QUESTIONS_EN = [
+  "Walk me through a product decision you made that turned out to be wrong. How did you know, and what did you do next?",
+  "Describe a situation where you had to align stakeholders who held fundamentally opposing views on what the product should do. What was your role and what did the outcome look like?",
+  "Tell me about the most technically constrained project you've worked on. How did those constraints shape your design decisions?",
+  "How do you decide when a problem is worth spending three days on versus three hours? Give me a recent example.",
+  "What does 'done' mean to you for a shipped feature, and how do you know when you've actually reached it?",
+];
+
+const MOCK_QUESTIONS_AR = [
+  "اشرح قرار منتج اتخذته وتبيّن لاحقًا أنه خاطئ. كيف عرفت ذلك، وماذا فعلت بعدها؟",
+  "صف موقفًا اضطررت فيه إلى توحيد رؤى أصحاب مصلحة لديهم وجهات نظر متعارضة جوهريًا حول وظيفة المنتج. ما كان دورك وما الذي انتهى إليه الأمر؟",
+  "حدّثني عن أكثر مشروع واجهت فيه قيودًا تقنية. كيف شكّلت تلك القيود قراراتك التصميمية؟",
+  "كيف تقرر متى تستحق المشكلة ثلاثة أيام من العمل مقابل ثلاث ساعات؟ أعطني مثالًا حديثًا.",
+  "ماذا يعني لك مفهوم \"المنجز\" بالنسبة لميزة مُطلقة، وكيف تعرف أنك وصلت إليه فعلًا؟",
+];
+
 export async function mockGetResults(jobId: string): Promise<ResultsResponse> {
   await delay(300);
-  return { job_id: jobId, ranked_candidates: MOCK_CANDIDATES };
+  const candidates = activeLocale() === "ar" ? MOCK_CANDIDATES_AR : MOCK_CANDIDATES_EN;
+  return { job_id: jobId, ranked_candidates: candidates };
 }
 
 export async function mockGetQuestions(candidateId: string): Promise<QuestionsResponse> {
@@ -95,13 +154,7 @@ export async function mockGetQuestions(candidateId: string): Promise<QuestionsRe
   return {
     candidate_id: candidateId,
     job_id: "mock-job-id",
-    questions: [
-      "Walk me through a product decision you made that turned out to be wrong. How did you know, and what did you do next?",
-      "Describe a situation where you had to align stakeholders who held fundamentally opposing views on what the product should do. What was your role and what did the outcome look like?",
-      "Tell me about the most technically constrained project you've worked on. How did those constraints shape your design decisions?",
-      "How do you decide when a problem is worth spending three days on versus three hours? Give me a recent example.",
-      "What does 'done' mean to you for a shipped feature, and how do you know when you've actually reached it?",
-    ],
+    questions: activeLocale() === "ar" ? MOCK_QUESTIONS_AR : MOCK_QUESTIONS_EN,
   };
 }
 

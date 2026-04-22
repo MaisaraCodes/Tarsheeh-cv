@@ -1,13 +1,14 @@
 {
   "common": {
-    "ctaPrimary": "Post a Role"
+    "ctaPrimary": "Post a Role",
+    "tryAgain": "Try again"
   },
   "nav": {
     "toggleLabel": "EN"
   },
   "landing": {
     "hero": "Hire with precision.\nLead with confidence.",
-    "subHero": "Tarsheeh.cv screens every candidate, scores every CV, and delivers your shortlist \u2014 ranked, reasoned, and ready \u2014 in minutes.",
+    "subHero": "Tarsheeh.cv screens every candidate, scores every CV, and delivers your shortlist — ranked, reasoned, and ready — in minutes.",
     "ctaPrimary": "Post a Role",
     "learnMore": "Learn More",
     "missionNum": "01",
@@ -33,6 +34,94 @@
   },
   "footer": {
     "platform": "Intelligent Talent Acquisition",
-    "credits": "Team Nexus \u00b7 Agenticthon 2026 \u00b7 Internal Use Only"
+    "credits": "Team Nexus · Agenticthon 2026 · Internal Use Only"
+  },
+  "job": {
+    "num": "01",
+    "title": "Post a Role",
+    "intro": "Describe the role you're hiring for. Our agents will handle the rest.",
+    "labelTitle": "Job Title",
+    "labelDescription": "Job Description",
+    "placeholderTitle": "Senior Product Designer",
+    "placeholderDescription": "Paste your job description here...",
+    "submit": "Post a Role",
+    "submitting": "Reading the role description..."
+  },
+  "upload": {
+    "num": "02",
+    "title": "Upload CVs",
+    "intro": "Add the CVs you'd like evaluated. PDF format only.",
+    "dropzone": "Drop CVs here, or click to browse",
+    "hint": "PDF format only, max 10MB per file, up to 20 files",
+    "remove": "Remove",
+    "submit": "Upload CVs",
+    "submitting": "Reading the role description..."
+  },
+  "processing": {
+    "num": "03",
+    "title": "Processing",
+    "intro": "Your pipeline is running.",
+    "initializing": "Initializing...",
+    "overallProgress": "Overall Progress",
+    "badgeActive": "Active",
+    "badgeDone": "Done",
+    "badgePending": "Pending",
+    "indicatorComplete": "Complete",
+    "indicatorFailed": "Failed",
+    "indicatorProcessing": "Processing",
+    "subDone": "Done",
+    "subAwaiting": "Awaiting...",
+    "stageIntakeLabel": "Intake",
+    "stageScreeningLabel": "Screening",
+    "stageRankingLabel": "Ranking",
+    "stageInterviewLabel": "Interview",
+    "stageReportLabel": "Report",
+    "stageIntakeMsg": "Reading the role description...",
+    "stageScreeningMsg": "Screening candidates...",
+    "stageRankingMsg": "Ranking results...",
+    "stageInterviewMsg": "Preparing questions...",
+    "stageReportMsg": "Compiling your report...",
+    "complete": "Your shortlist is ready.",
+    "ctaResults": "View Shortlist",
+    "errorState": "Something went wrong. Try again or contact support."
+  },
+  "results": {
+    "num": "04",
+    "title": "Shortlist",
+    "intro": "Your ranked candidates.",
+    "tagline": "Ranked. Reasoned. Ready.",
+    "topScore": "Top Score",
+    "loading": "Loading shortlist...",
+    "empty": "No candidates yet. Upload CVs to begin.",
+    "errorState": "Something went wrong. Try again or contact support.",
+    "ctaReport": "Download Report",
+    "downloadingReport": "Compiling your report..."
+  },
+  "candidate": {
+    "num": "05",
+    "loading": "Loading...",
+    "loadingFull": "Loading candidate...",
+    "back": "Back to shortlist",
+    "rankLabel": "Rank",
+    "scoreLabel": "Match Score",
+    "interviewQuestionsTitle": "Interview Questions",
+    "interviewTagline": "Questions that reveal character, not just competence.",
+    "questionPrefix": "Q",
+    "errorState": "Something went wrong. Try again or contact support."
+  },
+  "errors": {
+    "bothFieldsRequired": "Both fields are required.",
+    "somethingWentWrong": "Something went wrong.",
+    "onlyPdf": "Only PDF files are accepted.",
+    "fileTooLarge": "File exceeds 10MB limit.",
+    "maxFiles": "Maximum 20 files.",
+    "addCv": "Add at least one CV.",
+    "uploadFailed": "Upload failed.",
+    "statusFailed": "Status check failed.",
+    "loadResults": "Failed to load results.",
+    "downloadFailed": "Report download failed.",
+    "missingIds": "Missing job or candidate identifier.",
+    "candidateNotFound": "Candidate not found in this shortlist.",
+    "loadCandidate": "Failed to load candidate."
   }
 }

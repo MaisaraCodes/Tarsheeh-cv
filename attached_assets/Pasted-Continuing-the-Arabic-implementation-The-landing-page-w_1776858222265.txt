@@ -1,0 +1,40 @@
+Continuing the Arabic implementation. The landing page was migrated successfully in the previous session. Now migrate the remaining pages.
+
+SCOPE:
+Migrate these pages to the /app/[locale]/ structure and replace all hardcoded strings with translation keys:
+- /app/job/page.tsx → /app/[locale]/job/page.tsx
+- /app/upload/[jobId]/page.tsx → /app/[locale]/upload/[jobId]/page.tsx
+- /app/processing/[jobId]/page.tsx → /app/[locale]/processing/[jobId]/page.tsx
+- /app/results/[jobId]/page.tsx → /app/[locale]/results/[jobId]/page.tsx
+- /app/candidates/[candidateId]/page.tsx → /app/[locale]/candidates/[candidateId]/page.tsx
+
+For each page:
+1. Move the file to the [locale] structure
+2. Identify every hardcoded string (including error messages, placeholder text, button labels, stage messages)
+3. Add corresponding keys to /messages/en.json and /messages/ar.json
+4. For Arabic strings: COPY EXACTLY from /tarsheeh_brand_guide_AR.html — do not translate from English yourself. The Arabic brand guide has sections 04 (النصوص والعبارات) with exact microcopy including stages, CTAs, empty states, error states. Use those verbatim.
+5. Update all Tailwind classes to use logical properties where direction matters:
+   - ml-* → ms-*
+   - mr-* → me-*
+   - pl-* → ps-*
+   - pr-* → pe-*
+   - text-left → text-start
+   - text-right → text-end
+   - border-l → border-s
+   - border-r → border-e
+6. Update any icons/arrows (like "← Back to shortlist") — in AR, the arrow should be "→"
+7. Update all internal navigation Links to include locale prefix
+
+Also update:
+- /lib/brand.ts — the COPY, TAGLINES, PHRASES constants need to either be removed entirely (in favor of pure i18n) or kept as English-only fallbacks. Your choice, explain your reasoning.
+- /lib/api.ts and /lib/types.ts — these contain no user-facing strings and should NOT be modified.
+- /lib/mocks.ts — the mock candidate names and summaries should stay in English since they're test data, but if they're shown on the Arabic side they look wrong. Propose a solution: either duplicate the mock data with Arabic names for the AR locale, or leave English and accept the mismatch for mock mode.
+
+DO NOT touch backend code. Do not modify /app/api routes if any exist.
+
+After implementation:
+- Run `npm run build` and fix any TypeScript errors
+- Tell me to test each page in both locales
+- Do not commit until I've verified all pages work in both EN and AR
+
+Report back with the list of files changed and the key naming convention you used in the dictionaries

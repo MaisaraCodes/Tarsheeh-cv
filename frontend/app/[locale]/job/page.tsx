@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { COPY } from "@/lib/brand";
+import { useTranslations } from 'next-intl';
+import { useRouter } from "@/i18n/navigation";
 import { postJob } from "@/lib/api";
 import type { JobRequest } from "@/lib/types";
 
@@ -13,6 +13,9 @@ const inputStyle: React.CSSProperties = {
 
 export default function JobPage() {
   const router = useRouter();
+  const t = useTranslations('job');
+  const tErr = useTranslations('errors');
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +24,7 @@ export default function JobPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
-      setError("Both fields are required.");
+      setError(tErr('bothFieldsRequired'));
       return;
     }
     setIsSubmitting(true);
@@ -31,7 +34,7 @@ export default function JobPage() {
       const res = await postJob(body);
       router.push(`/upload/${res.job_id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(err instanceof Error ? err.message : tErr('somethingWentWrong'));
       setIsSubmitting(false);
     }
   }
@@ -41,18 +44,21 @@ export default function JobPage() {
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
-        <span className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0">
-          01
+        <span
+          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          dir="ltr"
+        >
+          {t('num')}
         </span>
         <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
-          Post a Role
+          {t('title')}
         </h1>
         <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Intro */}
       <p className="font-serif text-[22px] font-light text-ivory mb-brand-xl">
-        Describe the role you&apos;re hiring for. Our agents will handle the rest.
+        {t('intro')}
       </p>
 
       {/* Form */}
@@ -61,13 +67,13 @@ export default function JobPage() {
         {/* Job Title */}
         <div>
           <label className="block font-sans text-[9px] font-normal uppercase tracking-label text-muted mb-2">
-            Job Title
+            {t('labelTitle')}
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Senior Product Designer"
+            placeholder={t('placeholderTitle')}
             className="w-full bg-noir-2 font-sans text-[13px] font-light text-ivory outline-none px-4 py-[0.875rem]"
             style={inputStyle}
           />
@@ -76,12 +82,12 @@ export default function JobPage() {
         {/* Job Description */}
         <div className="mt-brand-lg">
           <label className="block font-sans text-[9px] font-normal uppercase tracking-label text-muted mb-2">
-            Job Description
+            {t('labelDescription')}
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder={COPY.jobPlaceholder}
+            placeholder={t('placeholderDescription')}
             rows={10}
             className="w-full bg-noir-2 font-sans text-[13px] font-light text-ivory outline-none px-4 py-[0.875rem] resize-none"
             style={inputStyle}
@@ -99,7 +105,7 @@ export default function JobPage() {
             ].join(" ")}
             style={{ border: "1px solid var(--color-gold)" }}
           >
-            {isSubmitting ? COPY.stageIntake : COPY.ctaPrimary}
+            {isSubmitting ? t('submitting') : t('submit')}
           </button>
 
           {error && (

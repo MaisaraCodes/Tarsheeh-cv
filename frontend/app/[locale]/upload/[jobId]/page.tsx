@@ -1,8 +1,9 @@
 'use client';
 
 import { useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { COPY } from "@/lib/brand";
+import { useParams } from "next/navigation";
+import { useTranslations } from 'next-intl';
+import { useRouter } from "@/i18n/navigation";
 import { postCandidates } from "@/lib/api";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
@@ -12,39 +13,41 @@ function formatKB(bytes: number): string {
   return `${Math.round(bytes / 1024)} KB`;
 }
 
-function validateAndMerge(existing: File[], incoming: FileList | File[]): { valid: File[]; errorMsg: string | null } {
-  const list = Array.from(incoming);
-  let errorMsg: string | null = null;
-  const valid: File[] = [];
-
-  for (const file of list) {
-    if (file.type !== "application/pdf") {
-      errorMsg = "Only PDF files are accepted.";
-      continue;
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      errorMsg = "File exceeds 10MB limit.";
-      continue;
-    }
-    if (existing.length + valid.length >= MAX_FILES) {
-      errorMsg = "Maximum 20 files.";
-      break;
-    }
-    valid.push(file);
-  }
-
-  return { valid, errorMsg };
-}
-
 export default function UploadPage() {
   const { jobId } = useParams<{ jobId: string }>();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations('upload');
+  const tErr = useTranslations('errors');
 
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  function validateAndMerge(existing: File[], incoming: FileList | File[]): { valid: File[]; errorMsg: string | null } {
+    const list = Array.from(incoming);
+    let errorMsg: string | null = null;
+    const valid: File[] = [];
+
+    for (const file of list) {
+      if (file.type !== "application/pdf") {
+        errorMsg = tErr('onlyPdf');
+        continue;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        errorMsg = tErr('fileTooLarge');
+        continue;
+      }
+      if (existing.length + valid.length >= MAX_FILES) {
+        errorMsg = tErr('maxFiles');
+        break;
+      }
+      valid.push(file);
+    }
+
+    return { valid, errorMsg };
+  }
 
   function addFiles(incoming: FileList | File[]) {
     const { valid, errorMsg } = validateAndMerge(files, incoming);
@@ -83,7 +86,7 @@ export default function UploadPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (files.length === 0) {
-      setError("Add at least one CV.");
+      setError(tErr('addCv'));
       return;
     }
     setIsSubmitting(true);
@@ -95,7 +98,7 @@ export default function UploadPage() {
       await postCandidates(formData);
       router.push(`/processing/${jobId}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed.");
+      setError(err instanceof Error ? err.message : tErr('uploadFailed'));
       setIsSubmitting(false);
     }
   }
@@ -113,18 +116,21 @@ export default function UploadPage() {
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
-        <span className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0">
-          02
+        <span
+          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          dir="ltr"
+        >
+          {t('num')}
         </span>
         <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
-          Upload CVs
+          {t('title')}
         </h1>
         <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Intro */}
       <p className="font-serif text-[22px] font-light text-ivory mb-brand-xl">
-        Add the CVs you&apos;d like evaluated. PDF format only.
+        {t('intro')}
       </p>
 
       <form onSubmit={handleSubmit} noValidate>
@@ -149,10 +155,10 @@ export default function UploadPage() {
           style={{ border: dropZoneBorder, opacity: isDragging ? 0.8 : 1 }}
         >
           <p className="font-serif text-[18px] font-light text-ivory text-center">
-            {COPY.uploadPlaceholder}
+            {t('dropzone')}
           </p>
           <p className="font-sans text-xs text-muted mt-2 text-center">
-            PDF format only, max 10MB per file, up to 20 files
+            {t('hint')}
           </p>
         </div>
 
@@ -171,15 +177,18 @@ export default function UploadPage() {
                   <span className="font-sans text-sm font-light text-ivory flex-1 truncate">
                     {file.name}
                   </span>
-                  <span className="font-sans text-xs text-muted flex-shrink-0">
+                  <span
+                    className="font-sans text-xs text-muted flex-shrink-0"
+                    dir="ltr"
+                  >
                     {formatKB(file.size)}
                   </span>
                   <button
                     type="button"
                     onClick={() => removeFile(i)}
-                    className="font-sans text-[10px] uppercase tracking-label text-muted hover:text-ivory flex-shrink-0 ml-2"
+                    className="font-sans text-[10px] uppercase tracking-label text-muted hover:text-ivory flex-shrink-0 ms-2"
                   >
-                    Remove
+                    {t('remove')}
                   </button>
                 </div>
               </div>
@@ -198,7 +207,7 @@ export default function UploadPage() {
             ].join(" ")}
             style={{ border: "1px solid var(--color-gold)" }}
           >
-            {isSubmitting ? COPY.stageIntake : COPY.ctaSecondary}
+            {isSubmitting ? t('submitting') : t('submit')}
           </button>
 
           {error && (

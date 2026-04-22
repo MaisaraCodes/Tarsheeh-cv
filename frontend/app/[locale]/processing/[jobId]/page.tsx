@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { COPY } from "@/lib/brand";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { getStatus } from "@/lib/api";
 import type { PipelineStage, PipelineStatus, StatusResponse } from "@/lib/types";
 
-const STAGES: Array<{ key: PipelineStage; label: string; message: string }> = [
-  { key: "intake",      label: "Intake",    message: COPY.stageIntake },
-  { key: "cv_analyzer", label: "Screening", message: COPY.stageScreening },
-  { key: "ranking",     label: "Ranking",   message: COPY.stageRanking },
-  { key: "interview",   label: "Interview", message: COPY.stageInterview },
-  { key: "report",      label: "Report",    message: COPY.stageReport },
+const STAGE_KEYS: Array<{ key: PipelineStage; labelKey: string; msgKey: string }> = [
+  { key: "intake",      labelKey: "stageIntakeLabel",     msgKey: "stageIntakeMsg" },
+  { key: "cv_analyzer", labelKey: "stageScreeningLabel",  msgKey: "stageScreeningMsg" },
+  { key: "ranking",     labelKey: "stageRankingLabel",    msgKey: "stageRankingMsg" },
+  { key: "interview",   labelKey: "stageInterviewLabel",  msgKey: "stageInterviewMsg" },
+  { key: "report",      labelKey: "stageReportLabel",     msgKey: "stageReportMsg" },
 ];
 
 function stageState(
@@ -21,8 +21,8 @@ function stageState(
   overallStatus: PipelineStatus | undefined
 ): "active" | "completed" | "pending" {
   if (overallStatus === "complete") return "completed";
-  const currentIndex = STAGES.findIndex((s) => s.key === current);
-  const cardIndex = STAGES.findIndex((s) => s.key === cardStage);
+  const currentIndex = STAGE_KEYS.findIndex((s) => s.key === current);
+  const cardIndex = STAGE_KEYS.findIndex((s) => s.key === cardStage);
   if (cardIndex < currentIndex) return "completed";
   if (cardIndex === currentIndex) return "active";
   return "pending";
@@ -30,6 +30,10 @@ function stageState(
 
 export default function ProcessingPage() {
   const { jobId } = useParams<{ jobId: string }>();
+  const t = useTranslations('processing');
+  const tErr = useTranslations('errors');
+  const tCommon = useTranslations('common');
+
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,7 +51,7 @@ export default function ProcessingPage() {
         }
       } catch (err) {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : "Status check failed.");
+        setError(err instanceof Error ? err.message : tErr('statusFailed'));
       }
     }
 
@@ -56,7 +60,7 @@ export default function ProcessingPage() {
       cancelled = true;
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [jobId]);
+  }, [jobId, tErr]);
 
   const overallStatus = status?.status;
   const progress = status?.progress ?? 0;
@@ -67,7 +71,7 @@ export default function ProcessingPage() {
         <div className="flex items-center gap-2">
           <div className="w-[6px] h-[6px] rounded-full" style={{ background: "#6FCF97" }} />
           <span className="font-sans text-xs uppercase tracking-label" style={{ color: "#6FCF97" }}>
-            Complete
+            {t('indicatorComplete')}
           </span>
         </div>
       );
@@ -77,7 +81,7 @@ export default function ProcessingPage() {
         <div className="flex items-center gap-2">
           <div className="w-[6px] h-[6px] rounded-full" style={{ background: "#C97E7E" }} />
           <span className="font-sans text-xs uppercase tracking-label" style={{ color: "#C97E7E" }}>
-            Failed
+            {t('indicatorFailed')}
           </span>
         </div>
       );
@@ -86,7 +90,7 @@ export default function ProcessingPage() {
       <div className="flex items-center gap-2">
         <div className="w-[6px] h-[6px] rounded-full bg-gold animate-pulse" />
         <span className="font-sans text-xs text-gold uppercase tracking-label">
-          Processing
+          {t('indicatorProcessing')}
         </span>
       </div>
     );
@@ -97,11 +101,14 @@ export default function ProcessingPage() {
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
-        <span className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0">
-          03
+        <span
+          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          dir="ltr"
+        >
+          {t('num')}
         </span>
         <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
-          Processing
+          {t('title')}
         </h1>
         <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
@@ -109,7 +116,7 @@ export default function ProcessingPage() {
       {/* Sub-header row */}
       <div className="mt-4 flex justify-between items-center">
         <p className="font-serif text-[22px] font-light text-ivory">
-          Your pipeline is running.
+          {t('intro')}
         </p>
         <LiveIndicator />
       </div>
@@ -119,12 +126,12 @@ export default function ProcessingPage() {
         {status === null && error === null ? (
           <div className="min-h-[120px] flex items-center justify-center">
             <span className="font-serif text-[18px] font-light text-muted-light">
-              Initializing...
+              {t('initializing')}
             </span>
           </div>
         ) : (
           <div className="grid grid-cols-5 gap-0.5">
-            {STAGES.map((stage) => {
+            {STAGE_KEYS.map((stage) => {
               const state = stageState(stage.key, status?.stage, overallStatus);
               const isActive = state === "active";
               const isCompleted = state === "completed";
@@ -152,12 +159,12 @@ export default function ProcessingPage() {
                         : "var(--text-muted)",
                     }}
                   >
-                    {isActive ? "Active" : isCompleted ? "Done" : "Pending"}
+                    {isActive ? t('badgeActive') : isCompleted ? t('badgeDone') : t('badgePending')}
                   </span>
 
                   {/* Stage name */}
                   <span className="font-serif text-[16px] font-light text-ivory leading-tight">
-                    {stage.label}
+                    {t(stage.labelKey)}
                   </span>
 
                   {/* Sub-description */}
@@ -165,7 +172,7 @@ export default function ProcessingPage() {
                     className="font-sans text-[10px] mt-2 leading-snug"
                     style={{ color: "var(--text-muted)" }}
                   >
-                    {isActive ? stage.message : isCompleted ? "Done" : "Awaiting..."}
+                    {isActive ? t(stage.msgKey) : isCompleted ? t('subDone') : t('subAwaiting')}
                   </span>
                 </div>
               );
@@ -181,16 +188,16 @@ export default function ProcessingPage() {
             className="font-sans text-[10px] uppercase tracking-label"
             style={{ color: "var(--text-muted)" }}
           >
-            Overall Progress
+            {t('overallProgress')}
           </span>
-          <span className="font-sans text-xs text-gold-light">
+          <span className="font-sans text-xs text-gold-light" dir="ltr">
             {progress}%
           </span>
         </div>
         <div className="w-full relative" style={{ height: "1px", background: "var(--gold-faint)" }}>
           <div
-            className="absolute top-0 left-0 bg-gold transition-all duration-500 ease-out"
-            style={{ width: `${progress}%`, height: "1px" }}
+            className="absolute top-0 bg-gold transition-all duration-500 ease-out"
+            style={{ width: `${progress}%`, height: "1px", insetInlineStart: 0 }}
           />
         </div>
       </div>
@@ -200,7 +207,7 @@ export default function ProcessingPage() {
         {overallStatus === "complete" && (
           <div className="text-center">
             <p className="font-serif text-[28px] font-light text-ivory">
-              {COPY.stageComplete}
+              {t('complete')}
             </p>
             <div className="mt-brand-lg">
               <Link
@@ -208,7 +215,7 @@ export default function ProcessingPage() {
                 className="inline-block font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
                 style={{ border: "1px solid var(--color-gold)" }}
               >
-                {COPY.ctaResults}
+                {t('ctaResults')}
               </Link>
             </div>
           </div>
@@ -217,7 +224,7 @@ export default function ProcessingPage() {
         {overallStatus === "failed" && (
           <div className="text-center">
             <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
-              {COPY.errorState}
+              {t('errorState')}
             </p>
             <div className="mt-brand-lg">
               <Link
@@ -225,7 +232,7 @@ export default function ProcessingPage() {
                 className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
                 style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
               >
-                Try again
+                {tCommon('tryAgain')}
               </Link>
             </div>
           </div>
@@ -242,7 +249,7 @@ export default function ProcessingPage() {
                 className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
                 style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
               >
-                Try again
+                {tCommon('tryAgain')}
               </Link>
             </div>
           </div>

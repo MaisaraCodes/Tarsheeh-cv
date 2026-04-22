@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { COPY, PHRASES } from "@/lib/brand";
+import { useLocale, useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { getResults, getQuestions } from "@/lib/api";
 import type { RankedCandidate } from "@/lib/types";
 
@@ -12,13 +12,17 @@ export default function CandidateDetailPage() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId") ?? "";
 
+  const locale = useLocale();
+  const t = useTranslations('candidate');
+  const tErr = useTranslations('errors');
+
   const [candidate, setCandidate] = useState<RankedCandidate | null>(null);
   const [questions, setQuestions] = useState<string[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!jobId || !candidateId) {
-      setError("Missing job or candidate identifier.");
+      setError(tErr('missingIds'));
       return;
     }
 
@@ -31,7 +35,7 @@ export default function CandidateDetailPage() {
           (c) => c.candidate_id === candidateId,
         );
         if (!match) {
-          setError("Candidate not found in this shortlist.");
+          setError(tErr('candidateNotFound'));
           return;
         }
         setCandidate(match);
@@ -40,17 +44,18 @@ export default function CandidateDetailPage() {
       .catch((err) => {
         if (cancelled) return;
         setError(
-          err instanceof Error ? err.message : "Failed to load candidate.",
+          err instanceof Error ? err.message : tErr('loadCandidate'),
         );
       });
 
     return () => {
       cancelled = true;
     };
-  }, [jobId, candidateId]);
+  }, [jobId, candidateId, tErr]);
 
   const isLoading = candidate === null && questions === null && error === null;
   const backHref = `/results/${jobId}`;
+  const backArrow = locale === 'ar' ? '→' : '←';
 
   return (
     <div className="animate-fade-up max-w-3xl mx-auto w-full px-6 py-brand-2xl">
@@ -59,16 +64,19 @@ export default function CandidateDetailPage() {
         href={backHref}
         className="inline-block font-sans text-xs uppercase tracking-label text-muted hover:text-ivory transition-colors mb-brand-lg"
       >
-        ← Back to shortlist
+        {backArrow} {t('back')}
       </Link>
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
-        <span className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0">
-          05
+        <span
+          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          dir="ltr"
+        >
+          {t('num')}
         </span>
         <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
-          {candidate?.name ?? "Loading..."}
+          {candidate?.name ?? t('loading')}
         </h1>
         <div
           className="flex-1 h-px"
@@ -80,7 +88,7 @@ export default function CandidateDetailPage() {
       {isLoading && (
         <div className="flex items-center justify-center py-16">
           <span className="font-serif text-[18px] font-light text-muted-light">
-            Loading candidate...
+            {t('loadingFull')}
           </span>
         </div>
       )}
@@ -89,7 +97,7 @@ export default function CandidateDetailPage() {
       {error !== null && (
         <div className="text-center py-16">
           <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
-            {COPY.errorState}
+            {t('errorState')}
           </p>
           <div className="mt-brand-lg">
             <Link
@@ -100,7 +108,7 @@ export default function CandidateDetailPage() {
                 color: "var(--color-muted-light)",
               }}
             >
-              Back to shortlist
+              {t('back')}
             </Link>
           </div>
         </div>
@@ -114,9 +122,12 @@ export default function CandidateDetailPage() {
             {/* Rank */}
             <div className="flex-shrink-0">
               <p className="font-sans text-[10px] uppercase tracking-label text-muted">
-                {COPY.rankLabel}
+                {t('rankLabel')}
               </p>
-              <p className="font-serif text-[28px] font-light text-gold-light leading-none mt-2">
+              <p
+                className="font-serif text-[28px] font-light text-gold-light leading-none mt-2"
+                dir="ltr"
+              >
                 {String(candidate.rank).padStart(2, "0")}
               </p>
             </div>
@@ -129,11 +140,14 @@ export default function CandidateDetailPage() {
             </div>
 
             {/* Score */}
-            <div className="flex-shrink-0 text-right">
+            <div className="flex-shrink-0 text-end">
               <p className="font-sans text-[10px] uppercase tracking-label text-muted">
-                {COPY.scoreLabel}
+                {t('scoreLabel')}
               </p>
-              <p className="font-serif text-[42px] font-light text-gold-light leading-none mt-2">
+              <p
+                className="font-serif text-[42px] font-light text-gold-light leading-none mt-2"
+                dir="ltr"
+              >
                 {candidate.score}
               </p>
             </div>
@@ -145,18 +159,18 @@ export default function CandidateDetailPage() {
             style={{ height: "1px", background: "var(--gold-faint)" }}
           >
             <div
-              className="absolute top-0 left-0 bg-gold"
-              style={{ width: `${candidate.score}%`, height: "1px" }}
+              className="absolute top-0 bg-gold"
+              style={{ width: `${candidate.score}%`, height: "1px", insetInlineStart: 0 }}
             />
           </div>
 
           {/* Interview Questions section */}
           <div className="mt-brand-2xl">
             <h2 className="font-serif text-[22px] font-light text-ivory">
-              Interview Questions
+              {t('interviewQuestionsTitle')}
             </h2>
             <p className="font-sans text-xs text-muted uppercase tracking-label mt-2">
-              {PHRASES.interview}
+              {t('interviewTagline')}
             </p>
 
             {/* Questions list */}
@@ -171,7 +185,7 @@ export default function CandidateDetailPage() {
                   }}
                 >
                   <span className="font-serif text-gold-light text-[14px] flex-shrink-0">
-                    Q{index + 1}
+                    {t('questionPrefix')}{index + 1}
                   </span>
                   <p className="font-sans text-sm font-light text-ivory leading-relaxed">
                     {question}

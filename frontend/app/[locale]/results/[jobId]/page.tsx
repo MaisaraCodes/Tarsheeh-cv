@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { COPY, PHRASES } from "@/lib/brand";
+import { useTranslations } from 'next-intl';
+import { Link } from "@/i18n/navigation";
 import { getResults, getReport } from "@/lib/api";
 import type { ResultsResponse, RankedCandidate } from "@/lib/types";
 
 export default function ResultsPage() {
   const { jobId } = useParams<{ jobId: string }>();
+  const t = useTranslations('results');
+  const tErr = useTranslations('errors');
+  const tCommon = useTranslations('common');
+
   const [results, setResults] = useState<ResultsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -16,8 +20,8 @@ export default function ResultsPage() {
   useEffect(() => {
     getResults(jobId)
       .then(setResults)
-      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load results."));
-  }, [jobId]);
+      .catch((err) => setError(err instanceof Error ? err.message : tErr('loadResults')));
+  }, [jobId, tErr]);
 
   async function handleDownloadReport() {
     setIsDownloading(true);
@@ -34,7 +38,7 @@ export default function ResultsPage() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Report download failed.");
+      setError(err instanceof Error ? err.message : tErr('downloadFailed'));
     } finally {
       setIsDownloading(false);
     }
@@ -47,11 +51,14 @@ export default function ResultsPage() {
 
       {/* Section header */}
       <div className="flex items-baseline gap-6 mb-12">
-        <span className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0">
-          04
+        <span
+          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          dir="ltr"
+        >
+          {t('num')}
         </span>
         <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
-          Shortlist
+          {t('title')}
         </h1>
         <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
@@ -60,21 +67,24 @@ export default function ResultsPage() {
       <div className="mt-4 flex justify-between items-end">
         <div>
           <p className="font-serif text-[22px] font-light text-ivory">
-            Your ranked candidates.
+            {t('intro')}
           </p>
           <p className="font-sans text-xs text-muted uppercase tracking-label mt-2">
-            {PHRASES.ranking}
+            {t('tagline')}
           </p>
         </div>
         {topScore !== undefined && (
-          <div className="text-right">
+          <div className="text-end">
             <p
               className="font-sans text-[10px] uppercase tracking-label"
               style={{ color: "var(--text-muted)" }}
             >
-              Top Score
+              {t('topScore')}
             </p>
-            <p className="font-serif text-[42px] font-light text-gold-light leading-none">
+            <p
+              className="font-serif text-[42px] font-light text-gold-light leading-none"
+              dir="ltr"
+            >
               {topScore}
             </p>
           </div>
@@ -86,7 +96,7 @@ export default function ResultsPage() {
         {results === null && error === null && (
           <div className="flex items-center justify-center py-16">
             <span className="font-serif text-[18px] font-light text-muted-light">
-              Loading shortlist...
+              {t('loading')}
             </span>
           </div>
         )}
@@ -94,7 +104,7 @@ export default function ResultsPage() {
         {error !== null && results === null && (
           <div className="text-center py-16">
             <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
-              {COPY.errorState}
+              {t('errorState')}
             </p>
             <div className="mt-brand-lg">
               <Link
@@ -102,7 +112,7 @@ export default function ResultsPage() {
                 className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
                 style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
               >
-                Try again
+                {tCommon('tryAgain')}
               </Link>
             </div>
           </div>
@@ -111,7 +121,7 @@ export default function ResultsPage() {
         {results !== null && results.ranked_candidates.length === 0 && (
           <div className="text-center py-16">
             <p className="font-serif text-[22px] text-muted-light">
-              {COPY.emptyState}
+              {t('empty')}
             </p>
           </div>
         )}
@@ -135,6 +145,7 @@ export default function ResultsPage() {
                     className={`font-serif text-[16px] font-light flex-shrink-0 w-8 ${
                       candidate.rank === 1 ? "text-gold-light" : "text-muted"
                     }`}
+                    dir="ltr"
                   >
                     {String(candidate.rank).padStart(2, "0")}
                   </span>
@@ -156,17 +167,19 @@ export default function ResultsPage() {
                       style={{ width: "80px", height: "1px", background: "var(--gold-faint)" }}
                     >
                       <div
-                        className="absolute top-0 left-0"
+                        className="absolute top-0"
                         style={{
                           width: `${candidate.score}%`,
                           height: "1px",
                           background: "var(--color-gold-light)",
+                          insetInlineStart: 0,
                         }}
                       />
                     </div>
                     <span
-                      className="font-serif text-[14px] text-muted-light text-right"
+                      className="font-serif text-[14px] text-muted-light text-end"
                       style={{ minWidth: "28px" }}
+                      dir="ltr"
                     >
                       {candidate.score}
                     </span>
@@ -190,7 +203,7 @@ export default function ResultsPage() {
             ].join(" ")}
             style={{ border: "1px solid var(--color-gold)" }}
           >
-            {isDownloading ? COPY.stageReport : COPY.ctaReport}
+            {isDownloading ? t('downloadingReport') : t('ctaReport')}
           </button>
 
           {error !== null && (
