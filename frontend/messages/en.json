@@ -1,6 +1,6 @@
 {
   "common": {
-    "ctaPrimary": "Post a Role",
+    "ctaPrimary": "Post Another Role",
     "tryAgain": "Try again"
   },
   "nav": {
@@ -8,7 +8,7 @@
   },
   "landing": {
     "hero": "Hire with precision.\nLead with confidence.",
-    "subHero": "Tarsheeh.cv screens every candidate, scores every CV, and delivers your shortlist — ranked, reasoned, and ready — in minutes.",
+    "subHero": "We strive to make professional recruitment accessible to businesses that cannot afford a full HR team, and effortless for those that already have one.",
     "ctaPrimary": "Post a Role",
     "learnMore": "Learn More",
     "missionNum": "01",
@@ -34,7 +34,7 @@
   },
   "footer": {
     "platform": "Intelligent Talent Acquisition",
-    "credits": "Team Nexus · Agenticthon 2026 · Internal Use Only"
+    "credits": "Team Nexus · Agenticthon 2026 · All Rights Preserved ©"
   },
   "job": {
     "num": "01",
@@ -42,9 +42,9 @@
     "intro": "Describe the role you're hiring for. Our agents will handle the rest.",
     "labelTitle": "Job Title",
     "labelDescription": "Job Description",
-    "placeholderTitle": "Senior Product Designer",
+    "placeholderTitle": "Senior Software Engineer",
     "placeholderDescription": "Paste your job description here...",
-    "submit": "Post a Role",
+    "submit": "Save",
     "submitting": "Reading the role description..."
   },
   "upload": {
