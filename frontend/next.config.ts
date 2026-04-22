@@ -4,6 +4,9 @@ const devDomain = process.env.REPLIT_DEV_DOMAIN;
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: devDomain ? [devDomain] : [],
+  turbopack: {
+    root: import.meta.dirname,
+  },
   async rewrites() {
     return [
       {
