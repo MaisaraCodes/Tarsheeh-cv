@@ -15,7 +15,7 @@ import {
   mockGetReport,
 } from "./mocks";
 
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "false";
+const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 async function handleResponse<T>(res: Response): Promise<T> {

@@ -44,20 +44,18 @@ def get_status(job_id: str):
     has_candidates = len(candidates) > 0
     has_analyses = has_candidates and any(c.get("scorecard") for c in candidates)
     has_ranking = bool(results and results.get("ranked_candidates"))
-    has_questions = has_candidates and any(c.get("interview_questions") for c in candidates)
-    has_report = bool(results and results.get("generated_pdf_url"))
     any_error = any(c.get("status") == "error" for c in candidates)
 
     if any_error:
         return StatusResponse(job_id=job_id, stage="cv_analyzer", progress=35, status="failed")
 
-    if has_report:
-        stage = "complete"
-    elif has_questions:
-        stage = "report"
-    elif has_ranking:
-        stage = "interview"
-    elif has_analyses:
+    # Ranking is the final pipeline gate. Interview questions and PDF report are
+    # on-demand artifacts generated lazily on first request from the results page,
+    # not blocking pipeline stages.
+    if has_ranking:
+        return StatusResponse(job_id=job_id, stage="complete", progress=100, status="complete")
+
+    if has_analyses:
         stage = "ranking"
     elif has_candidates:
         stage = "cv_analyzer"
@@ -67,6 +65,6 @@ def get_status(job_id: str):
         stage = "intake"
 
     progress = STAGE_PROGRESS.get(stage, 0)
-    status_value = "complete" if stage == "complete" else "processing"
+    status_value = "processing"
 
     return StatusResponse(job_id=job_id, stage=stage, progress=progress, status=status_value)
