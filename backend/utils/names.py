@@ -1,6 +1,22 @@
 """Helpers for deriving a presentable candidate name."""
+import json
+import logging
+import os
 import re
 from typing import Optional
+
+logger = logging.getLogger(__name__)
+
+# Minimum number of characters of extracted text before we bother calling the
+# LLM. Below this we assume the PDF is image-only/scanned and the filename is
+# the best we have.
+_LLM_MIN_TEXT_LEN = 80
+
+# Slice of CV passed to the LLM — keep it small to bound cost/latency. We send
+# both the top of the document (where names usually are) and a tail snippet
+# (which often contains the email signature when the name isn't at the top).
+_LLM_HEAD_CHARS = 2000
+_LLM_TAIL_CHARS = 800
 
 # Words/phrases that often appear at the top of a CV but are NOT the candidate's name.
 _HEADER_NOISE = {
@@ -82,6 +98,99 @@ def extract_candidate_name(cv_text: str) -> Optional[str]:
         if _looks_like_name(candidate):
             return _normalize_name(candidate)
     return None
+
+
+def _slice_for_llm(cv_text: str) -> str:
+    """Return a head+tail slice of the CV bounded by character limits."""
+    text = cv_text.strip()
+    if len(text) <= _LLM_HEAD_CHARS + _LLM_TAIL_CHARS:
+        return text
+    return f"{text[:_LLM_HEAD_CHARS]}\n...\n{text[-_LLM_TAIL_CHARS:]}"
+
+
+def extract_candidate_name_llm(cv_text: str) -> Optional[str]:
+    """Ask a small LLM to pick the candidate's name out of the CV text.
+
+    Designed as a fallback for cases the heuristic can't handle:
+    non-Latin scripts (Arabic etc.), names buried in email signatures,
+    layouts that lead with a logo/address/job title.
+
+    Returns ``None`` on any failure (missing key, network error, ambiguous
+    output) so callers can keep falling back to the filename. Skips the call
+    entirely when there's almost no extracted text (likely a scanned PDF) to
+    avoid wasted spend.
+    """
+    if not cv_text or len(cv_text.strip()) < _LLM_MIN_TEXT_LEN:
+        return None
+    if not os.getenv("OPENAI_API_KEY"):
+        return None
+
+    try:
+        from langchain_openai import ChatOpenAI
+    except Exception as e:  # pragma: no cover - import error path
+        logger.warning("langchain_openai unavailable for LLM name extraction: %s", e)
+        return None
+
+    snippet = _slice_for_llm(cv_text)
+    prompt = (
+        "You extract the candidate's full name from a CV/resume. "
+        "The CV may be in any language or script (Arabic, Chinese, Cyrillic, etc.). "
+        "The name might appear at the top, inside an email signature, next to a "
+        "photo caption, or after a 'Name:' label. Ignore company names, job "
+        "titles, addresses, and section headings like 'Curriculum Vitae'.\n\n"
+        "Return strict JSON of the form {\"name\": \"<full name>\"} using the "
+        "name exactly as written in the CV (preserve original script and "
+        "diacritics). If you cannot confidently identify a person's name, "
+        "return {\"name\": null}.\n\n"
+        f"CV TEXT:\n{snippet}"
+    )
+
+    try:
+        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=15)
+        response = llm.invoke(prompt)
+        raw = (response.content or "").strip()
+    except Exception as e:
+        logger.warning("LLM name extraction failed: %s", e)
+        return None
+
+    # Tolerate ```json fences``` or stray prose around the JSON object.
+    match = re.search(r"\{.*\}", raw, re.DOTALL)
+    if not match:
+        return None
+    try:
+        payload = json.loads(match.group(0))
+    except json.JSONDecodeError:
+        return None
+
+    name = payload.get("name") if isinstance(payload, dict) else None
+    if not isinstance(name, str):
+        return None
+    name = name.strip()
+    if not name or name.lower() in {"null", "none", "unknown"}:
+        return None
+    # Guard against the model echoing a section header.
+    if name.lower() in _HEADER_NOISE or name.lower() in _SECTION_WORDS:
+        return None
+    # Collapse whitespace; keep original script/casing otherwise.
+    return re.sub(r"\s+", " ", name)
+
+
+def resolve_candidate_name(cv_text: Optional[str], filename: Optional[str]) -> str:
+    """Best name we can produce: heuristic → LLM fallback → cleaned filename.
+
+    The heuristic is fast and conservative, so we try it first. When it can't
+    find a plausible name (non-Latin script, name buried in a signature, etc.)
+    we ask a small LLM. If that also can't help — or there's effectively no
+    extracted text (image PDF) — we fall back to the cleaned filename.
+    """
+    cv_text = cv_text or ""
+    heuristic = extract_candidate_name(cv_text)
+    if heuristic:
+        return heuristic
+    llm_name = extract_candidate_name_llm(cv_text)
+    if llm_name:
+        return llm_name
+    return clean_name_from_filename(filename or "")
 
 
 def clean_name_from_filename(filename: str) -> str:

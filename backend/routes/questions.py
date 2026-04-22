@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from backend.agents.graph import interview_graph
 from backend.models.job import JobProfile
 from backend.models.cv import CVAnalysisResult
-from backend.utils.names import clean_name_from_filename, extract_candidate_name
+from backend.utils.names import resolve_candidate_name
 from backend.utils.supabase_client import get_supabase
 
 router = APIRouter()
@@ -58,13 +58,12 @@ def get_questions(candidate_id: str):
                 candidate_name = rc["name"]
                 break
     if candidate_name == "the candidate":
-        from_cv = extract_candidate_name(candidate.get("cv_text") or "")
-        if from_cv:
-            candidate_name = from_cv
-        else:
-            candidate_name = clean_name_from_filename(candidate.get("file_name") or "")
-            if candidate_name == "Unnamed candidate":
-                candidate_name = "the candidate"
+        resolved = resolve_candidate_name(
+            candidate.get("cv_text") or "",
+            candidate.get("file_name") or "",
+        )
+        if resolved and resolved != "Unnamed candidate":
+            candidate_name = resolved
 
     try:
         result = interview_graph.invoke({

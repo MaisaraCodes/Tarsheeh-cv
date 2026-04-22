@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from backend.agents.graph import analysis_graph
 from backend.models.job import JobProfile
-from backend.utils.names import clean_name_from_filename, extract_candidate_name
+from backend.utils.names import resolve_candidate_name
 from backend.utils.supabase_client import get_supabase
 
 router = APIRouter()
@@ -67,7 +67,7 @@ def upload_candidates(
         raw = upload.file.read()
         cv_text = _extract_pdf_text(raw, upload.filename)
         cid = str(uuid.uuid4())
-        name = extract_candidate_name(cv_text) or clean_name_from_filename(upload.filename)
+        name = resolve_candidate_name(cv_text, upload.filename)
         candidates_state.append({"id": cid, "name": name, "cv_text": cv_text})
         inserted_rows.append({
             "id": cid,
