@@ -6,6 +6,7 @@ GET /candidates/{candidate_id} — slim per-candidate fetch for the detail page
 import uuid
 from io import BytesIO
 from typing import List, Optional
+from uuid import UUID
 
 import pdfplumber
 from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile, File, Form
@@ -30,6 +31,10 @@ STAGE_FAILED = "failed"
 # Cap persisted failure messages so a noisy stack trace from an underlying
 # library can't bloat the job_results row or leak too much detail to the UI.
 _ERROR_MESSAGE_MAX_LEN = 300
+
+# Mirrors the frontend's per-job upload cap. Enforced server-side so a direct
+# API caller can't blow OpenAI's TPM ceiling and crash the whole pipeline.
+_MAX_CANDIDATES_PER_JOB = 20
 
 
 def _short_error_message(exc: Exception) -> str:
@@ -244,6 +249,14 @@ def upload_candidates(
 ):
     if not files:
         raise HTTPException(status_code=400, detail="At least one CV file is required")
+    if len(files) > _MAX_CANDIDATES_PER_JOB:
+        raise HTTPException(
+            status_code=413,
+            detail=(
+                f"Too many CVs: {len(files)} provided, "
+                f"maximum is {_MAX_CANDIDATES_PER_JOB}"
+            ),
+        )
 
     sb = get_supabase()
 
@@ -309,13 +322,15 @@ def upload_candidates(
 
 
 @router.get("/candidates/{candidate_id}", response_model=CandidateDetailResponse)
-def get_candidate(candidate_id: str, job_id: Optional[str] = None):
+def get_candidate(candidate_id: UUID, job_id: Optional[UUID] = None):
     """Return one candidate's ranked entry. Slim alternative to /results.
 
     The candidate detail page used to fetch the entire job's ranked list just
     to find one row. This endpoint reads the same job_results row but returns
     only the matching entry, keeping the wire payload small.
     """
+    candidate_id = str(candidate_id)
+    job_id = str(job_id) if job_id else None
     sb = get_supabase()
 
     if not job_id:
@@ -323,6 +338,13 @@ def get_candidate(candidate_id: str, job_id: Optional[str] = None):
         if not cand_row.data:
             raise HTTPException(status_code=404, detail="Candidate not found")
         job_id = cand_row.data[0]["job_id"]
+    else:
+        # Even when the caller supplies job_id, verify the candidate row exists
+        # so a bogus id returns "Candidate not found" instead of the misleading
+        # "Candidate not in ranked results".
+        cand_row = sb.table("candidates").select("id").eq("id", candidate_id).limit(1).execute()
+        if not cand_row.data:
+            raise HTTPException(status_code=404, detail="Candidate not found")
 
     results_row = sb.table("job_results").select("ranked_candidates") \
         .eq("job_id", job_id).limit(1).execute()

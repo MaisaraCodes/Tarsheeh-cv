@@ -4,6 +4,8 @@ Pipeline state is now published to a single column (`job_results.status`) by
 the upload route's background worker, so this endpoint is one query — no more
 joining candidates + jobs + job_results just to infer where we are.
 """
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Literal, Optional
@@ -43,7 +45,10 @@ _STAGE_FROM_DB = {
 
 
 @router.get("/status/{job_id}", response_model=StatusResponse)
-def get_status(job_id: str):
+def get_status(job_id: UUID):
+    # FastAPI validates the UUID and returns 422 for malformed values, which
+    # avoids a Postgres "invalid input syntax for type uuid" 500 downstream.
+    job_id = str(job_id)
     sb = get_supabase()
 
     try:

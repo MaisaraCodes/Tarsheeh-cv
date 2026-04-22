@@ -28,6 +28,8 @@ class JobResponse(BaseModel):
 
 @router.post("/job", response_model=JobResponse)
 def create_job(job: JobRequest):
+    if not job.title or not job.title.strip():
+        raise HTTPException(status_code=422, detail="title must not be empty")
     if not job.description or not job.description.strip():
         raise HTTPException(status_code=422, detail="description must not be empty")
 

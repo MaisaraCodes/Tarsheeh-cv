@@ -1,5 +1,7 @@
 """GET /results/{job_id} — return the stored ranked candidate list."""
 from typing import List
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
@@ -22,7 +24,8 @@ class ResultsResponse(BaseModel):
 
 
 @router.get("/results/{job_id}", response_model=ResultsResponse)
-def get_results(job_id: str):
+def get_results(job_id: UUID):
+    job_id = str(job_id)
     sb = get_supabase()
 
     job_row = sb.table("jobs").select("id").eq("id", job_id).limit(1).execute()

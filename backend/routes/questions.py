@@ -1,5 +1,7 @@
 """GET /questions/{candidate_id} — generate (lazily) and return interview questions."""
 from typing import List
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
@@ -20,7 +22,8 @@ class QuestionsResponse(BaseModel):
 
 
 @router.get("/questions/{candidate_id}", response_model=QuestionsResponse)
-def get_questions(candidate_id: str):
+def get_questions(candidate_id: UUID):
+    candidate_id = str(candidate_id)
     sb = get_supabase()
 
     cand_row = sb.table("candidates").select("*").eq("id", candidate_id).limit(1).execute()

@@ -1,4 +1,6 @@
 """GET /report/{job_id} — generate and stream the PDF hiring report."""
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException, Response
 
 from backend.agents.graph import report_graph
@@ -24,7 +26,8 @@ def _pdf_response(pdf_bytes: bytes, job_id: str) -> Response:
 
 
 @router.get("/report/{job_id}")
-def get_report(job_id: str):
+def get_report(job_id: UUID):
+    job_id = str(job_id)
     sb = get_supabase()
 
     job_row = sb.table("jobs").select("*").eq("id", job_id).limit(1).execute()
