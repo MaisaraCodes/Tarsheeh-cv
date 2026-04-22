@@ -25,6 +25,9 @@ export interface StatusResponse {
   stage: PipelineStage;
   progress: number;
   status: PipelineStatus;
+  // Present only when status === "failed" and the backend captured a
+  // human-readable reason from the failing pipeline step.
+  error_message?: string | null;
 }
 
 export interface RankedCandidate {

@@ -27,6 +27,24 @@ STAGE_RANKING = "ranking"               # ranker running
 STAGE_COMPLETE = "ranking_complete"     # done
 STAGE_FAILED = "failed"
 
+# Cap persisted failure messages so a noisy stack trace from an underlying
+# library can't bloat the job_results row or leak too much detail to the UI.
+_ERROR_MESSAGE_MAX_LEN = 300
+
+
+def _short_error_message(exc: Exception) -> str:
+    """Format an exception into a single-line, length-bounded message.
+
+    The processing page renders this verbatim under the failed state, so we
+    strip newlines and truncate aggressively. The exception class name is
+    included so a bare `RuntimeError("")` still gives the user a hint.
+    """
+    raw = str(exc).strip() or exc.__class__.__name__
+    flattened = " ".join(raw.split())
+    if len(flattened) > _ERROR_MESSAGE_MAX_LEN:
+        flattened = flattened[: _ERROR_MESSAGE_MAX_LEN - 1].rstrip() + "…"
+    return flattened
+
 
 class CandidatesResponse(BaseModel):
     job_id: str
@@ -99,7 +117,11 @@ def _run_analysis_pipeline(
         except Exception:
             pass
         try:
-            _upsert_job_results(sb, job_id, {"status": STAGE_FAILED, "ranked_candidates": []})
+            _upsert_job_results(sb, job_id, {
+                "status": STAGE_FAILED,
+                "ranked_candidates": [],
+                "error_message": _short_error_message(e),
+            })
         except Exception:
             pass
         return
@@ -116,7 +138,10 @@ def _run_analysis_pipeline(
     except Exception as e:
         print(f"[PIPELINE] ranker failure for job {job_id}: {e}")
         try:
-            _upsert_job_results(sb, job_id, {"status": STAGE_FAILED})
+            _upsert_job_results(sb, job_id, {
+                "status": STAGE_FAILED,
+                "error_message": _short_error_message(e),
+            })
         except Exception as inner:
             print(f"[PIPELINE] also failed to publish failed-state for {job_id}: {inner}")
         return
@@ -145,7 +170,10 @@ def _run_analysis_pipeline(
             print(f"[PIPELINE] warning: failed to persist candidate {cid}: {e}")
 
     if not ranking:
-        _upsert_job_results(sb, job_id, {"status": STAGE_FAILED})
+        _upsert_job_results(sb, job_id, {
+            "status": STAGE_FAILED,
+            "error_message": "Ranking step returned no results.",
+        })
         return
 
     ranked_payload = [rc.model_dump() for rc in ranking.ranked_candidates]
@@ -156,7 +184,10 @@ def _run_analysis_pipeline(
         })
     except Exception as e:
         print(f"[PIPELINE] failed to persist ranked_candidates for {job_id}: {e}")
-        _upsert_job_results(sb, job_id, {"status": STAGE_FAILED})
+        _upsert_job_results(sb, job_id, {
+            "status": STAGE_FAILED,
+            "error_message": _short_error_message(e),
+        })
         return
 
     if write_failures:
@@ -223,7 +254,11 @@ def upload_candidates(
     # the frontend sees real pipeline state instead of falling through to the
     # default intake stage.
     try:
-        _upsert_job_results(sb, job_id, {"status": STAGE_SCREENING, "ranked_candidates": []})
+        _upsert_job_results(sb, job_id, {
+            "status": STAGE_SCREENING,
+            "ranked_candidates": [],
+            "error_message": None,
+        })
     except Exception as e:
         print(f"[CANDIDATES] warning: failed to publish screening stage: {e}")
 

@@ -226,6 +226,14 @@ export default function ProcessingPage() {
             <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
               {t('errorState')}
             </p>
+            {status?.error_message && (
+              <p
+                className="mt-brand-sm font-sans text-xs font-light max-w-xl mx-auto"
+                style={{ color: "var(--text-muted-light)" }}
+              >
+                {status.error_message}
+              </p>
+            )}
             <div className="mt-brand-lg">
               <Link
                 href="/job"

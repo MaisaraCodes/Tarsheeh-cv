@@ -6,7 +6,7 @@ joining candidates + jobs + job_results just to infer where we are.
 """
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Literal
+from typing import Literal, Optional
 
 from backend.utils.supabase_client import get_supabase
 
@@ -18,6 +18,10 @@ class StatusResponse(BaseModel):
     stage: str
     progress: int
     status: Literal["processing", "complete", "failed"]
+    # Populated only when status == "failed" and the pipeline persisted a
+    # human-readable reason. The processing page renders this verbatim under
+    # the failed state, falling back to a generic copy when absent.
+    error_message: Optional[str] = None
 
 
 # Maps the value persisted in `job_results.status` to (UI-stage, progress%).
@@ -36,7 +40,8 @@ _STAGE_FROM_DB = {
 def get_status(job_id: str):
     sb = get_supabase()
 
-    row = sb.table("job_results").select("status").eq("job_id", job_id).limit(1).execute()
+    row = sb.table("job_results").select("status, error_message") \
+        .eq("job_id", job_id).limit(1).execute()
 
     if not row.data:
         # No job_results row yet — could be a brand-new job (upload hasn't
@@ -50,10 +55,18 @@ def get_status(job_id: str):
             job_id=job_id, stage="intake", progress=10, status="processing",
         )
 
-    db_status = (row.data[0].get("status") or "").lower()
+    db_row = row.data[0]
+    db_status = (db_row.get("status") or "").lower()
     stage, progress, status_value = _STAGE_FROM_DB.get(
         db_status, ("cv_analyzer", 35, "processing"),
     )
+    # Only forward error_message when the run actually failed; a stale value
+    # from a prior failed attempt should not bleed into a healthy poll.
+    error_message = db_row.get("error_message") if status_value == "failed" else None
     return StatusResponse(
-        job_id=job_id, stage=stage, progress=progress, status=status_value,
+        job_id=job_id,
+        stage=stage,
+        progress=progress,
+        status=status_value,
+        error_message=error_message or None,
     )
