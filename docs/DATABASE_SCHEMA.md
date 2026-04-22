@@ -45,3 +45,4 @@ Stores final pipeline output.
 | ranked_candidates | JSONB | Full ranked list with all data |
 | generated_pdf_url | VARCHAR | URL to downloadable report |
 | status | VARCHAR | Generation status |
+| error_message | TEXT | Short, single-line failure reason captured when `status='failed'` (analyzer/ranker exception). Surfaced by `/status` and shown on the processing page. Cleared at the start of each new pipeline run. |

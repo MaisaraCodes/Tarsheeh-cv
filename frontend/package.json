@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 5000 -H 0.0.0.0",
+    "dev": "next dev --webpack -p 5000 -H 0.0.0.0",
     "build": "next build",
     "start": "next start -p 5000 -H 0.0.0.0",
     "lint": "eslint"
   },
   "dependencies": {
+    "@fontsource/amiri": "^5.2.8",
+    "@fontsource/cairo": "^5.2.7",
     "@fontsource/cormorant-garamond": "^5.2.11",
     "@fontsource/dm-sans": "^5.2.8",
     "next": "16.2.4",
+    "next-intl": "^4.9.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },

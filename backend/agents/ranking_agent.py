@@ -9,20 +9,28 @@ from langchain_core.output_parsers import PydanticOutputParser
 
 from backend.models.ranking import RankedList
 
-# Load environment variables
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
 load_dotenv(env_path)
 
-def rank_candidates(analyses: List[Dict[str, Any]]) -> RankedList:
-    """
-    Takes a list of CV analysis results and asks the LLM to rank them
-    objectively to produce a shortlist.
-    
-    :param analyses: A list of dicts. Example: [{"candidate_id": "1", "analysis": {...}}, ...]
-    """
+
+_LANG_DIRECTIVE = {
+    "ar": (
+        "Write each candidate `summary` in fluent Modern Standard Arabic. "
+        "Keep candidate names exactly as provided (do not transliterate). "
+        "Keep technical skill names (Python, FastAPI, etc.) in their original form."
+    ),
+    "en": (
+        "Write each candidate `summary` in clear professional English. "
+        "Keep candidate names and technical skills exactly as provided."
+    ),
+}
+
+
+def rank_candidates(analyses: List[Dict[str, Any]], locale: str = "en") -> RankedList:
+    """Rank candidate analyses, producing summaries in the requested locale."""
     llm = ChatOpenAI(model="gpt-4o", temperature=0)
     parser = PydanticOutputParser(pydantic_object=RankedList)
-    
+
     prompt_template = """You are a Senior Strategic Recruitment Consultant.
 Your task is to take a list of candidate CV analysis results and rank them to create a shortlist for the Hiring Manager.
 
@@ -32,58 +40,27 @@ Requirements:
 3. Rank them from highest (best fit, rank 1) to lowest. Write a summary for each candidate outlining why they deserve this rank.
 4. The ranking must be completely objective and fair based strictly on the provided analysis.
 
+Localization directive: {lang_directive}
+
 Candidate Analyses:
 {analyses_data}
 
 {format_instructions}
 """
-    
+
     prompt = PromptTemplate(
         template=prompt_template,
-        input_variables=["analyses_data"],
-        partial_variables={"format_instructions": parser.get_format_instructions()}
+        input_variables=["analyses_data", "lang_directive"],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
     )
-    
+
     chain = prompt | llm | parser
-    
-    # Execute the Chain
-    result = chain.invoke({
-        "analyses_data": json.dumps(analyses, indent=2)
+    return chain.invoke({
+        "analyses_data": json.dumps(analyses, indent=2, ensure_ascii=False),
+        "lang_directive": _LANG_DIRECTIVE.get(locale, _LANG_DIRECTIVE["en"]),
     })
-    
-    return result
+
 
 if __name__ == "__main__":
-    # --- Test Script ---
-    dummy_analyses = [
-        {
-            "candidate_id": "123",
-            "name": "Osama",
-            "analysis": {
-                "score": 60,
-                "reasoning": "Has 4 years backend experience but lacks FastAPI.",
-                "matching_skills": ["Python"],
-                "missing_skills": ["FastAPI", "LangChain"]
-            }
-        },
-        {
-            "candidate_id": "456",
-            "name": "Ahmed",
-            "analysis": {
-                "score": 90,
-                "reasoning": "Excellent fit with 5 years experience in Python and FastAPI.",
-                "matching_skills": ["Python", "FastAPI", "PostgreSQL", "LangChain"],
-                "missing_skills": []
-            }
-        }
-    ]
-    
-    print("--- Testing Ranking Agent ---")
-    print("Ranking candidates...")
-    
-    try:
-        ranked_list = rank_candidates(dummy_analyses)
-        print("\nSuccess! Structured Ranking Output:")
-        print(ranked_list.model_dump_json(indent=4))
-    except Exception as e:
-        print("\nError occurred:", e)
+    dummy = [{"candidate_id": "1", "name": "Ahmed", "analysis": {"score": 90, "reasoning": "Strong fit.", "matching_skills": ["Python"], "missing_skills": []}}]
+    print(rank_candidates(dummy, locale="ar").model_dump_json(indent=2))

@@ -1,7 +1,10 @@
 """GET /report/{job_id} — generate and stream the PDF hiring report."""
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException, Response
 
 from backend.agents.graph import report_graph
+from backend.utils.locale import pop_locale
 from backend.utils.supabase_client import get_supabase
 
 router = APIRouter()
@@ -23,7 +26,8 @@ def _pdf_response(pdf_bytes: bytes, job_id: str) -> Response:
 
 
 @router.get("/report/{job_id}")
-def get_report(job_id: str):
+def get_report(job_id: UUID):
+    job_id = str(job_id)
     sb = get_supabase()
 
     job_row = sb.table("jobs").select("*").eq("id", job_id).limit(1).execute()
@@ -49,16 +53,19 @@ def get_report(job_id: str):
         for c in candidates
     }
 
+    parsed_profile, locale = pop_locale(job.get("parsed_profile"))
+
     try:
         result = report_graph.invoke({
             "job_id": job_id,
             "job": {
                 "title": job.get("title"),
                 "description": job.get("description"),
-                "parsed_profile": job.get("parsed_profile"),
+                "parsed_profile": parsed_profile,
             },
             "ranked_candidates": ranked,
             "candidate_details": candidate_details,
+            "locale": locale,
         })
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Report Agent failure: {e}")
@@ -67,14 +74,12 @@ def get_report(job_id: str):
     if not pdf_bytes:
         raise HTTPException(status_code=500, detail="Report Agent produced no PDF bytes")
 
-    # Mark the report as generated so /status flips to "complete".
     try:
         sb.table("job_results").update({
             "generated_pdf_url": GENERATED_MARKER,
             "status": "complete",
         }).eq("job_id", job_id).execute()
     except Exception as e:
-        # Persistence failure should not block the user from receiving the PDF.
         print(f"[REPORT] warning: failed to update job_results marker: {e}")
 
     return _pdf_response(pdf_bytes, job_id)

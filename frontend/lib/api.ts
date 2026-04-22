@@ -5,6 +5,7 @@ import type {
   StatusResponse,
   ResultsResponse,
   QuestionsResponse,
+  CandidateDetail,
 } from "./types";
 import {
   mockPostJob,
@@ -57,6 +58,22 @@ export async function getResults(jobId: string): Promise<ResultsResponse> {
   if (USE_MOCK) return mockGetResults(jobId);
   const res = await fetch(`${API_URL}/results/${encodeURIComponent(jobId)}`);
   return handleResponse<ResultsResponse>(res);
+}
+
+export async function getCandidate(
+  candidateId: string,
+  jobId?: string,
+): Promise<CandidateDetail> {
+  if (USE_MOCK) {
+    // Mock fallback: derive the slim shape from the full results list.
+    const results = await mockGetResults(jobId ?? "");
+    const match = results.ranked_candidates.find((c) => c.candidate_id === candidateId);
+    if (!match) throw new Error(`404: candidate ${candidateId} not found`);
+    return { ...match, job_id: jobId ?? "" };
+  }
+  const qs = jobId ? `?job_id=${encodeURIComponent(jobId)}` : "";
+  const res = await fetch(`${API_URL}/candidates/${encodeURIComponent(candidateId)}${qs}`);
+  return handleResponse<CandidateDetail>(res);
 }
 
 export async function getQuestions(candidateId: string): Promise<QuestionsResponse> {

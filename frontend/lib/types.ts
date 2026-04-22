@@ -1,9 +1,12 @@
 export type PipelineStage = "intake" | "cv_analyzer" | "ranking" | "interview" | "report";
 export type PipelineStatus = "processing" | "complete" | "failed";
 
+export type Locale = "en" | "ar";
+
 export interface JobRequest {
   title: string;
   description: string;
+  locale?: Locale;
 }
 
 export interface JobResponse {
@@ -22,6 +25,9 @@ export interface StatusResponse {
   stage: PipelineStage;
   progress: number;
   status: PipelineStatus;
+  // Present only when status === "failed" and the backend captured a
+  // human-readable reason from the failing pipeline step.
+  error_message?: string | null;
 }
 
 export interface RankedCandidate {
@@ -41,4 +47,13 @@ export interface QuestionsResponse {
   candidate_id: string;
   job_id: string;
   questions: string[];
+}
+
+export interface CandidateDetail {
+  candidate_id: string;
+  job_id: string;
+  name: string;
+  score: number;
+  rank: number;
+  summary: string;
 }
