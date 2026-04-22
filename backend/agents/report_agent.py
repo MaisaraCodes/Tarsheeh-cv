@@ -91,6 +91,7 @@ _LABELS = {
         "appendix": "Original Job Description",
         "score_suffix": "/100",
         "empty_dash": "—",
+        "unnamed_candidate": "Unnamed candidate",
     },
     "ar": {
         "header": "ترشيح — تقرير التوظيف",
@@ -108,6 +109,7 @@ _LABELS = {
         "appendix": "الوصف الوظيفي الأصلي",
         "score_suffix": "/100",
         "empty_dash": "—",
+        "unnamed_candidate": "مرشح بدون اسم",
     },
 }
 
@@ -227,7 +229,8 @@ def generate_report(
         rows_def = [
             (L["field_title"], profile.get("title") or job.get("title") or L["empty_dash"]),
             (L["field_skills"], _format_skills(profile.get("required_skills"), locale)),
-            (L["field_experience"], str(profile.get("experience_years") or L["empty_dash"])),
+            (L["field_experience"],
+             str(profile["experience_years"]) if profile.get("experience_years") is not None else L["empty_dash"]),
             (L["field_priorities"], _format_skills(profile.get("priorities"), locale)),
         ]
         # In RTL mode the value column should sit on the left and the label on
@@ -271,7 +274,7 @@ def generate_report(
         for c in ranked_candidates:
             cid = c.get("candidate_id", "")
             rank = c.get("rank", "—")
-            name = c.get("name") or "Unnamed candidate"
+            name = c.get("name") or L["unnamed_candidate"]
             score = c.get("score", 0)
             summary = c.get("summary", "")
 
