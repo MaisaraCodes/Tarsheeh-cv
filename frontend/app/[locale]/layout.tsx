@@ -34,7 +34,12 @@ export default async function LocaleLayout({ children, params }: Props) {
             className="px-6 py-8"
             style={{ borderTop: '1px solid var(--gold-dim)' }}
           >
-            <div className="max-w-4xl mx-auto flex items-start justify-between">
+            <div
+              dir="ltr"
+              className={`max-w-4xl mx-auto flex items-start ${
+                locale === 'ar' ? 'gap-12 justify-start' : 'justify-between'
+              }`}
+            >
               <div>
                 <p
                   className="font-serif text-xl tracking-logo leading-none"
@@ -43,11 +48,17 @@ export default async function LocaleLayout({ children, params }: Props) {
                   <span className="font-light text-gold-pale">TARSHEEH</span>
                   <span className="font-normal text-gold">.CV</span>
                 </p>
-                <p className="font-sans text-[10px] font-light text-muted-light uppercase tracking-wide mt-2">
+                <p
+                  className="font-sans text-[10px] font-light text-muted-light uppercase tracking-wide mt-2"
+                  dir={locale === 'ar' ? 'rtl' : 'ltr'}
+                >
                   {t('platform')}
                 </p>
               </div>
-              <p className="font-sans text-[10px] font-light text-muted uppercase tracking-wide text-end">
+              <p
+                className="font-sans text-[10px] font-light text-muted uppercase tracking-wide"
+                dir={locale === 'ar' ? 'rtl' : 'ltr'}
+              >
                 {t('credits')}
               </p>
             </div>
