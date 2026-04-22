@@ -28,17 +28,29 @@ export default function CandidateDetailPage() {
 
     let cancelled = false;
 
-    Promise.all([getCandidate(candidateId, jobId), getQuestions(candidateId)])
-      .then(([candidateRes, questionsRes]) => {
+    // Fetch independently so a flaky /questions response doesn't hide a
+    // candidate that already loaded successfully.
+    getCandidate(candidateId, jobId)
+      .then((candidateRes) => {
         if (cancelled) return;
         setCandidate(candidateRes);
-        setQuestions(questionsRes.questions);
       })
       .catch((err) => {
         if (cancelled) return;
         setError(
           err instanceof Error ? err.message : tErr('loadCandidate'),
         );
+      });
+
+    getQuestions(candidateId)
+      .then((questionsRes) => {
+        if (cancelled) return;
+        setQuestions(questionsRes.questions);
+      })
+      .catch(() => {
+        // Swallow questions failure — the candidate panel can still render.
+        if (cancelled) return;
+        setQuestions([]);
       });
 
     return () => {

@@ -40,18 +40,25 @@ export default function ProcessingPage() {
   useEffect(() => {
     let cancelled = false;
     let timeoutId: ReturnType<typeof setTimeout>;
+    let hasReceivedStatus = false;
 
     async function poll() {
       try {
         const res = await getStatus(jobId);
         if (cancelled) return;
+        hasReceivedStatus = true;
         setStatus(res);
         if (res.status === "processing") {
           timeoutId = setTimeout(poll, 2000);
         }
       } catch (err) {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : tErr('statusFailed'));
+        // Keep polling on transient failures so a single blip doesn't kick the
+        // user off the page; only surface the error if we never got a status.
+        if (!hasReceivedStatus) {
+          setError(err instanceof Error ? err.message : tErr('statusFailed'));
+        }
+        timeoutId = setTimeout(poll, 2000);
       }
     }
 
