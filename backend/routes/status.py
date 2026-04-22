@@ -10,11 +10,11 @@ from typing import Literal, Optional
 
 from backend.utils.supabase_client import get_supabase
 
-# Postgres "undefined_column" SQLSTATE. Raised by PostgREST as APIError when a
-# select/update references a column that doesn't exist on the live table — we
-# tolerate it so the app keeps working whether or not the optional
-# `error_message` column has been added on Supabase.
-_PG_UNDEFINED_COLUMN = "42703"
+# Tolerated when the optional `error_message` column hasn't been added to the
+# live `job_results` table. PostgREST raises two different errors depending on
+# the operation: 42703 (real Postgres SQLSTATE, surfaced by SELECT) and
+# PGRST204 (schema-cache rejection, raised before INSERT/UPDATE even runs).
+_MISSING_COLUMN_CODES = ("42703", "PGRST204")
 
 router = APIRouter()
 
@@ -52,7 +52,8 @@ def get_status(job_id: str):
     except Exception as e:
         # Fall back to selecting just `status` if the optional column hasn't
         # been added on the live DB yet. Any other failure should still bubble.
-        if getattr(e, "code", None) == _PG_UNDEFINED_COLUMN or _PG_UNDEFINED_COLUMN in str(e):
+        code = getattr(e, "code", None)
+        if code in _MISSING_COLUMN_CODES or any(c in str(e) for c in _MISSING_COLUMN_CODES):
             row = sb.table("job_results").select("status") \
                 .eq("job_id", job_id).limit(1).execute()
         else:

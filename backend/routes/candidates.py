@@ -73,17 +73,19 @@ def _extract_pdf_text(data: bytes, filename: str) -> str:
         raise HTTPException(status_code=415, detail=f"Could not parse PDF '{filename}': {e}")
 
 
-# Postgres "undefined_column" SQLSTATE. PostgREST surfaces it as an APIError
-# whose `.code` is "42703". Tolerated so writes still succeed when the live DB
-# hasn't been migrated to add the optional `error_message` column.
-_PG_UNDEFINED_COLUMN = "42703"
+# Tolerated when the optional `error_message` column hasn't been added to the
+# live `job_results` table. PostgREST raises two different errors depending on
+# the operation: 42703 (real Postgres SQLSTATE, surfaced by SELECT) and
+# PGRST204 (schema-cache rejection, raised before INSERT/UPDATE even runs).
+_MISSING_COLUMN_CODES = ("42703", "PGRST204")
 
 
 def _is_undefined_column_error(exc: Exception) -> bool:
-    return (
-        getattr(exc, "code", None) == _PG_UNDEFINED_COLUMN
-        or _PG_UNDEFINED_COLUMN in str(exc)
-    )
+    code = getattr(exc, "code", None)
+    if code in _MISSING_COLUMN_CODES:
+        return True
+    msg = str(exc)
+    return any(c in msg for c in _MISSING_COLUMN_CODES)
 
 
 def _upsert_job_results(sb, job_id: str, payload: dict) -> None:
