@@ -1,0 +1,40 @@
+STOP. Before you do anything, I need you to perform a verification step and wait for my approval before proceeding.
+
+PART A: VERIFICATION (READ-ONLY, NO CODE CHANGES)
+
+Read the following files and report back:
+
+1. /backend/agents/ — list every file present. For each Python file, tell me: (a) what class or function it exports, (b) whether the file is complete (has real implementation) or is a stub/placeholder, (c) any obvious broken imports or TODO comments.
+
+2. /backend/agents/graph.py specifically — report what nodes are in the LangGraph state machine, what edges connect them, and what the final state shape looks like.
+
+3. /backend/models/ — list what Pydantic models exist. For each, report its field names and types.
+
+4. /backend/routes/ — list every route file and every route handler inside. For each handler, report which HTTP method + path it handles, and whether it's implemented or empty/stub.
+
+5. /backend/main.py — show me the full current state of route registration and any startup code.
+
+6. /docs/API_CONTRACT.md — summarize which of the six endpoints are expected.
+
+After reading all of the above, produce a clean status report in this format:
+
+AGENT STATUS:
+- Intake Agent: [complete/partial/missing] — [file path, notes]
+- CV Analyzer: [complete/partial/missing] — [file path, notes]
+- Ranking Agent: [complete/partial/missing] — [file path, notes]
+- Interview Agent: [complete/partial/missing] — [file path, notes]
+- Report Agent: [complete/partial/missing] — [file path, notes]
+- Orchestrator (graph.py): [complete/partial/missing] — [notes on wiring]
+
+ENDPOINT STATUS:
+- POST /job: [implemented/partial/missing]
+- POST /candidates: [implemented/partial/missing]
+- GET /status/{job_id}: [implemented/partial/missing]
+- GET /results/{job_id}: [implemented/partial/missing]
+- GET /questions/{candidate_id}: [implemented/partial/missing]
+- GET /report/{job_id}: [implemented/partial/missing]
+
+KNOWN BUGS:
+- POST /job currently returns 500 with "Missing job_profile or candidates in state". Root cause analysis: [your analysis based on reading graph.py and the route handler]
+
+DO NOT WRITE ANY CODE YET. Give me this report and wait for my approval.

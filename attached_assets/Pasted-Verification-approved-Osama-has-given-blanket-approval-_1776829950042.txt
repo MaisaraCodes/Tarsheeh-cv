@@ -1,0 +1,66 @@
+Verification approved. Osama has given blanket approval to modify backend code including agents, orchestrator, and state shape. Proceed with Phase 4 work.
+
+ARCHITECTURAL DECISION: Use the SPLIT GRAPH approach, not checkpoints. Create separate subgraphs per endpoint. Rationale: simpler state ownership, easier debugging, fewer moving parts.
+
+SCOPE:
+You have broad authority over /backend/ to make this work. Specifically you may:
+- Modify /backend/agents/graph.py to split into subgraphs
+- Modify /backend/agents/*.py files
+- Create new agent files for Interview and Report agents
+- Modify /backend/models/ to add fields
+- Build route handlers in /backend/routes/ and wire them in /backend/main.py
+- Modify AgentState TypedDict freely
+- Read/write Supabase via the existing supabase_client utility
+- Install new Python packages if needed (reportlab is likely needed)
+
+You may NOT:
+- Touch /frontend/ (completely off limits)
+- Change the API contract in /docs/API_CONTRACT.md — the contract is locked. Your endpoints must match its request/response shapes exactly.
+- Change the DATABASE_SCHEMA in /docs/DATABASE_SCHEMA.md — work within the existing schema.
+
+BUILD ORDER (build, commit, verify, move on — do not batch):
+
+PHASE A: Graph restructure + state shape
+1. Expand AgentState TypedDict to include: job_id, job_profile, candidates (with name field per candidate), all_cv_analyses, ranking_result, interview_questions (dict keyed by candidate_id), report_url.
+2. Split graph.py into subgraphs:
+   - intake_graph: START → intake → END
+   - analysis_graph: START → analyzer → ranker → END  
+   - interview_graph: START → interview → END (per candidate)
+   - report_graph: START → report → END
+3. Each subgraph should be independently invokable with the appropriate partial state.
+4. Remove the serial-all-nodes pattern that caused the original bug.
+
+PHASE B: Missing agents
+1. Build Interview Agent at /backend/agents/interview_agent.py. Signature: generate_questions(job_profile, cv_analysis) -> List[str]. Returns 5 tailored interview questions. Use GPT-4o, temperature=0, PydanticOutputParser. Style: questions that probe judgment, character, and competence (per brand guide's feature phrase).
+2. Build Report Agent at /backend/agents/report_agent.py. Signature: generate_report(job, ranked_candidates, candidate_details) -> bytes. Returns PDF bytes using ReportLab. PDF should include: job title, date, ranked candidate list with scores and summaries, and brief job profile. Keep it clean and readable. Add reportlab to requirements.txt.
+
+PHASE C: Fix existing endpoint
+1. POST /job: rewrite to invoke ONLY the intake_graph. Persist the JobProfile to Supabase jobs table (as parsed_profile JSONB per schema). Return {"job_id", "status": "processing"} per contract.
+
+PHASE D: Build missing endpoints
+2. POST /candidates: accept multipart with job_id and repeated "files" key. Extract text via pdfplumber. Create candidate rows in Supabase. Invoke analysis_graph (analyzer + ranker) over all candidates. Persist results. Return {"job_id", "candidates_queued", "status": "processing"} per contract. Note: this endpoint may take time — consider how to handle. If synchronous is acceptable for demo, synchronous is fine. If async is needed, use FastAPI BackgroundTasks.
+3. GET /status/{job_id}: derive stage and progress from what's been persisted. Stage progression: intake (job profile exists) → cv_analyzer (candidates exist but no analyses) → ranking (analyses exist but no ranking) → interview (ranking exists but no questions) → report (questions exist but no report) → complete (report exists). Return per contract shape.
+4. GET /results/{job_id}: read from Supabase and return ranked candidates. Match contract shape exactly.
+5. GET /questions/{candidate_id}: invoke interview_graph if questions don't exist yet for this candidate. Persist and return. Match contract shape.
+6. GET /report/{job_id}: invoke report_graph if no report exists yet. Return PDF as binary stream with appropriate Content-Type: application/pdf header. Match contract.
+
+PHASE E: End-to-end verification
+Run this test and show me ALL the output:
+1. POST /job with body: {"title": "Senior Backend Engineer", "description": "We need a Python engineer with 5+ years experience in FastAPI, PostgreSQL, and distributed systems. Experience with LLM integration is a strong plus."}. Show response.
+2. POST /candidates with the returned job_id and 2-3 sample PDF CVs (use any real PDFs from the knowledge_base directory if no CV PDFs are available — note this may affect ranking quality). Show response.
+3. Poll GET /status/{job_id} every 3 seconds for up to 90 seconds, showing stage progression. If it hits "complete", move on. If it hits "failed" or stalls, STOP and diagnose.
+4. GET /results/{job_id}. Show the ranked candidates.
+5. GET /questions/{candidate_id} for the top-ranked candidate. Show the 5 questions.
+6. GET /report/{job_id}. Save the PDF and confirm it opens. Show file size.
+7. Query Supabase directly (use the supabase client or raw SQL if easier) and show the actual rows in: jobs, candidates, job_results tables for this test run. I want to see that persistence worked.
+
+CRITICAL CONSTRAINTS:
+- Do NOT return fake/stub data from endpoints. If something doesn't work, the endpoint should return an error, not lie with placeholder data.
+- Do NOT skip the end-to-end verification. I need to see the output.
+- Each phase should be committed separately so history is readable.
+- Push to dev branch at the END, only if end-to-end test passes.
+- If you hit a blocker you can't solve, STOP and tell me. Do not push broken code.
+
+If verification reveals a ranking bug where the LLM invents candidate names (you flagged this): fix it by passing candidate names (from PDF filename as fallback) through the state so the LLM doesn't hallucinate.
+
+Begin.

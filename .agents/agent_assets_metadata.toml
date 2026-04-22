@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "AJXJ-iAcHiYbL6wyi0q02"
+uri = "file://artifacts/tarsheeh-report-sample.pdf"
+type = "pdf"
+title = "Sample Hiring Report (E2E test output)"
