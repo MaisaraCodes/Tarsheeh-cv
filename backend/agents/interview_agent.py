@@ -1,7 +1,7 @@
 """Interview Agent — generates 5 tailored interview questions for a candidate."""
 import os
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List
 from dotenv import load_dotenv
 
 from langchain_core.prompts import PromptTemplate
@@ -17,15 +17,25 @@ load_dotenv(backend_dir.parent / ".env")
 load_dotenv(backend_dir / ".env")
 
 
+_LANG_DIRECTIVE = {
+    "ar": (
+        "Write all 5 questions in fluent, professional Modern Standard Arabic. "
+        "Keep proper-noun technical terms (e.g. Python, FastAPI) in their original Latin form. "
+        "Phrase the questions naturally for an Arabic-speaking interviewer to read aloud."
+    ),
+    "en": (
+        "Write all 5 questions in clear, professional English."
+    ),
+}
+
+
 def generate_questions(
     job_profile: JobProfile,
     cv_analysis: CVAnalysisResult,
     candidate_name: str = "the candidate",
+    locale: str = "en",
 ) -> List[str]:
-    """
-    Generate exactly 5 tailored interview questions that probe judgment,
-    character, and competence based on the candidate's scorecard and the job.
-    """
+    """Generate exactly 5 tailored interview questions in the requested locale."""
     llm = ChatOpenAI(model="gpt-4o", temperature=0)
     parser = PydanticOutputParser(pydantic_object=InterviewQuestions)
 
@@ -44,6 +54,8 @@ Design principles:
 - Avoid leading questions and avoid yes/no questions.
 - Reference the candidate's specific strengths or gaps where relevant.
 
+Localization directive: {lang_directive}
+
 Inputs:
 - Job Profile (JSON): {job_profile}
 - Candidate scorecard (JSON): {cv_analysis}
@@ -53,34 +65,29 @@ Inputs:
 
     prompt = PromptTemplate(
         template=prompt_template,
-        input_variables=["candidate_name", "job_profile", "cv_analysis"],
+        input_variables=["candidate_name", "job_profile", "cv_analysis", "lang_directive"],
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
     chain = prompt | llm | parser
-
     result: InterviewQuestions = chain.invoke({
         "candidate_name": candidate_name,
         "job_profile": job_profile.model_dump_json(),
         "cv_analysis": cv_analysis.model_dump_json(),
+        "lang_directive": _LANG_DIRECTIVE.get(locale, _LANG_DIRECTIVE["en"]),
     })
-
     return result.questions
 
 
 if __name__ == "__main__":
     dummy_job = JobProfile(
         title="Senior Python Backend Developer",
-        required_skills=["Python", "FastAPI", "PostgreSQL", "LangChain"],
+        required_skills=["Python", "FastAPI"],
         experience_years=5,
-        priorities=["Build scalable APIs", "Integrate LLM models"],
+        priorities=["Scalable APIs"],
     )
     dummy_analysis = CVAnalysisResult(
-        score=72,
-        reasoning="Strong Python and PostgreSQL background; limited FastAPI exposure; no LangChain.",
-        matching_skills=["Python", "PostgreSQL"],
-        missing_skills=["FastAPI", "LangChain"],
+        score=72, reasoning="Solid Python.", matching_skills=["Python"], missing_skills=["FastAPI"],
     )
-    qs = generate_questions(dummy_job, dummy_analysis, candidate_name="Osama")
-    for i, q in enumerate(qs, 1):
-        print(f"{i}. {q}")
+    for q in generate_questions(dummy_job, dummy_analysis, "Osama", locale="ar"):
+        print(q)

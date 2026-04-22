@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from "@/i18n/navigation";
 import { postJob } from "@/lib/api";
-import type { JobRequest } from "@/lib/types";
+import type { JobRequest, Locale } from "@/lib/types";
 
 const inputStyle: React.CSSProperties = {
   border: "1px solid var(--gold-dim)",
@@ -15,6 +15,7 @@ export default function JobPage() {
   const router = useRouter();
   const t = useTranslations('job');
   const tErr = useTranslations('errors');
+  const locale = useLocale() as Locale;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -30,7 +31,7 @@ export default function JobPage() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const body: JobRequest = { title: title.trim(), description: description.trim() };
+      const body: JobRequest = { title: title.trim(), description: description.trim(), locale };
       const res = await postJob(body);
       router.push(`/upload/${res.job_id}`);
     } catch (err) {

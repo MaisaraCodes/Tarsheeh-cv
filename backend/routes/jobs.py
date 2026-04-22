@@ -1,9 +1,12 @@
 """POST /job — runs ONLY the intake subgraph and persists the parsed profile."""
 import uuid
+from typing import Optional
+
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from backend.agents.graph import intake_graph
+from backend.utils.locale import normalize_locale, stash_locale
 from backend.utils.supabase_client import get_supabase
 
 router = APIRouter()
@@ -12,6 +15,10 @@ router = APIRouter()
 class JobRequest(BaseModel):
     title: str
     description: str
+    locale: Optional[str] = Field(
+        default="en",
+        description="Output language for downstream LLM agents and PDF report. 'en' or 'ar'.",
+    )
 
 
 class JobResponse(BaseModel):
@@ -25,6 +32,7 @@ def create_job(job: JobRequest):
         raise HTTPException(status_code=422, detail="description must not be empty")
 
     job_id = str(uuid.uuid4())
+    locale = normalize_locale(job.locale)
 
     try:
         result = intake_graph.invoke({
@@ -35,7 +43,8 @@ def create_job(job: JobRequest):
         raise HTTPException(status_code=500, detail=f"Intake Agent failure: {e}")
 
     profile = result.get("job_profile")
-    parsed_profile = profile.model_dump() if profile is not None else None
+    profile_dict = profile.model_dump() if profile is not None else {}
+    parsed_profile = stash_locale(profile_dict, locale)
 
     try:
         get_supabase().table("jobs").insert({

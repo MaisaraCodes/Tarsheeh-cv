@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from backend.agents.graph import interview_graph
 from backend.models.job import JobProfile
 from backend.models.cv import CVAnalysisResult
+from backend.utils.locale import pop_locale
 from backend.utils.names import resolve_candidate_name
 from backend.utils.supabase_client import get_supabase
 
@@ -30,7 +31,6 @@ def get_questions(candidate_id: str):
 
     existing = candidate.get("interview_questions")
     if existing:
-        # Stored as either a list or {"questions": [...]} depending on history.
         questions = existing if isinstance(existing, list) else existing.get("questions", [])
         if questions:
             return QuestionsResponse(candidate_id=candidate_id, job_id=job_id, questions=questions)
@@ -43,13 +43,13 @@ def get_questions(candidate_id: str):
     if not job_row.data or not job_row.data[0].get("parsed_profile"):
         raise HTTPException(status_code=409, detail="Job profile not available")
 
+    parsed_profile, locale = pop_locale(job_row.data[0]["parsed_profile"])
     try:
-        job_profile = JobProfile(**job_row.data[0]["parsed_profile"])
+        job_profile = JobProfile(**parsed_profile)
         cv_analysis = CVAnalysisResult(**scorecard)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Stored data invalid: {e}")
 
-    # Prefer the canonical name persisted by the ranker on job_results.
     candidate_name = "the candidate"
     results_row = sb.table("job_results").select("ranked_candidates").eq("job_id", job_id).limit(1).execute()
     if results_row.data and results_row.data[0].get("ranked_candidates"):
@@ -71,6 +71,7 @@ def get_questions(candidate_id: str):
             "candidate_name": candidate_name,
             "job_profile": job_profile,
             "cv_analysis": cv_analysis,
+            "locale": locale,
         })
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Interview Agent failure: {e}")

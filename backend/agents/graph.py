@@ -3,6 +3,9 @@
 Each subgraph owns the minimum state it needs and is invoked from the matching
 FastAPI route. This avoids the original "run everything serially on first call"
 bug where the analyzer ran before any candidates existed.
+
+`locale` ("en" or "ar") flows through every state so downstream LLM agents and
+the PDF renderer produce localized output.
 """
 from typing import TypedDict, Optional, List, Dict, Any
 from langgraph.graph import StateGraph, START, END
@@ -18,7 +21,7 @@ from backend.agents.report_agent import generate_report
 
 
 # ---------------------------------------------------------------------------
-# State definitions — one per subgraph, minimal surface area
+# State definitions
 # ---------------------------------------------------------------------------
 
 class IntakeState(TypedDict, total=False):
@@ -30,7 +33,8 @@ class IntakeState(TypedDict, total=False):
 class AnalysisState(TypedDict, total=False):
     job_id: str
     job_profile: JobProfile
-    candidates: List[Dict[str, str]]          # [{id, name, cv_text}, ...]
+    candidates: List[Dict[str, str]]
+    locale: str
     all_cv_analyses: Optional[List[Dict[str, Any]]]
     ranking_result: Optional[RankedList]
 
@@ -40,6 +44,7 @@ class InterviewState(TypedDict, total=False):
     candidate_name: str
     job_profile: JobProfile
     cv_analysis: CVAnalysisResult
+    locale: str
     interview_questions: Optional[List[str]]
 
 
@@ -48,6 +53,7 @@ class ReportState(TypedDict, total=False):
     job: Dict[str, Any]
     ranked_candidates: List[Dict[str, Any]]
     candidate_details: Dict[str, Dict[str, Any]]
+    locale: str
     pdf_bytes: Optional[bytes]
 
 
@@ -65,6 +71,7 @@ def _analyzer_node(state: AnalysisState) -> Dict[str, Any]:
     print("--- [ANALYZER] scoring candidates ---")
     job_profile = state.get("job_profile")
     candidates = state.get("candidates", [])
+    locale = state.get("locale", "en")
     if not job_profile:
         raise ValueError("analysis_graph: missing job_profile")
     if not candidates:
@@ -75,8 +82,8 @@ def _analyzer_node(state: AnalysisState) -> Dict[str, Any]:
         cid = candidate.get("id")
         name = candidate.get("name") or "Unnamed candidate"
         cv_text = candidate.get("cv_text", "")
-        print(f"   - analyzing {name} ({cid})")
-        result = analyze_cv(job_profile, cv_text)
+        print(f"   - analyzing {name} ({cid}) [locale={locale}]")
+        result = analyze_cv(job_profile, cv_text, locale=locale)
         analyses.append({
             "candidate_id": cid,
             "name": name,
@@ -88,11 +95,11 @@ def _analyzer_node(state: AnalysisState) -> Dict[str, Any]:
 def _ranker_node(state: AnalysisState) -> Dict[str, Any]:
     print("--- [RANKER] producing shortlist ---")
     analyses = state.get("all_cv_analyses") or []
+    locale = state.get("locale", "en")
     if not analyses:
         raise ValueError("analysis_graph: no analyses to rank")
-    result = rank_candidates(analyses)
+    result = rank_candidates(analyses, locale=locale)
 
-    # Defensive: the LLM occasionally drifts on names. Force the names we fed in.
     name_by_id = {a["candidate_id"]: a.get("name") for a in analyses if a.get("candidate_id")}
     score_by_id = {a["candidate_id"]: a["analysis"].get("score") for a in analyses if a.get("candidate_id")}
     fixed = []
@@ -105,28 +112,29 @@ def _ranker_node(state: AnalysisState) -> Dict[str, Any]:
         if canonical_score is not None:
             rc_dump["score"] = canonical_score
         fixed.append(rc_dump)
-    # Re-pack into RankedList shape via dict (avoid re-validating pydantic name change)
     from backend.models.ranking import RankedList, RankedCandidate
     rebuilt = RankedList(ranked_candidates=[RankedCandidate(**rc) for rc in fixed])
     return {"ranking_result": rebuilt}
 
 
 def _interview_node(state: InterviewState) -> Dict[str, Any]:
-    print(f"--- [INTERVIEW] questions for {state.get('candidate_name')} ---")
+    print(f"--- [INTERVIEW] questions for {state.get('candidate_name')} [locale={state.get('locale', 'en')}] ---")
     questions = generate_questions(
         job_profile=state["job_profile"],
         cv_analysis=state["cv_analysis"],
         candidate_name=state.get("candidate_name") or "the candidate",
+        locale=state.get("locale", "en"),
     )
     return {"interview_questions": questions}
 
 
 def _report_node(state: ReportState) -> Dict[str, Any]:
-    print("--- [REPORT] rendering PDF ---")
+    print(f"--- [REPORT] rendering PDF [locale={state.get('locale', 'en')}] ---")
     pdf_bytes = generate_report(
         job=state["job"],
         ranked_candidates=state["ranked_candidates"],
         candidate_details=state.get("candidate_details") or {},
+        locale=state.get("locale", "en"),
     )
     return {"pdf_bytes": pdf_bytes}
 

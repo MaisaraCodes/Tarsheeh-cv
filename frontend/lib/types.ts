@@ -1,9 +1,12 @@
 export type PipelineStage = "intake" | "cv_analyzer" | "ranking" | "interview" | "report";
 export type PipelineStatus = "processing" | "complete" | "failed";
 
+export type Locale = "en" | "ar";
+
 export interface JobRequest {
   title: string;
   description: string;
+  locale?: Locale;
 }
 
 export interface JobResponse {

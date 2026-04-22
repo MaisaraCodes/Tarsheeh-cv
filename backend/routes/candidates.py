@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from backend.agents.graph import analysis_graph
 from backend.models.job import JobProfile
+from backend.utils.locale import pop_locale
 from backend.utils.names import resolve_candidate_name
 from backend.utils.supabase_client import get_supabase
 
@@ -43,21 +44,20 @@ def upload_candidates(
 
     sb = get_supabase()
 
-    # Validate job exists and load profile
     job_row = sb.table("jobs").select("*").eq("id", job_id).limit(1).execute()
     if not job_row.data:
         raise HTTPException(status_code=400, detail="Invalid or unrecognised job_id")
     job = job_row.data[0]
-    parsed_profile = job.get("parsed_profile")
-    if not parsed_profile:
+    parsed_profile_raw = job.get("parsed_profile")
+    if not parsed_profile_raw:
         raise HTTPException(status_code=409, detail="Job has no parsed profile yet")
 
+    parsed_profile, locale = pop_locale(parsed_profile_raw)
     try:
         job_profile = JobProfile(**parsed_profile)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Stored job profile is invalid: {e}")
 
-    # Read + extract + persist candidate rows
     candidates_state: List[dict] = []
     inserted_rows: List[dict] = []
     for upload in files:
@@ -82,12 +82,12 @@ def upload_candidates(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to persist candidates: {e}")
 
-    # Run the analysis subgraph synchronously (acceptable for demo per Osama's note).
     try:
         result = analysis_graph.invoke({
             "job_id": job_id,
             "job_profile": job_profile,
             "candidates": candidates_state,
+            "locale": locale,
         })
     except Exception as e:
         sb.table("candidates").update({"status": "error"}).eq("job_id", job_id).execute()
@@ -105,7 +105,6 @@ def upload_candidates(
                 "score": rc.score,
             }
 
-    # Persist per-candidate scorecards + rank
     for a in analyses:
         cid = a["candidate_id"]
         scorecard = a["analysis"]
@@ -117,7 +116,6 @@ def upload_candidates(
             "status": "completed",
         }).eq("id", cid).execute()
 
-    # Persist ranked list aggregate (manual upsert — job_results.job_id has no unique constraint)
     if ranking:
         ranked_payload = [rc.model_dump() for rc in ranking.ranked_candidates]
         existing = sb.table("job_results").select("job_id").eq("job_id", job_id).limit(1).execute()

@@ -31,9 +31,16 @@ Accepts a job description and triggers the Intake Agent, which parses the input 
 ```json
 {
   "title": "string",
-  "description": "string"
+  "description": "string",
+  "locale": "en"
 }
 ```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `title` | string | yes | Job title shown to the user |
+| `description` | string | yes | Raw job description text fed to the Intake Agent |
+| `locale` | string | no | Output language for downstream LLM agents and the PDF report. `"en"` (default) or `"ar"`. The intake parsing itself is always normalized to English; the persisted locale is what controls the analyzer, ranking, interview, and report stages |
 
 **Success response**, `200 OK`
 
