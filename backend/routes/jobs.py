@@ -1,6 +1,6 @@
 """POST /job — runs ONLY the intake subgraph and persists the parsed profile."""
 import uuid
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
@@ -15,7 +15,7 @@ router = APIRouter()
 class JobRequest(BaseModel):
     title: str
     description: str
-    locale: Optional[str] = Field(
+    locale: Optional[Literal["en", "ar"]] = Field(
         default="en",
         description="Output language for downstream LLM agents and PDF report. 'en' or 'ar'.",
     )
