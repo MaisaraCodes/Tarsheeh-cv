@@ -89,11 +89,13 @@ export default function Home() {
           className="py-16"
           style={{ borderTop: "1px solid var(--gold-dim)" }}
         >
-          <SectionHeader num="01" title="The Problem" />
+          <SectionHeader num="01" title="Our Mission" />
           <p className="font-serif text-[26px] font-light text-muted-light text-center w-full max-w-[32rem] mx-auto leading-relaxed">
-            Screening is slow, subjective, and inconsistent. Two managers
-            reading the same CV reach different conclusions. The best candidate
-            often does not make it past the first filter.
+            Recruitment should not require a dedicated team to do well. 
+            Tarsheeh.cv is a multi-agent AI platform that makes the entire process Something to businesses can run 
+            without the overhead of a full HR operation team, and effortless for those that already have one. 
+            It reads every CV, evaluates every candidate against your job profile, and returns a ranked shortlist 
+            with full reasoning in minutes, not days.
           </p>
         </section>
 
@@ -105,9 +107,9 @@ export default function Home() {
         >
           <SectionHeader num="02" title="How It Works" />
           <p className="font-sans text-sm font-light text-muted-light text-center mb-8">
-            Five specialised agents work in sequence — from reading your job
-            description to compiling a ranked shortlist with interview
-            questions.
+            Five specialised agents read every CV, score every candidate against the job profile, 
+            and returns a ranked shortlist with full reasoning. 
+            Post a role. Upload CVs. Receive your shortlist in minutes.
           </p>
           <div className="grid grid-cols-5 gap-[2px]">
             {PIPELINE_STAGES.map((stage) => (
