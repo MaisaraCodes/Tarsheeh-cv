@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from backend.agents.graph import analysis_graph
 from backend.models.job import JobProfile
+from backend.utils.names import clean_name_from_filename, extract_candidate_name
 from backend.utils.supabase_client import get_supabase
 
 router = APIRouter()
@@ -30,12 +31,6 @@ def _extract_pdf_text(data: bytes, filename: str) -> str:
         return text
     except Exception as e:
         raise HTTPException(status_code=415, detail=f"Could not parse PDF '{filename}': {e}")
-
-
-def _name_from_filename(filename: str) -> str:
-    stem = filename.rsplit(".", 1)[0]
-    cleaned = stem.replace("_", " ").replace("-", " ").strip()
-    return cleaned or "Unnamed candidate"
 
 
 @router.post("/candidates", response_model=CandidatesResponse)
@@ -72,7 +67,7 @@ def upload_candidates(
         raw = upload.file.read()
         cv_text = _extract_pdf_text(raw, upload.filename)
         cid = str(uuid.uuid4())
-        name = _name_from_filename(upload.filename)
+        name = extract_candidate_name(cv_text) or clean_name_from_filename(upload.filename)
         candidates_state.append({"id": cid, "name": name, "cv_text": cv_text})
         inserted_rows.append({
             "id": cid,
