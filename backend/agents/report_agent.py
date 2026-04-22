@@ -94,7 +94,7 @@ _LABELS = {
         "unnamed_candidate": "Unnamed candidate",
     },
     "ar": {
-        "header": "Tarsheeh.cv - تقرير التوظيف",
+        "header": "Tarsheeh.cv - تقرير الترشيح",
         "untitled_role": "وظيفة بدون عنوان",
         "generated_fmt": "تاريخ الانشاء: {when}",
         "role_profile": "تفاصيل الوظيفة",
