@@ -63,7 +63,7 @@ export default function CandidateDetailPage() {
   const backArrow = locale === 'ar' ? '→' : '←';
 
   return (
-    <div className="animate-fade-up max-w-3xl mx-auto w-full px-6 py-brand-2xl">
+    <div className="animate-fade-up max-w-3xl mx-auto w-full px-4 sm:px-6 py-brand-xl sm:py-brand-2xl">
       {/* Back link */}
       <Link
         href={backHref}
@@ -73,14 +73,14 @@ export default function CandidateDetailPage() {
       </Link>
 
       {/* Section header */}
-      <div className="flex items-baseline gap-6 mb-12">
+      <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
           className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading min-w-0 break-words">
           {candidate?.name ?? t('loading')}
         </h1>
         <div
@@ -123,7 +123,7 @@ export default function CandidateDetailPage() {
       {candidate !== null && questions !== null && error === null && (
         <>
           {/* Top summary row */}
-          <div className="mt-brand-lg flex items-start justify-between gap-6">
+          <div className="mt-brand-lg flex flex-col sm:flex-row items-start sm:justify-between gap-6">
             {/* Rank */}
             <div className="flex-shrink-0">
               <p className="font-sans text-[10px] uppercase tracking-label text-muted">

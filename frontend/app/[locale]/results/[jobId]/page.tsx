@@ -47,26 +47,26 @@ export default function ResultsPage() {
   const topScore = results?.ranked_candidates[0]?.score;
 
   return (
-    <div className="animate-fade-up max-w-4xl mx-auto w-full px-6 py-brand-2xl">
+    <div className="animate-fade-up max-w-4xl mx-auto w-full px-4 sm:px-6 py-brand-xl sm:py-brand-2xl">
 
       {/* Section header */}
-      <div className="flex items-baseline gap-6 mb-12">
+      <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
           className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
           {t('title')}
         </h1>
         <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Sub-header row */}
-      <div className="mt-4 flex justify-between items-end">
+      <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
         <div>
-          <p className="font-serif text-[22px] font-light text-ivory">
+          <p className="font-serif text-[18px] sm:text-[22px] font-light text-ivory">
             {t('intro')}
           </p>
           <p className="font-sans text-xs text-muted uppercase tracking-label mt-2">
@@ -82,7 +82,7 @@ export default function ResultsPage() {
               {t('topScore')}
             </p>
             <p
-              className="font-serif text-[42px] font-light text-gold-light leading-none"
+              className="font-serif text-[34px] sm:text-[42px] font-light text-gold-light leading-none"
               dir="ltr"
             >
               {topScore}
@@ -163,7 +163,7 @@ export default function ResultsPage() {
                   {/* Score bar + number */}
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <div
-                      className="relative"
+                      className="relative hidden sm:block"
                       style={{ width: "80px", height: "1px", background: "var(--gold-faint)" }}
                     >
                       <div

@@ -3,14 +3,14 @@ import { Link } from '@/i18n/navigation';
 
 function SectionHeader({ num, title }: { num: string; title: string }) {
   return (
-    <div className="flex items-baseline gap-6 mb-12">
+    <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
       <span
         className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
         dir="ltr"
       >
         {num}
       </span>
-      <h2 className="font-serif text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+      <h2 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
         {title}
       </h2>
       <div className="flex-1 h-px" style={{ background: 'var(--gold-dim)' }} />
@@ -38,9 +38,9 @@ export default async function Home() {
   return (
     <div className="flex flex-col">
       {/* ── Hero ── */}
-      <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center">
+      <section className="min-h-[80vh] flex flex-col items-center justify-center px-4 sm:px-6 text-center">
         <p
-          className="animate-hero-enter font-serif text-7xl tracking-logo leading-none"
+          className="animate-hero-enter font-serif text-5xl sm:text-7xl tracking-logo leading-none"
           dir="ltr"
         >
           <span className="font-light text-gold-pale">TARSHEEH</span>
@@ -53,7 +53,7 @@ export default async function Home() {
         />
 
         <h1
-          className="animate-fade-up font-serif text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line"
+          className="animate-fade-up font-serif text-3xl sm:text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line"
           style={{ animationDelay: '400ms' }}
         >
           {t('hero')}
@@ -92,7 +92,7 @@ export default async function Home() {
       </section>
 
       {/* ── Content sections ── */}
-      <div className="max-w-4xl mx-auto w-full px-6 pb-brand-2xl">
+      <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 pb-brand-2xl">
 
         {/* 01 — Mission */}
         <section
@@ -116,7 +116,7 @@ export default async function Home() {
           <p className="font-sans text-sm font-light text-muted-light text-center mb-8">
             {t('howItWorksIntro')}
           </p>
-          <div className="grid grid-cols-5 gap-[2px]">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-[2px]">
             {pipelineStages.map((stage) => (
               <div
                 key={stage}
@@ -138,7 +138,7 @@ export default async function Home() {
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
           <SectionHeader num={t('featuresNum')} title={t('featuresTitle')} />
-          <div className="grid grid-cols-3 gap-[2px]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-[2px]">
             {featureCards.map(({ phrase, sub }) => (
               <div
                 key={phrase}
@@ -161,7 +161,7 @@ export default async function Home() {
           className="py-16 flex flex-col items-center"
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
-          <p className="font-serif text-[28px] font-light text-ivory tracking-heading mb-brand-xl">
+          <p className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading mb-brand-xl text-center">
             {t('closingCta')}
           </p>
           <Link

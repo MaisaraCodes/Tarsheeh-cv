@@ -22,7 +22,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <header
-            className="px-6 py-4"
+            className="px-4 sm:px-6 py-3 sm:py-4"
             style={{ borderBottom: '1px solid var(--gold-dim)' }}
           >
             <Nav />
@@ -31,10 +31,10 @@ export default async function LocaleLayout({ children, params }: Props) {
           <main className="flex-1 flex flex-col">{children}</main>
 
           <footer
-            className="px-6 py-8"
+            className="px-4 sm:px-6 py-6 sm:py-8"
             style={{ borderTop: '1px solid var(--gold-dim)' }}
           >
-            <div className="max-w-4xl mx-auto flex items-start justify-between">
+            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 sm:gap-6">
               <div>
                 <p
                   className="font-serif text-xl tracking-logo leading-none"

@@ -4,7 +4,9 @@
     "tryAgain": "Try again"
   },
   "nav": {
-    "toggleLabel": "EN"
+    "toggleLabel": "EN",
+    "profileLabel": "Account",
+    "profileTooltip": "Coming soon! This is where you'll be able to access your account and the dashboard for all of your posted roles."
   },
   "landing": {
     "hero": "Hire with precision.\nLead with confidence.",

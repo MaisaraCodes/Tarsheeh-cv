@@ -4,7 +4,9 @@
     "tryAgain": "أعد المحاولة"
   },
   "nav": {
-    "toggleLabel": "AR"
+    "toggleLabel": "AR",
+    "profileLabel": "الحساب",
+    "profileTooltip": "قريبًا! سيمكنك من هنا الوصول الى حسابك والى لوحة التحكم بجميع الوظائف والمرشحين."
   },
   "landing": {
     "hero": "وظِّف بدقّة.\nقُد بثقة.",
