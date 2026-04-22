@@ -55,7 +55,7 @@
     "hint": "PDF format only, max 10MB per file, up to 20 files",
     "remove": "Remove",
     "submit": "Upload CVs",
-    "submitting": "Reading the role description..."
+    "submitting": "Uploading CVs..."
   },
   "processing": {
     "num": "03",
