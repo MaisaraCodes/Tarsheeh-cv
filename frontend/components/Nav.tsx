@@ -16,7 +16,8 @@ function ProfileIcon({
       <button
         type="button"
         aria-label={label}
-        className="flex items-center justify-center w-7 h-7 text-muted hover:text-ivory transition-colors duration-200 cursor-default"
+        onClick={(e) => e.currentTarget.blur()}
+        className="flex items-center justify-center w-7 h-7 text-muted hover:text-ivory transition-colors duration-200 cursor-default focus:outline-none"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +35,7 @@ function ProfileIcon({
       </button>
       <div
         role="tooltip"
-        className="pointer-events-none absolute top-full mt-3 end-0 w-64 bg-noir-3 px-4 py-3 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 z-50"
+        className="pointer-events-none absolute top-full mt-3 end-0 w-64 bg-noir-3 px-4 py-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50"
         style={{ border: '1px solid var(--gold-dim)' }}
       >
         <p className="font-sans text-[11px] font-light text-muted-light leading-relaxed">
