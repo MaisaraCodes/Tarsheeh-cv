@@ -223,3 +223,9 @@ build/
 
 # Claude Code context (local only)
 CLAUDE.md
+
+# Replit artifacts
+attached_assets/
+.agents/
+replit.md
+scripts/post-merge.sh
