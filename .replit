@@ -56,3 +56,8 @@ externalPort = 8000
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 180000
+
+[deployment]
+run = ["bash", "-c", "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & cd frontend && npm run start"]
+deploymentTarget = "autoscale"
+build = ["bash", "-c", "cd frontend && npm ci && npm run build"]
