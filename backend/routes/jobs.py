@@ -1,0 +1,62 @@
+"""POST /job — runs ONLY the intake subgraph and persists the parsed profile."""
+import uuid
+from typing import Literal, Optional
+
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+
+from backend.agents.graph import intake_graph
+from backend.utils.locale import normalize_locale, stash_locale
+from backend.utils.supabase_client import get_supabase
+
+router = APIRouter()
+
+
+class JobRequest(BaseModel):
+    title: str
+    description: str
+    locale: Optional[Literal["en", "ar"]] = Field(
+        default="en",
+        description="Output language for downstream LLM agents and PDF report. 'en' or 'ar'.",
+    )
+
+
+class JobResponse(BaseModel):
+    job_id: str
+    status: str
+
+
+@router.post("/job", response_model=JobResponse)
+def create_job(job: JobRequest):
+    if not job.title or not job.title.strip():
+        raise HTTPException(status_code=422, detail="title must not be empty")
+    if not job.description or not job.description.strip():
+        raise HTTPException(status_code=422, detail="description must not be empty")
+
+    job_id = str(uuid.uuid4())
+    locale = normalize_locale(job.locale)
+
+    try:
+        result = intake_graph.invoke({
+            "job_id": job_id,
+            "job_description": job.description,
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Intake Agent failure: {e}")
+
+    profile = result.get("job_profile")
+    profile_dict = profile.model_dump() if profile is not None else {}
+    parsed_profile = stash_locale(profile_dict, locale)
+
+    try:
+        get_supabase().table("jobs").insert({
+            "id": job_id,
+            "title": job.title,
+            "description": job.description,
+            "parsed_profile": parsed_profile,
+            "status": "candidates_pending",
+        }).execute()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to persist job: {e}")
+
+    return JobResponse(job_id=job_id, status="processing")

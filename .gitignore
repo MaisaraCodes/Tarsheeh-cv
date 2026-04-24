@@ -14,8 +14,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -223,3 +223,9 @@ build/
 
 # Claude Code context (local only)
 CLAUDE.md
+
+# Replit artifacts
+attached_assets/
+.agents/
+replit.md
+scripts/post-merge.sh

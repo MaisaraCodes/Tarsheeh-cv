@@ -1,5 +1,4 @@
 import os
-import json
 from dotenv import load_dotenv
 
 from langchain_core.prompts import PromptTemplate
@@ -9,7 +8,6 @@ from langchain_core.output_parsers import PydanticOutputParser
 from backend.models.cv import CVAnalysisResult
 from backend.models.job import JobProfile
 
-# Try to import retriever, handle path dynamically for script execution
 try:
     from backend.rag.retriever import retrieve_context, format_context_for_prompt
 except ModuleNotFoundError:
@@ -17,29 +15,49 @@ except ModuleNotFoundError:
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
     from backend.rag.retriever import retrieve_context, format_context_for_prompt
 
-# Load environment variables
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
 load_dotenv(env_path)
 
-def analyze_cv(job_profile: JobProfile, cv_text: str) -> CVAnalysisResult:
+
+_LANG_DIRECTIVE = {
+    "ar": (
+        "Write the `reasoning` field in fluent Modern Standard Arabic. "
+        "Keep proper-noun technical skill names (e.g. Python, FastAPI, AWS) in their original Latin form "
+        "inside the matching/missing skill lists. Numeric `score` stays a plain integer."
+    ),
+    "en": (
+        "Write the `reasoning` field in clear professional English. "
+        "Keep proper-noun technical skill names in their original form."
+    ),
+}
+
+
+def build_rag_context_for_job(job_profile: JobProfile) -> str:
+    """Run the RAG retrieval once for a job and return the formatted context.
+
+    Hoisted out of `analyze_cv` so a single retrieval can be shared across all
+    candidates for the same job (was previously running once per candidate with
+    the identical query — N redundant embedding + vector calls).
     """
-    Analyzes a CV against a Job Profile using RAG for HR best practices
-    and GPT-4o for evaluation.
-    """
-    # 1. Retrieve RAG Context
-    # Formulate a query using the job title and priorities
-    query = f"How to evaluate a candidate for {job_profile.title}? Key priorities: {', '.join(job_profile.priorities)}"
-    
-    # Retrieve top 3 relevant chunks from the database
+    query = (
+        f"How to evaluate a candidate for {job_profile.title}? "
+        f"Key priorities: {', '.join(job_profile.priorities)}"
+    )
     raw_results = retrieve_context(query_text=query, match_count=3)
-    rag_context = format_context_for_prompt(raw_results)
-    
-    # 2. Setup the LLM and the Output Parser
+    return format_context_for_prompt(raw_results)
+
+
+def analyze_cv_with_context(
+    job_profile: JobProfile,
+    cv_text: str,
+    rag_context: str,
+    locale: str = "en",
+) -> CVAnalysisResult:
+    """Evaluate a CV against a Job Profile using a pre-built RAG context."""
     llm = ChatOpenAI(model="gpt-4o", temperature=0)
     parser = PydanticOutputParser(pydantic_object=CVAnalysisResult)
-    
-    # 3. Create the Prompt Template
-    prompt_template = """You are an expert Senior HR Recruiter. 
+
+    prompt_template = """You are an expert Senior HR Recruiter.
 Your task is to evaluate a Candidate's CV against a Job Profile.
 
 1. Context: Use the "HR Hiring Best Practices" retrieved from the knowledge base (RAG) to assess the candidate. Do not rely solely on your personal opinion; you must anchor your assessment on professional standards and the provided reference.
@@ -53,54 +71,42 @@ Your task is to evaluate a Candidate's CV against a Job Profile.
    - Write a detailed Reasoning that explains the candidate's strengths and weaknesses based on the provided RAG Context.
    - Extract the Matching Skills and Missing Skills.
 
+Localization directive: {lang_directive}
+
 Your output must strictly adhere to the following data structure format:
 {format_instructions}
 """
-    
+
     prompt = PromptTemplate(
         template=prompt_template,
-        input_variables=["job_profile", "cv_text", "rag_context"],
-        partial_variables={"format_instructions": parser.get_format_instructions()}
+        input_variables=["job_profile", "cv_text", "rag_context", "lang_directive"],
+        partial_variables={"format_instructions": parser.get_format_instructions()},
     )
-    
-    # 4. Execute the Chain
+
     chain = prompt | llm | parser
-    
-    result = chain.invoke({
+    return chain.invoke({
         "job_profile": job_profile.model_dump_json(),
         "cv_text": cv_text,
-        "rag_context": rag_context
+        "rag_context": rag_context,
+        "lang_directive": _LANG_DIRECTIVE.get(locale, _LANG_DIRECTIVE["en"]),
     })
-    
-    return result
+
+
+def analyze_cv(job_profile: JobProfile, cv_text: str, locale: str = "en") -> CVAnalysisResult:
+    """Backwards-compatible single-shot analyzer (computes its own RAG context).
+
+    Prefer `build_rag_context_for_job` + `analyze_cv_with_context` when scoring
+    multiple candidates for the same job to avoid redundant retrievals.
+    """
+    rag_context = build_rag_context_for_job(job_profile)
+    return analyze_cv_with_context(job_profile, cv_text, rag_context, locale=locale)
+
 
 if __name__ == "__main__":
-    # --- Test Script ---
     dummy_job = JobProfile(
         title="Senior Python Backend Developer",
         required_skills=["Python", "FastAPI", "PostgreSQL", "LangChain"],
         experience_years=5,
-        priorities=["Build scalable APIs", "Integrate LLM models", "Optimize database queries"]
+        priorities=["Build scalable APIs", "Integrate LLM models"],
     )
-    
-    dummy_cv = """
-    Osama - Software Engineer
-    Experience: 4 years working with Python backend systems.
-    Tech Stack: Python, Django, MySQL.
-    Recent Projects: 
-    - Built a monolithic API for an e-commerce store using Django.
-    - Optimized MySQL database queries dropping response times by 30%.
-    - Started learning FastAPI but haven't used it in production yet.
-    - No direct experience with LangChain, but I understand basic AI concepts.
-    """
-    
-    print("--- Testing CV Analyzer Agent ---")
-    print(f"Target Role: {dummy_job.title}")
-    print("Retrieving RAG Context & Evaluating CV (Calling GPT-4o)...")
-    
-    try:
-        result = analyze_cv(dummy_job, dummy_cv)
-        print("\nSuccess! Structured Analysis Output:")
-        print(result.model_dump_json(indent=4))
-    except Exception as e:
-        print("\nError occurred:", e)
+    print(analyze_cv(dummy_job, "Python developer with 4 years experience.", locale="ar").model_dump_json(indent=2))

@@ -5,6 +5,11 @@
 @import '@fontsource/dm-sans/300.css';
 @import '@fontsource/dm-sans/400.css';
 @import '@fontsource/dm-sans/500.css';
+@import '@fontsource/amiri/400.css';
+@import '@fontsource/amiri/700.css';
+@import '@fontsource/cairo/300.css';
+@import '@fontsource/cairo/400.css';
+@import '@fontsource/cairo/500.css';
 
 @import "tailwindcss";
 
@@ -52,6 +57,11 @@
   --tracking-label:    0.30em;
   --tracking-badge:    0.35em;
   --tracking-tagline:  0.45em;
+
+  /* ── Animations ── */
+  --animate-fade-up: fade-up 600ms ease-out both;
+  --animate-hero-enter: hero-enter 1000ms ease-out both;
+  --animate-shimmer: shimmer 1800ms linear infinite;
 }
 
 /* Opacity tokens — in :root so they are accessible as CSS variables
@@ -63,6 +73,19 @@
   --ivory-dim:  rgba(242, 235, 217, 0.70);
 }
 
+/* RTL font overrides — when [dir="rtl"] is set on <html>, every component
+   using font-serif or font-sans Tailwind utilities automatically gets Arabic
+   fonts with no per-component changes. */
+[dir="rtl"] {
+  --font-serif: 'Amiri', serif;
+  --font-sans:  'Cairo', 'Tajawal', sans-serif;
+  line-height: 1.8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--color-noir);
   color: var(--color-ivory);
@@ -70,4 +93,35 @@ body {
   font-weight: 300;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    letter-spacing: 0.35em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.2em;
+  }
 }

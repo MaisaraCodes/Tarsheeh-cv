@@ -11,12 +11,20 @@ import time
 
 load_dotenv()
 
-# Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
 # Model configuration
 EMBEDDING_MODEL = "text-embedding-3-small"
 EMBEDDING_DIMENSION = 1536
+
+_client = None
+
+def _get_client() -> OpenAI:
+    global _client
+    if _client is None:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
+        _client = OpenAI(api_key=api_key)
+    return _client
 
 
 def generate_embedding(text: str) -> List[float]:
@@ -30,7 +38,7 @@ def generate_embedding(text: str) -> List[float]:
         List of 1536 float values representing the embedding
     """
     try:
-        response = client.embeddings.create(
+        response = _get_client().embeddings.create(
             model=EMBEDDING_MODEL,
             input=text
         )
@@ -70,7 +78,7 @@ def generate_embeddings_batch(
         print(f"  Processing batch {batch_num}/{total_batches} ({len(batch)} items)...")
         
         try:
-            response = client.embeddings.create(
+            response = _get_client().embeddings.create(
                 model=EMBEDDING_MODEL,
                 input=batch
             )
