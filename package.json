@@ -6,8 +6,5 @@
   "scripts": {
     "build": "cd frontend && npm ci && npm run build",
     "start": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & cd frontend && npm run start"
-  },
-  "dependencies": {
-    "next": "16.2.4"
   }
 }
