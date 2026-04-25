@@ -16,7 +16,7 @@ if os.getenv("OPENAI_API_KEY") or os.getenv("SUPABASE_URL"):
 else:
     print("[WARNING] Required environment variables not found. Please check your .env file.")
 
-from routes import (
+from backend.routes import (
     jobs_router,
     candidates_router,
     status_router,
