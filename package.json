@@ -1,0 +1,10 @@
+{
+  "name": "tarsheeh-cv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tarsheeh.cv — root wrapper for Replit deployment. Real Next.js app lives in frontend/. FastAPI backend in backend/.",
+  "scripts": {
+    "build": "cd frontend && npm ci && npm run build",
+    "start": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 & cd frontend && npm run start"
+  }
+}
