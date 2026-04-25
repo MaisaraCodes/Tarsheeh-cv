@@ -8,12 +8,14 @@ bug where the analyzer ran before any candidates existed.
 the PDF renderer produce localized output.
 """
 from typing import TypedDict, Optional, List, Dict, Any
+from concurrent.futures import ThreadPoolExecutor
 from langgraph.graph import StateGraph, START, END
 
 from backend.models.job import JobProfile
 from backend.models.cv import CVAnalysisResult
 from backend.models.ranking import RankedList
-from concurrent.futures import ThreadPoolExecutor
+from backend.models.questions import InterviewQuestions
+from backend.models.report import HiringReport
 
 from backend.agents.intake_agent import process_job_description
 from backend.agents.cv_analyzer import (
@@ -23,7 +25,7 @@ from backend.agents.cv_analyzer import (
 )
 from backend.agents.ranking_agent import rank_candidates
 from backend.agents.interview_agent import generate_questions
-from backend.agents.report_agent import generate_report
+from backend.agents.report_agent import compile_hiring_report, generate_report
 
 # Bounded concurrency for parallel CV analysis. Keep modest to respect
 # OpenAI rate limits and avoid thundering-herd on the vector DB / LLM.
@@ -47,6 +49,8 @@ class AnalysisState(TypedDict, total=False):
     locale: str
     all_cv_analyses: Optional[List[Dict[str, Any]]]
     ranking_result: Optional[RankedList]
+    interview_questions: Optional[List[Dict[str, Any]]] # Accumulated questions per candidate
+    final_report: Optional[HiringReport]
 
 
 class InterviewState(TypedDict, total=False):
@@ -65,6 +69,7 @@ class ReportState(TypedDict, total=False):
     candidate_details: Dict[str, Dict[str, Any]]
     locale: str
     pdf_bytes: Optional[bytes]
+    final_report: Optional[HiringReport]
 
 
 # ---------------------------------------------------------------------------
@@ -144,6 +149,7 @@ def _ranker_node(state: AnalysisState) -> Dict[str, Any]:
         if canonical_score is not None:
             rc_dump["score"] = canonical_score
         fixed.append(rc_dump)
+    
     from backend.models.ranking import RankedList, RankedCandidate
     rebuilt = RankedList(ranked_candidates=[RankedCandidate(**rc) for rc in fixed])
     return {"ranking_result": rebuilt}
@@ -161,14 +167,29 @@ def _interview_node(state: InterviewState) -> Dict[str, Any]:
 
 
 def _report_node(state: ReportState) -> Dict[str, Any]:
-    print(f"--- [REPORT] rendering PDF [locale={state.get('locale', 'en')}] ---")
-    pdf_bytes = generate_report(
-        job=state["job"],
-        ranked_candidates=state["ranked_candidates"],
-        candidate_details=state.get("candidate_details") or {},
-        locale=state.get("locale", "en"),
+    print(f"--- [REPORT] generating summary and PDF [locale={state.get('locale', 'en')}] ---")
+    job = state["job"]
+    ranked_candidates = state["ranked_candidates"]
+    candidate_details = state.get("candidate_details") or {}
+    locale = state.get("locale", "en")
+
+    # 1. Generate LLM summary (Osama's logic)
+    # We pass the ranked candidates and job profile to get an executive summary
+    llm_report = compile_hiring_report(
+        ranked_list={"ranked_candidates": ranked_candidates},
+        job_profile=job.get("parsed_profile") or job
     )
-    return {"pdf_bytes": pdf_bytes}
+
+    # 2. Render PDF with the summary (Remote logic + integration)
+    pdf_bytes = generate_report(
+        job=job,
+        ranked_candidates=ranked_candidates,
+        candidate_details=candidate_details,
+        locale=locale,
+        llm_report=llm_report
+    )
+    
+    return {"pdf_bytes": pdf_bytes, "final_report": llm_report}
 
 
 # ---------------------------------------------------------------------------
