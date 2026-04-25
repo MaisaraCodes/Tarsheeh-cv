@@ -1,4 +1,5 @@
-"""Report Agent — generates a PDF hiring report using ReportLab.
+"""Report Agent — generates a PDF hiring report using ReportLab, 
+incorporating an LLM-generated executive summary.
 
 Locale-aware. In Arabic mode the renderer:
   - registers the Amiri TTF (regular + bold) for proper Arabic glyphs
@@ -7,6 +8,8 @@ Locale-aware. In Arabic mode the renderer:
   - mirrors table column order (rank moves to the right edge)
   - right-aligns paragraphs and uses an Arabic label dictionary
 """
+import os
+import json
 from datetime import datetime
 from io import BytesIO
 from pathlib import Path
@@ -14,6 +17,7 @@ from typing import Any, Dict, List, Optional
 
 import arabic_reshaper
 from bidi.algorithm import get_display
+from dotenv import load_dotenv
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT
@@ -31,10 +35,67 @@ from reportlab.platypus import (
     TableStyle,
 )
 
+from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
+from langchain_core.output_parsers import PydanticOutputParser
+
+from backend.models.report import HiringReport
+
+# Load environment variables
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+load_dotenv(env_path)
 
 # ---------------------------------------------------------------------------
-# Brand palette
+# LLM Logic (from Osama's branch)
 # ---------------------------------------------------------------------------
+
+def compile_hiring_report(ranked_list: Dict[str, Any], job_profile: Dict[str, Any]) -> HiringReport:
+    """
+    Generates an executive hiring report summary based on the ranked candidates and job profile.
+    
+    :param ranked_list: The ranked candidates result dict.
+    :param job_profile: The job profile dict.
+    """
+    llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
+    parser = PydanticOutputParser(pydantic_object=HiringReport)
+    
+    prompt_template = """You are an HR Consultant.
+Your task is to write a comprehensive final hiring report summarizing the recruitment process for this role.
+
+1. Inputs:
+   - Ranked Candidates Summary: {ranked_list}
+   - Job Profile: {job_profile}
+
+2. Instructions:
+   - Write an "Executive Summary" explaining how the hiring process went.
+   - Provide a "Clear Recommendation" on who should be hired based on their ranking and skills, and explain why.
+   - Add "Overall Hiring Insight" about the quality of the applicant pool (e.g., did the applicants possess the required skills, or does the job description need adjustments?).
+   - Ensure the tone is formal, professional, and convincing.
+
+Format your response strictly as a JSON object matching the following structure: {format_instructions}
+"""
+    
+    prompt = PromptTemplate(
+        template=prompt_template,
+        input_variables=["ranked_list", "job_profile"],
+        partial_variables={"format_instructions": parser.get_format_instructions()}
+    )
+    
+    chain = prompt | llm | parser
+    
+    result = chain.invoke({
+        "ranked_list": json.dumps(ranked_list, ensure_ascii=False),
+        "job_profile": json.dumps(job_profile, ensure_ascii=False)
+    })
+    
+    return result
+
+
+# ---------------------------------------------------------------------------
+# PDF Rendering Logic (from remote branch)
+# ---------------------------------------------------------------------------
+
+# Brand palette
 GOLD = colors.HexColor("#B08D57")
 NOIR = colors.HexColor("#1A1A1A")
 INK = colors.HexColor("#2C2C2C")
@@ -42,9 +103,7 @@ MUTED = colors.HexColor("#7A7A7A")
 RULE = colors.HexColor("#D9D2C5")
 
 
-# ---------------------------------------------------------------------------
 # Font registration (Arabic). Done once on import; safe to call repeatedly.
-# ---------------------------------------------------------------------------
 _FONTS_DIR = Path(__file__).parent.parent / "assets" / "fonts"
 _AR_FONT = "Amiri"
 _AR_FONT_BOLD = "Amiri-Bold"
@@ -71,9 +130,7 @@ def _register_arabic_fonts() -> bool:
         return False
 
 
-# ---------------------------------------------------------------------------
 # Localization
-# ---------------------------------------------------------------------------
 _LABELS = {
     "en": {
         "header": "Tarsheeh.cv — Hiring Report",
@@ -92,6 +149,9 @@ _LABELS = {
         "score_suffix": "/100",
         "empty_dash": "—",
         "unnamed_candidate": "Unnamed candidate",
+        "exec_summary": "Executive Summary",
+        "recommendation": "Recommendation",
+        "insights": "Hiring Insights",
     },
     "ar": {
         "header": "Tarsheeh.cv - تقرير الترشيح",
@@ -110,6 +170,9 @@ _LABELS = {
         "score_suffix": "/100",
         "empty_dash": "—",
         "unnamed_candidate": "مرشح بدون اسم",
+        "exec_summary": "الملخص التنفيذي",
+        "recommendation": "التوصية",
+        "insights": "رؤى التوظيف",
     },
 }
 
@@ -131,9 +194,7 @@ def _t(text: str, locale: str) -> str:
     return text
 
 
-# ---------------------------------------------------------------------------
 # Styles
-# ---------------------------------------------------------------------------
 def _styles(locale: str) -> Dict[str, ParagraphStyle]:
     base = getSampleStyleSheet()
     is_ar = locale == "ar"
@@ -188,14 +249,13 @@ def _format_skills(skills: Optional[List[str]], locale: str) -> str:
     return sep.join(skills)
 
 
-# ---------------------------------------------------------------------------
 # Main entrypoint
-# ---------------------------------------------------------------------------
 def generate_report(
     job: Dict[str, Any],
     ranked_candidates: List[Dict[str, Any]],
     candidate_details: Optional[Dict[str, Dict[str, Any]]] = None,
     locale: str = "en",
+    llm_report: Optional[HiringReport] = None,
 ) -> bytes:
     """Render a hiring report PDF and return the bytes."""
     locale = locale if locale in _LABELS else "en"
@@ -222,6 +282,18 @@ def generate_report(
     story.append(Paragraph(_t(L["generated_fmt"].format(when=when), locale), s["meta"]))
     story.append(Spacer(1, 0.18 * inch))
 
+    # ----- Executive Summary (Optional LLM content) -----
+    if llm_report:
+        story.append(Paragraph(_t(L["exec_summary"], locale), s["h2"]))
+        story.append(Paragraph(_t(llm_report.executive_summary, locale), s["body"]))
+        
+        story.append(Paragraph(_t(L["recommendation"], locale), s["h3"]))
+        story.append(Paragraph(_t(llm_report.top_candidates_recommendation, locale), s["body"]))
+        
+        story.append(Paragraph(_t(L["insights"], locale), s["h3"]))
+        story.append(Paragraph(_t(llm_report.overall_hiring_insight, locale), s["body"]))
+        story.append(Spacer(1, 0.1 * inch))
+
     # ----- Role profile -----
     profile = job.get("parsed_profile") or {}
     if profile:
@@ -235,8 +307,6 @@ def generate_report(
         ]
         # In RTL mode the value column should sit on the left and the label on
         # the right, so we swap column order and right-align the label cells.
-        # Wrap each cell in a Paragraph so long values word-wrap inside the
-        # column instead of overflowing horizontally past the page margin.
         body_font = s["body"].fontName
         body_size = 9
         body_leading = 12
