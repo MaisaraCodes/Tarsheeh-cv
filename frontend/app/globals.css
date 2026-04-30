@@ -64,8 +64,54 @@
   --animate-shimmer: shimmer 1800ms linear infinite;
 }
 
-/* Opacity tokens — in :root so they are accessible as CSS variables
-   in inline styles and outside Tailwind utilities (e.g. score bar fills). */
+/* Theme-aware CSS variables */
+[data-theme="light"] {
+  --page:        #F7F1E1;
+  --surface:     #FBF6E8;
+  --surface-2:   #F2EBD9;
+  --ink:         #1C180F;
+  --ink-2:       #4A3A1A;
+  --muted:       #7A7060;
+  --muted-light: #A89880;
+  --gold:        #B8922E;
+  --gold-deep:   #8C6E1F;
+  --gold-light:  #D4AE5A;
+  --gold-dim:    rgba(184,146,46,0.28);
+  --gold-faint:  rgba(184,146,46,0.12);
+  --gold-hover:  rgba(184,146,46,0.50);
+  --row-rule:    rgba(28,24,15,0.08);
+  --bg-primary:  #F7F1E1;
+  --bg-secondary: #FBF6E8;
+  --text-primary: #1C180F;
+  --text-secondary: #4A3A1A;
+  --border-color: rgba(184,146,46,0.28);
+  --ivory-dim:  rgba(28, 24, 15, 0.70);
+}
+
+[data-theme="dark"] {
+  --page:        #0C0A07;
+  --surface:     #141109;
+  --surface-2:   #1C180F;
+  --ink:         #F2EBD9;
+  --ink-2:       #EDD38A;
+  --muted:       #7A7060;
+  --muted-light: #A89880;
+  --gold:        #D4AE5A;
+  --gold-deep:   #B8922E;
+  --gold-light:  #EDD38A;
+  --gold-dim:    rgba(212,174,90,0.20);
+  --gold-faint:  rgba(212,174,90,0.08);
+  --gold-hover:  rgba(212,174,90,0.35);
+  --row-rule:    rgba(242,235,217,0.06);
+  --bg-primary:  #0C0A07;
+  --bg-secondary: #141109;
+  --text-primary: #F2EBD9;
+  --text-secondary: #EDD38A;
+  --border-color: rgba(212,174,90,0.20);
+  --ivory-dim:  rgba(242, 235, 217, 0.70);
+}
+
+/* Fallback opacity tokens for elements rendered before theme is applied */
 :root {
   --gold-dim:   rgba(184, 146, 46, 0.18);
   --gold-faint: rgba(184, 146, 46, 0.08);
@@ -84,15 +130,95 @@
 
 html {
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+}
+
+@media (min-width: 1400px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+.container-brand {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (min-width: 768px) {
+  .container-brand {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-brand {
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
 }
 
 body {
-  background: var(--color-noir);
-  color: var(--color-ivory);
+  background: var(--bg-primary, var(--color-noir));
+  color: var(--text-primary, var(--color-ivory));
   font-family: var(--font-sans);
   font-weight: 300;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ── Auth form primitives ── */
+.auth-input {
+  background: var(--surface-2);
+  border: 1px solid var(--gold-dim);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 300;
+  width: 100%;
+  padding-block: 0.625rem;
+  padding-inline: 0.875rem;
+  transition: border-color 0.15s ease;
+  appearance: none;
+}
+
+.auth-input:focus {
+  border-color: var(--gold);
+  outline: none;
+}
+
+.auth-input.input-error {
+  border-color: #C97E7E;
+}
+
+.auth-input::placeholder {
+  color: var(--muted);
+  font-weight: 300;
+  opacity: 0.7;
+}
+
+.auth-checkbox {
+  accent-color: var(--gold);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+@keyframes dropdown-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fade-up {

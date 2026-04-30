@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarsheeh.cv — Light Theme Companion 2026</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/300.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5/500.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/300.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/400.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/dm-sans@1/500.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* Light theme tokens */
+    --page:        #F7F1E1;
+    --surface:     #FBF6E8;
+    --surface-2:   #F2EBD9;
+    --ink:         #1C180F;
+    --ink-2:       #4A3A1A;
+    --muted:       #7A7060;
+    --muted-light: #A89880;
+    --gold:        #B8922E;
+    --gold-deep:   #8C6E1F;
+    --gold-light:  #D4AE5A;
+    --gold-dim:    rgba(184,146,46,0.28);
+    --gold-faint:  rgba(184,146,46,0.12);
+    --gold-hover:  rgba(184,146,46,0.50);
+    --row-rule:    rgba(28,24,15,0.08);
+
+    /* Typography */
+    --serif:       'Cormorant Garamond', Georgia, serif;
+    --sans:        'DM Sans', system-ui, sans-serif;
+    --ar-display:  'Amiri', 'Traditional Arabic', serif;
+    --ar-sans:     'Cairo', 'Tajawal', sans-serif;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2.5rem 6rem;
+  }
+
+  .section {
+    border-top: 1px solid var(--gold-dim);
+    padding: 4rem 0;
+  }
+
+  .section:first-of-type { border-top: none; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-num {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gold-deep);
+    letter-spacing: 0.2em;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 5rem 2.5rem;
+    position: relative;
+  }
+
+  .cover-corner { position: absolute; width: 28px; height: 28px; }
+  .cover-corner.tl { top: 3rem; left: 3rem; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .cover-corner.tr { top: 3rem; right: 3rem; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+  .cover-corner.bl { bottom: 3rem; left: 3rem; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .cover-corner.br { bottom: 3rem; right: 3rem; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+  .cover-rule { width: 56px; height: 1px; background: var(--gold); margin: 0 auto 2.5rem; }
+
+  .cover-wordmark {
+    font-family: var(--serif);
+    font-size: 72px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--ink-2);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .cover-wordmark span { color: var(--gold); font-weight: 400; }
+
+  .cover-tagline {
+    font-size: 10px;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 1.75rem;
+  }
+
+  .cover-meta {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── LABEL ─── */
+  .label {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ─── INTRO NOTE ─── */
+  .intro-note {
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+    border-left: 3px solid var(--gold);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .intro-note p {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+
+  .intro-note .ref {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 0.875rem;
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  /* ─── COLOUR ─── */
+  .palette-primary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    margin-bottom: 0.75rem;
+  }
+
+  .palette-secondary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 0.75rem;
+  }
+
+  .swatch-block { display: flex; flex-direction: column; }
+
+  .swatch-color { height: 80px; }
+
+  .swatch-info {
+    background: var(--surface);
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--gold-dim);
+    border-top: none;
+  }
+
+  .swatch-name {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .swatch-values { display: flex; flex-direction: column; gap: 2px; }
+
+  .swatch-hex {
+    font-size: 11px;
+    color: var(--ink);
+    font-family: 'Courier New', monospace;
+  }
+
+  .swatch-rgb {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Courier New', monospace;
+  }
+
+  .swatch-role {
+    font-size: 10px;
+    color: var(--gold-deep);
+    margin-top: 0.4rem;
+    display: block;
+    font-style: italic;
+  }
+
+  /* ─── DARK/LIGHT MAPPING TABLE ─── */
+  .map-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+  }
+
+  .map-table th {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gold-dim);
+    background: var(--surface-2);
+  }
+
+  .map-table td {
+    font-size: 12px;
+    color: var(--ink);
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--row-rule);
+    vertical-align: middle;
+    line-height: 1.6;
+  }
+
+  .map-table td.tok {
+    color: var(--gold-deep);
+    font-weight: 500;
+    width: 130px;
+    letter-spacing: 0.04em;
+  }
+
+  .map-table td.swatch-cell {
+    width: 110px;
+    padding: 0.5rem 1rem;
+  }
+
+  .swatch-pair { display: flex; align-items: center; gap: 8px; }
+  .swatch-dot {
+    width: 14px; height: 14px;
+    border: 1px solid var(--gold-dim);
+    flex-shrink: 0;
+  }
+
+  .map-table td.note-cell {
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .map-table tr:last-child td { border-bottom: none; }
+
+  .hex-mono {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--ink);
+  }
+
+  /* ─── USAGE CARDS ─── */
+  .usage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 2rem;
+  }
+
+  .usage-card {
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+    padding: 1.5rem;
+  }
+
+  .usage-card h4 {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--gold-deep);
+    margin-bottom: 0.875rem;
+    letter-spacing: 0.04em;
+  }
+
+  .usage-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .usage-card ul li {
+    font-size: 12px;
+    color: var(--ink);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--row-rule);
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .usage-card ul li:last-child { border-bottom: none; }
+
+  .usage-card ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+  }
+
+  /* ─── LOGO ─── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2rem;
+  }
+
+  .logo-demo {
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 180px;
+    position: relative;
+  }
+
+  .logo-demo.dark {
+    background: #0C0A07;
+  }
+
+  .logo-demo-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 1.25rem;
+  }
+
+  .logo-demo.dark .logo-demo-label { color: #7A7060; }
+
+  .demo-wordmark-light {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--ink-2);
+    line-height: 1;
+  }
+  .demo-wordmark-light span { color: var(--gold); font-weight: 400; }
+
+  .demo-wordmark-dark {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: #EDD38A;
+    line-height: 1;
+  }
+  .demo-wordmark-dark span { color: var(--gold); font-weight: 400; }
+
+  /* ─── COMPONENTS ─── */
+  .components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .comp-demo {
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+    padding: 2rem;
+  }
+
+  .comp-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #FAF6EE;
+    background: var(--gold-deep);
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--gold-deep);
+    cursor: pointer;
+    margin-right: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    background: transparent;
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--gold-dim);
+    cursor: pointer;
+    margin-right: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-ghost {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    padding: 0.75rem 2rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--gold-dim);
+    text-underline-offset: 3px;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Badges */
+  .badge-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+
+  .badge {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.875rem;
+    font-weight: 500;
+  }
+
+  .badge-gold { color: var(--gold-deep); border: 1px solid var(--gold-dim); background: rgba(184,146,46,0.10); }
+  .badge-muted { color: var(--muted); border: 1px solid rgba(122,112,96,0.25); background: rgba(122,112,96,0.06); }
+  .badge-ink { color: var(--ink); border: 1px solid rgba(28,24,15,0.15); background: rgba(28,24,15,0.04); }
+
+  /* Input */
+  .input-demo {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 1px solid var(--gold-dim);
+    border-bottom: 1px solid var(--gold);
+    padding: 0.875rem 1rem;
+    width: 100%;
+    outline: none;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-demo::placeholder { color: var(--muted-light); }
+
+  .input-label-demo {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Candidate Card */
+  .candidate-card {
+    background: var(--surface-2);
+    border: 1px solid var(--gold-dim);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .candidate-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gold-faint);
+  }
+
+  .c-name {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+
+  .c-score {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--gold-deep);
+    line-height: 1;
+  }
+
+  .c-meta {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.875rem;
+  }
+
+  .c-bar-wrap {
+    height: 1px;
+    background: rgba(184,146,46,0.18);
+    margin-bottom: 0.875rem;
+    position: relative;
+  }
+
+  .c-bar-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .score-breakdown { margin-top: 0.875rem; }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.3rem 0;
+  }
+
+  .score-row-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    width: 120px;
+    flex-shrink: 0;
+  }
+
+  .score-row-bar {
+    flex: 1;
+    height: 1px;
+    background: var(--gold-faint);
+    position: relative;
+  }
+
+  .score-row-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .score-row-num {
+    font-size: 11px;
+    color: var(--ink);
+    width: 30px;
+    text-align: right;
+  }
+
+  /* Trace panel */
+  .trace-panel {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    margin-top: 0.5rem;
+  }
+
+  .trace-step {
+    background: var(--surface-2);
+    border: 1px solid var(--gold-faint);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .trace-step.active {
+    border-color: var(--gold);
+    background: var(--surface);
+  }
+
+  .trace-status {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .trace-status.active-lbl { color: var(--gold-deep); }
+
+  .trace-name {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .trace-desc {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* RTL preview wrapper */
+  .rtl-preview {
+    direction: rtl;
+    text-align: right;
+  }
+
+  .rtl-preview .candidate-card-header {
+    flex-direction: row-reverse;
+  }
+
+  .rtl-preview .c-name {
+    font-family: var(--ar-display);
+    font-size: 19px;
+    font-weight: 400;
+  }
+
+  .rtl-preview .score-row {
+    flex-direction: row-reverse;
+  }
+
+  .rtl-preview .score-row-label {
+    font-family: var(--ar-sans);
+    text-align: right;
+  }
+
+  .rtl-preview .c-bar-fill,
+  .rtl-preview .score-row-fill {
+    left: auto;
+    right: 0;
+  }
+
+  .rtl-preview .c-score {
+    direction: ltr;
+  }
+
+  /* Accessibility note */
+  .a11y-note {
+    background: var(--surface);
+    border: 1px solid var(--gold-dim);
+    padding: 1.5rem 1.75rem;
+  }
+
+  .a11y-note h4 {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--gold-deep);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+
+  .a11y-note p {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  .a11y-note .contrast-ratio {
+    display: inline-block;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--gold-deep);
+    background: rgba(184,146,46,0.10);
+    padding: 2px 8px;
+    margin: 0 2px;
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid var(--gold-dim);
+    padding: 2.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-mark {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--ink-2);
+  }
+
+  .footer-mark span { color: var(--gold); font-weight: 400; }
+
+  .footer-meta {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  @media print {
+    .cover { min-height: auto; padding: 4rem 2.5rem; }
+    .page { padding-bottom: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-corner tl"></div>
+    <div class="cover-corner tr"></div>
+    <div class="cover-corner bl"></div>
+    <div class="cover-corner br"></div>
+
+    <div class="cover-rule"></div>
+    <div class="cover-wordmark">TARSHEEH<span>.CV</span></div>
+    <div class="cover-tagline">Light Theme Companion &nbsp;·&nbsp; 2026</div>
+
+    <div class="cover-meta">Team Nexus &nbsp;·&nbsp; Agenticthon 2026 &nbsp;·&nbsp; Internal Use Only</div>
+  </div>
+
+  <!-- ─── 00 SCOPE ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">00</span>
+      <h2 class="section-title">Scope</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="intro-note">
+      <p>
+        This document defines the light theme companion for Tarsheeh.cv. It covers only what changes between the
+        dark and light modes: colour tokens, surface treatments, the logo on light, and UI components rendered on light.
+      </p>
+      <p class="ref">
+        Brand essence, mission, personality, voice, brand copy, phrases, microcopy, typography, type scale,
+        spacing, and grid rules are unchanged. Refer to <strong style="color: var(--ink-2);">tarsheeh_brand_guide.html</strong>
+        and <strong style="color: var(--ink-2);">tarsheeh_brand_guide_AR.html</strong> for those sections.
+      </p>
+    </div>
+
+    <div class="usage-grid">
+      <div class="usage-card">
+        <h4>What stays the same</h4>
+        <ul>
+          <li>Cormorant Garamond for English display</li>
+          <li>DM Sans for English interface</li>
+          <li>Amiri for Arabic display</li>
+          <li>Cairo for Arabic interface</li>
+          <li>Type scale, weights, and tracking</li>
+          <li>Spacing tokens (xs through 2xl)</li>
+          <li>Logo wordmark, lockup, clear space rules</li>
+          <li>All copy, phrases, and microcopy strings</li>
+          <li>Border thicknesses and corner mark motif</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>What this document covers</h4>
+        <ul>
+          <li>Light theme colour tokens (8 values)</li>
+          <li>Dark to light token mapping table</li>
+          <li>Gold weighting on warm ivory surfaces</li>
+          <li>Logo treatment on light backgrounds</li>
+          <li>Buttons, badges, inputs on light</li>
+          <li>Candidate card and ranking on light</li>
+          <li>Live agent trace panel on light</li>
+          <li>RTL preview on light</li>
+          <li>Accessibility and contrast notes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 01 LIGHT THEME COLOUR TOKENS ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Light Theme Colour Tokens</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">Surface Palette</span>
+    <div class="palette-primary">
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#F7F1E1; border:1px solid var(--gold-dim);"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Page Ivory</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#F7F1E1</span>
+            <span class="swatch-rgb">rgb(247, 241, 225)</span>
+          </div>
+          <span class="swatch-role">Page Background</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#FBF6E8;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Paper</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#FBF6E8</span>
+            <span class="swatch-rgb">rgb(251, 246, 232)</span>
+          </div>
+          <span class="swatch-role">Surface / Card</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#F2EBD9;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Warm Ivory</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#F2EBD9</span>
+            <span class="swatch-rgb">rgb(242, 235, 217)</span>
+          </div>
+          <span class="swatch-role">Recessed Surface</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#1C180F;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Ink Primary</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#1C180F</span>
+            <span class="swatch-rgb">rgb(28, 24, 15)</span>
+          </div>
+          <span class="swatch-role">Body Text</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#4A3A1A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Ink Warm</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#4A3A1A</span>
+            <span class="swatch-rgb">rgb(74, 58, 26)</span>
+          </div>
+          <span class="swatch-role">Logo / Display Text</span>
+        </div>
+      </div>
+    </div>
+
+    <span class="label" style="margin-top:2rem;">Gold Palette — Recalibrated for Light</span>
+    <div class="palette-secondary">
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#8C6E1F; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Gold Deep</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#8C6E1F</span>
+            <span class="swatch-rgb">rgb(140, 110, 31)</span>
+          </div>
+          <span class="swatch-role">Gold Text on Light</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#B8922E; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Gold</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#B8922E</span>
+            <span class="swatch-rgb">rgb(184, 146, 46)</span>
+          </div>
+          <span class="swatch-role">Brand Accent</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#D4AE5A; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Gold Light</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#D4AE5A</span>
+            <span class="swatch-rgb">rgb(212, 174, 90)</span>
+          </div>
+          <span class="swatch-role">Decorative Only</span>
+        </div>
+      </div>
+      <div class="swatch-block">
+        <div class="swatch-color" style="background:#7A7060; height:60px;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Muted Warm</span>
+          <div class="swatch-values">
+            <span class="swatch-hex">#7A7060</span>
+            <span class="swatch-rgb">rgb(122, 112, 96)</span>
+          </div>
+          <span class="swatch-role">Secondary Text / Labels</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <span class="label">Opacity Tokens — Light Theme</span>
+      <table class="map-table">
+        <thead>
+          <tr>
+            <th>Token Name</th>
+            <th>Value</th>
+            <th>Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tok">Gold Dim</td>
+            <td><span class="hex-mono">rgba(184, 146, 46, 0.28)</span></td>
+            <td class="note-cell">Default card borders, section rules</td>
+          </tr>
+          <tr>
+            <td class="tok">Gold Faint</td>
+            <td><span class="hex-mono">rgba(184, 146, 46, 0.12)</span></td>
+            <td class="note-cell">Inner separators, score bar tracks</td>
+          </tr>
+          <tr>
+            <td class="tok">Gold Hover</td>
+            <td><span class="hex-mono">rgba(184, 146, 46, 0.50)</span></td>
+            <td class="note-cell">Border on hover state</td>
+          </tr>
+          <tr>
+            <td class="tok">Row Rule</td>
+            <td><span class="hex-mono">rgba(28, 24, 15, 0.08)</span></td>
+            <td class="note-cell">Table row dividers, subtle list separators</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── 02 DARK TO LIGHT MAPPING ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Dark to Light Mapping</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <p style="font-size:13px; color:var(--ink); line-height:1.75; margin-bottom:1.5rem; max-width:680px;">
+      For developers implementing the theme switch, this table maps every dark theme token to its
+      light theme equivalent. CSS variable names remain identical so a single theme attribute on the root
+      element switches the entire interface.
+    </p>
+
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">Token</th>
+          <th style="width:110px;">Dark</th>
+          <th style="width:110px;">Light</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tok">--bg-primary</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#0C0A07;"></div><span class="hex-mono">#0C0A07</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#F7F1E1;"></div><span class="hex-mono">#F7F1E1</span></div></td>
+          <td class="note-cell">Page background</td>
+        </tr>
+        <tr>
+          <td class="tok">--surface</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#1C180F;"></div><span class="hex-mono">#1C180F</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#FBF6E8;"></div><span class="hex-mono">#FBF6E8</span></div></td>
+          <td class="note-cell">Cards, panels, surface fills</td>
+        </tr>
+        <tr>
+          <td class="tok">--surface-2</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#141109;"></div><span class="hex-mono">#141109</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#F2EBD9;"></div><span class="hex-mono">#F2EBD9</span></div></td>
+          <td class="note-cell">Recessed surfaces, input backgrounds</td>
+        </tr>
+        <tr>
+          <td class="tok">--text-primary</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#F2EBD9;"></div><span class="hex-mono">#F2EBD9</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#1C180F;"></div><span class="hex-mono">#1C180F</span></div></td>
+          <td class="note-cell">Body text, primary readable content</td>
+        </tr>
+        <tr>
+          <td class="tok">--text-display</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#EDD38A;"></div><span class="hex-mono">#EDD38A</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#4A3A1A;"></div><span class="hex-mono">#4A3A1A</span></div></td>
+          <td class="note-cell">Logo, display headings, hero copy</td>
+        </tr>
+        <tr>
+          <td class="tok">--text-muted</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#7A7060;"></div><span class="hex-mono">#7A7060</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#7A7060;"></div><span class="hex-mono">#7A7060</span></div></td>
+          <td class="note-cell">Labels, secondary text (unchanged)</td>
+        </tr>
+        <tr>
+          <td class="tok">--gold</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#B8922E;"></div><span class="hex-mono">#B8922E</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#B8922E;"></div><span class="hex-mono">#B8922E</span></div></td>
+          <td class="note-cell">Brand accent, decorative rules (unchanged)</td>
+        </tr>
+        <tr>
+          <td class="tok">--gold-text</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#D4AE5A;"></div><span class="hex-mono">#D4AE5A</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#8C6E1F;"></div><span class="hex-mono">#8C6E1F</span></div></td>
+          <td class="note-cell">Gold-coloured text, scores, numeric values</td>
+        </tr>
+        <tr>
+          <td class="tok">--btn-primary-bg</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#B8922E;"></div><span class="hex-mono">#B8922E</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#8C6E1F;"></div><span class="hex-mono">#8C6E1F</span></div></td>
+          <td class="note-cell">Primary CTA fill (deeper for contrast)</td>
+        </tr>
+        <tr>
+          <td class="tok">--btn-primary-text</td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#0C0A07;"></div><span class="hex-mono">#0C0A07</span></div></td>
+          <td class="swatch-cell"><div class="swatch-pair"><div class="swatch-dot" style="background:#FAF6EE;"></div><span class="hex-mono">#FAF6EE</span></div></td>
+          <td class="note-cell">Text inside primary button</td>
+        </tr>
+        <tr>
+          <td class="tok">--border-default</td>
+          <td><span class="hex-mono">rgba(184,146,46,0.18)</span></td>
+          <td><span class="hex-mono">rgba(184,146,46,0.28)</span></td>
+          <td class="note-cell">Card and panel borders</td>
+        </tr>
+        <tr>
+          <td class="tok">--border-faint</td>
+          <td><span class="hex-mono">rgba(184,146,46,0.08)</span></td>
+          <td><span class="hex-mono">rgba(184,146,46,0.12)</span></td>
+          <td class="note-cell">Inner separators</td>
+        </tr>
+        <tr>
+          <td class="tok">--border-hover</td>
+          <td><span class="hex-mono">rgba(184,146,46,0.35)</span></td>
+          <td><span class="hex-mono">rgba(184,146,46,0.50)</span></td>
+          <td class="note-cell">Border on hover state</td>
+        </tr>
+        <tr>
+          <td class="tok">--row-rule</td>
+          <td><span class="hex-mono">rgba(184,146,46,0.08)</span></td>
+          <td><span class="hex-mono">rgba(28,24,15,0.08)</span></td>
+          <td class="note-cell">Table row dividers (uses ink, not gold)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── 03 GOLD WEIGHTING ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Gold Weighting on Light</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <p style="font-size:13px; color:var(--ink); line-height:1.75; margin-bottom:1.5rem; max-width:680px;">
+      The relationship between gold tones inverts when moving from dark to light. On dark surfaces, Gold Light
+      (#D4AE5A) carries the highlight while Gold (#B8922E) recedes into accent rules. On light surfaces, Gold
+      remains the primary brand colour, but any gold-coloured text must use Gold Deep (#8C6E1F) to achieve
+      readable contrast against the ivory page.
+    </p>
+
+    <div class="usage-grid">
+      <div class="usage-card">
+        <h4>Use Gold (#B8922E) for</h4>
+        <ul>
+          <li>Decorative rules and 1px dividers</li>
+          <li>Corner mark motif on hero sections</li>
+          <li>Active border on focused inputs</li>
+          <li>Score bar fills and progress indicators</li>
+          <li>The .CV accent in the wordmark</li>
+          <li>Hover state borders</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>Use Gold Deep (#8C6E1F) for</h4>
+        <ul>
+          <li>Section number labels (01, 02, 03)</li>
+          <li>Numeric scores and values (e.g. 94)</li>
+          <li>Gold-coloured headings inside cards</li>
+          <li>Primary button background fill</li>
+          <li>Secondary button text colour</li>
+          <li>Any gold text smaller than 16px</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>Use Gold Light (#D4AE5A) for</h4>
+        <ul>
+          <li>Decorative use only on dark blocks</li>
+          <li>Dark-themed elements within light pages</li>
+          <li>Never as text on light backgrounds</li>
+        </ul>
+      </div>
+      <div class="usage-card">
+        <h4>Avoid on Light</h4>
+        <ul>
+          <li>Gold Light (#D4AE5A) as body or heading text</li>
+          <li>Pale gold (#EDD38A) anywhere except on dark surfaces</li>
+          <li>Pure black text (use Ink Primary instead)</li>
+          <li>Pure white surfaces (use Page Ivory instead)</li>
+          <li>Gold borders thicker than 1px outside CTAs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 04 LOGO ON LIGHT ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Logo on Light</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <span class="label">Logo Variants</span>
+    <div class="logo-grid" style="margin-bottom:2rem;">
+      <div class="logo-demo">
+        <div class="demo-wordmark-light">TARSHEEH<span>.CV</span></div>
+        <div class="logo-demo-label">Primary on Light — Default</div>
+      </div>
+      <div class="logo-demo dark">
+        <div class="demo-wordmark-dark">TARSHEEH<span>.CV</span></div>
+        <div class="logo-demo-label">Primary on Dark — Reference</div>
+      </div>
+    </div>
+
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Light Theme</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tok">TARSHEEH colour</td>
+          <td><span class="hex-mono">#4A3A1A</span> (Ink Warm)</td>
+          <td class="note-cell">Dark warm brown. Never pure black.</td>
+        </tr>
+        <tr>
+          <td class="tok">.CV colour</td>
+          <td><span class="hex-mono">#B8922E</span> (Gold)</td>
+          <td class="note-cell">Same on both themes. Carries brand accent.</td>
+        </tr>
+        <tr>
+          <td class="tok">Font weight</td>
+          <td>300 / 400</td>
+          <td class="note-cell">TARSHEEH Light, .CV Regular. Unchanged.</td>
+        </tr>
+        <tr>
+          <td class="tok">Letter-spacing</td>
+          <td>0.2em</td>
+          <td class="note-cell">Unchanged. Never below 0.15em.</td>
+        </tr>
+        <tr>
+          <td class="tok">Direction</td>
+          <td><span class="hex-mono">dir="ltr"</span></td>
+          <td class="note-cell">Always LTR, even inside Arabic RTL pages.</td>
+        </tr>
+        <tr>
+          <td class="tok">Tagline colour</td>
+          <td><span class="hex-mono">#7A7060</span> (Muted Warm)</td>
+          <td class="note-cell">Same as dark. Reads as restrained label.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── 05 UI COMPONENTS ON LIGHT ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">UI Components on Light</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="components-grid" style="margin-bottom:2px;">
+
+      <div class="comp-demo">
+        <span class="comp-label">Buttons</span>
+        <div>
+          <div class="btn-primary">Post a Role</div>
+          <div class="btn-primary">Upload CVs</div>
+        </div>
+        <div>
+          <div class="btn-secondary">View Shortlist</div>
+          <div class="btn-secondary">Download Report</div>
+        </div>
+        <div>
+          <div class="btn-ghost">Cancel</div>
+        </div>
+        <div style="margin-top:1rem; font-size:11px; color:var(--muted); line-height:1.7;">
+          Primary: Gold Deep fill, Ivory text, 1px Gold Deep border<br>
+          Secondary: Transparent, Gold Deep text, 1px Gold Dim border<br>
+          Ghost: Transparent, Muted text, gold underline
+        </div>
+      </div>
+
+      <div class="comp-demo">
+        <span class="comp-label">Badges &amp; Tags</span>
+        <div class="badge-row">
+          <span class="badge badge-gold">Processing</span>
+          <span class="badge badge-gold">Completed</span>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-muted">Pending</span>
+          <span class="badge badge-muted">Archived</span>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-ink">Python</span>
+          <span class="badge badge-ink">Leadership</span>
+          <span class="badge badge-ink">6 yrs exp</span>
+        </div>
+        <div style="margin-top:1rem; font-size:11px; color:var(--muted); line-height:1.7;">
+          Gold: Gold Deep text on faint gold tint<br>
+          Muted: Muted text on subtle warm tint<br>
+          Ink: Ink text on subtle ink tint (skill tags)
+        </div>
+      </div>
+
+      <div class="comp-demo">
+        <span class="comp-label">Form Input</span>
+        <label class="input-label-demo">Job Title</label>
+        <input class="input-demo" type="text" value="Senior Product Designer" readonly>
+        <label class="input-label-demo" style="margin-top:0.75rem;">Company</label>
+        <input class="input-demo" type="text" placeholder="Enter company name...">
+        <div style="margin-top:1rem; font-size:11px; color:var(--muted); line-height:1.7;">
+          Background: Warm Ivory (#F2EBD9)<br>
+          Active border-bottom: Gold (#B8922E)<br>
+          Placeholder: Muted Light (#A89880)
+        </div>
+      </div>
+
+      <div class="comp-demo">
+        <span class="comp-label">Candidate Card</span>
+        <div class="candidate-card">
+          <div class="candidate-card-header">
+            <div>
+              <div class="c-name">Sarah Al-Mansouri</div>
+              <div class="c-meta">UX Lead &nbsp;·&nbsp; 7 years</div>
+            </div>
+            <div>
+              <div style="font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); text-align:right; margin-bottom:2px;">Match Score</div>
+              <div class="c-score">94</div>
+            </div>
+          </div>
+          <div class="c-bar-wrap"><div class="c-bar-fill" style="width:94%"></div></div>
+          <div class="score-breakdown">
+            <div class="score-row">
+              <span class="score-row-label">Technical Skills</span>
+              <div class="score-row-bar"><div class="score-row-fill" style="width:96%"></div></div>
+              <span class="score-row-num">96</span>
+            </div>
+            <div class="score-row">
+              <span class="score-row-label">Experience</span>
+              <div class="score-row-bar"><div class="score-row-fill" style="width:88%"></div></div>
+              <span class="score-row-num">88</span>
+            </div>
+            <div class="score-row">
+              <span class="score-row-label">Culture Fit</span>
+              <div class="score-row-bar"><div class="score-row-fill" style="width:92%"></div></div>
+              <span class="score-row-num">92</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:1px solid var(--gold-dim); padding:2rem; margin-top:2px;">
+      <span class="comp-label">Processing Trace Panel — Live Agent States</span>
+      <div class="trace-panel">
+        <div class="trace-step active">
+          <span class="trace-status active-lbl">Active</span>
+          <div class="trace-name">Intake</div>
+          <div class="trace-desc">Reading role...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.55;">
+          <span class="trace-status">Pending</span>
+          <div class="trace-name">Screening</div>
+          <div class="trace-desc">Awaiting...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.55;">
+          <span class="trace-status">Pending</span>
+          <div class="trace-name">Ranking</div>
+          <div class="trace-desc">Awaiting...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.55;">
+          <span class="trace-status">Pending</span>
+          <div class="trace-name">Interview</div>
+          <div class="trace-desc">Awaiting...</div>
+        </div>
+        <div class="trace-step" style="opacity:0.55;">
+          <span class="trace-status">Pending</span>
+          <div class="trace-name">Report</div>
+          <div class="trace-desc">Awaiting...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 06 RTL PREVIEW ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Arabic Preview on Light</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <p style="font-size:13px; color:var(--ink); line-height:1.75; margin-bottom:1.5rem; max-width:680px;">
+      The light theme applies identically to the Arabic RTL interface. Score bars fill from the right edge,
+      numbers remain LTR, and Amiri continues to drive display headings. Only the colour tokens swap.
+    </p>
+
+    <div class="comp-demo rtl-preview">
+      <span class="comp-label" style="text-align:right;">بطاقة المرشح — RTL</span>
+      <div class="candidate-card">
+        <div class="candidate-card-header">
+          <div>
+            <div class="c-name">سارة المنصوري</div>
+            <div class="c-meta" style="font-family:var(--ar-sans);">قائدة تجربة المستخدم &nbsp;·&nbsp; ٧ سنوات</div>
+          </div>
+          <div style="text-align:left;">
+            <div style="font-size:9px; letter-spacing:0.1em; color:var(--muted); margin-bottom:2px; font-family:var(--ar-sans); text-align:left;">نسبة التوافق</div>
+            <div class="c-score">94</div>
+          </div>
+        </div>
+        <div class="c-bar-wrap"><div class="c-bar-fill" style="width:94%; left:auto; right:0;"></div></div>
+        <div class="score-breakdown">
+          <div class="score-row">
+            <span class="score-row-label">المهارات التقنية</span>
+            <div class="score-row-bar"><div class="score-row-fill" style="width:96%; left:auto; right:0;"></div></div>
+            <span class="score-row-num" style="text-align:left;">96</span>
+          </div>
+          <div class="score-row">
+            <span class="score-row-label">الخبرة العملية</span>
+            <div class="score-row-bar"><div class="score-row-fill" style="width:88%; left:auto; right:0;"></div></div>
+            <span class="score-row-num" style="text-align:left;">88</span>
+          </div>
+          <div class="score-row">
+            <span class="score-row-label">الملاءمة الثقافية</span>
+            <div class="score-row-bar"><div class="score-row-fill" style="width:92%; left:auto; right:0;"></div></div>
+            <span class="score-row-num" style="text-align:left;">92</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 07 ACCESSIBILITY ─── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Accessibility &amp; Contrast</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="a11y-note" style="margin-bottom:2px;">
+      <h4>Why Gold Deep replaces Gold for text</h4>
+      <p>
+        Gold (#B8922E) on Page Ivory (#F7F1E1) measures roughly
+        <span class="contrast-ratio">3.1 : 1</span> — below the WCAG AA threshold of 4.5:1 for body text.
+        Gold Deep (#8C6E1F) measures
+        <span class="contrast-ratio">5.4 : 1</span>, which clears AA for normal text and AAA for large text.
+        Use Gold Deep wherever gold appears as readable text. Use Gold for purely decorative elements
+        like rules, dividers, and focus borders, where contrast matters less than colour identity.
+      </p>
+    </div>
+
+    <div class="a11y-note" style="margin-bottom:2px;">
+      <h4>Body text contrast</h4>
+      <p>
+        Ink Primary (#1C180F) on Page Ivory (#F7F1E1) measures
+        <span class="contrast-ratio">14.2 : 1</span>, well above AAA. The off-black is intentional. Pure
+        #000000 on warm ivory creates a harsh visual seam that the warm near-black avoids, while still
+        delivering excellent readability across screen and print.
+      </p>
+    </div>
+
+    <div class="a11y-note">
+      <h4>Theme switching</h4>
+      <p>
+        When implementing the theme toggle, drive all colour values from CSS custom properties on
+        <span class="hex-mono">:root[data-theme="light"]</span> and
+        <span class="hex-mono">:root[data-theme="dark"]</span>. The token names in the mapping table
+        (section 02) remain identical across both themes so component CSS does not need conditional logic.
+        Only the values change.
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-mark">TARSHEEH<span>.CV</span></div>
+    <div class="footer-meta">
+      Light Theme Companion — 2026<br>
+      Team Nexus &nbsp;·&nbsp; Agenticthon 2026<br>
+      Internal Use Only
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

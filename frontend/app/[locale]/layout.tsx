@@ -3,6 +3,7 @@ import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Nav from '@/components/Nav';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 type Props = {
   children: React.ReactNode;
@@ -18,23 +19,26 @@ export default async function LocaleLayout({ children, params }: Props) {
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <html lang={locale} dir={dir} className="h-full antialiased">
+    <html lang={locale} dir={dir} data-theme="dark" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>
+          <ThemeProvider>
           <header
-            className="px-4 sm:px-6 py-3 sm:py-4"
+            className="w-full py-3 sm:py-4"
             style={{ borderBottom: '1px solid var(--gold-dim)' }}
           >
-            <Nav />
+            <div className="container-brand">
+              <Nav />
+            </div>
           </header>
 
           <main className="flex-1 flex flex-col">{children}</main>
 
           <footer
-            className="px-4 sm:px-6 py-6 sm:py-8"
+            className="w-full py-6 sm:py-8"
             style={{ borderTop: '1px solid var(--gold-dim)' }}
           >
-            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 sm:gap-6">
+            <div className="container-brand flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 sm:gap-6">
               <div>
                 <p
                   className="font-serif text-xl tracking-logo leading-none"
@@ -58,6 +62,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               </p>
             </div>
           </footer>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
