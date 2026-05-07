@@ -19,6 +19,7 @@
 | GET | `/results/{job_id}` | Retrieve full ranked results and scorecards | Osama |
 | GET | `/report/{job_id}` | Download the PDF hiring report | Osama |
 | GET | `/questions/{candidate_id}` | Retrieve tailored interview questions for a candidate | Maisara |
+| GET | `/jobs/by-user/{user_id}` | Retrieve all jobs posted by a specific authenticated user | Maisara |
 
 ---
 
@@ -41,6 +42,7 @@ Accepts a job description and triggers the Intake Agent, which parses the input 
 | `title` | string | yes | Job title shown to the user |
 | `description` | string | yes | Raw job description text fed to the Intake Agent |
 | `locale` | string | no | Output language for downstream LLM agents and the PDF report. `"en"` (default) or `"ar"`. The intake parsing itself is always normalized to English; the persisted locale is what controls the analyzer, ranking, interview, and report stages |
+| `user_id` | string | no | UUID of the authenticated user who owns this job. Passed from the frontend after Supabase sign-in. Stored as-is; `NULL` if omitted |
 
 **Success response**, `200 OK`
 
@@ -217,6 +219,47 @@ Returns a list of tailored interview questions generated for a specific candidat
 |------|--------|
 | 404 | Candidate not found |
 | 409 | Questions not ready, pipeline still processing |
+
+---
+
+## GET `/jobs/by-user/{user_id}`
+
+Returns all jobs associated with a specific user, sorted newest-first. Used by the dashboard to render the hiring manager's job history.
+
+**Path parameter**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `user_id` | string | UUID of the authenticated user |
+
+**Success response**, `200 OK`
+
+```json
+{
+  "jobs": [
+    {
+      "job_id": "string",
+      "title": "string",
+      "status": "string",
+      "created_at": "ISO 8601 timestamp",
+      "parsed_profile": {
+        "skills": ["string"],
+        "..."
+      }
+    }
+  ]
+}
+```
+
+> `status` values match those in `GET /status/{job_id}`: `candidates_pending`, `processing`, `completed`, `failed`.  
+> `parsed_profile` is the full structured job profile produced by the Intake Agent. The `skills` array is always included when present; the frontend uses it to render skill chips on dashboard cards. The field is `null` if parsing did not complete.  
+> Returns an empty `jobs` array (not a 404) when the user has no posted jobs.
+
+**Error responses**
+
+| Code | Reason |
+|------|--------|
+| 500 | Database query failure |
 
 ---
 

@@ -104,10 +104,10 @@ export default function UploadPage() {
   }
 
   const dropZoneBorder = files.length > 0
-    ? "1px solid var(--gold-dim)"
+    ? "1px solid var(--border-default)"
     : isDragging
-    ? "1px dashed var(--color-gold)"
-    : "1px dashed var(--gold-dim)";
+    ? "1px dashed var(--gold)"
+    : "1px dashed var(--border-default)";
 
   const isDisabled = files.length === 0 || isSubmitting;
 
@@ -117,19 +117,26 @@ export default function UploadPage() {
       {/* Section header */}
       <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
-          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          className="font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+          style={{ color: 'var(--gold-text)' }}
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        <h1
+          className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading flex-shrink-0"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {t('title')}
         </h1>
         <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Intro */}
-      <p className="font-serif text-[18px] sm:text-[22px] font-light text-ivory mb-brand-xl">
+      <p
+        className="font-serif text-[18px] sm:text-[22px] font-light mb-brand-xl"
+        style={{ color: 'var(--text-primary)' }}
+      >
         {t('intro')}
       </p>
 
@@ -151,13 +158,19 @@ export default function UploadPage() {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className="w-full min-h-[200px] bg-noir-2 flex flex-col items-center justify-center cursor-pointer select-none px-6"
-          style={{ border: dropZoneBorder, opacity: isDragging ? 0.8 : 1 }}
+          className="w-full min-h-[200px] flex flex-col items-center justify-center cursor-pointer select-none px-6"
+          style={{ background: 'var(--surface)', border: dropZoneBorder, opacity: isDragging ? 0.8 : 1 }}
         >
-          <p className="font-serif text-[18px] font-light text-ivory text-center">
+          <p
+            className="font-serif text-[18px] font-light text-center"
+            style={{ color: 'var(--text-primary)' }}
+          >
             {t('dropzone')}
           </p>
-          <p className="font-sans text-xs text-muted mt-2 text-center">
+          <p
+            className="font-sans text-xs mt-2 text-center"
+            style={{ color: 'var(--muted)' }}
+          >
             {t('hint')}
           </p>
         </div>
@@ -165,8 +178,8 @@ export default function UploadPage() {
         {/* File list */}
         {files.length > 0 && (
           <div
-            className="bg-noir-3 p-4 mt-brand-lg"
-            style={{ border: "1px solid var(--gold-dim)" }}
+            className="p-4 mt-brand-lg"
+            style={{ background: 'var(--surface-2)', border: "1px solid var(--border-default)" }}
           >
             {files.map((file, i) => (
               <div key={`${file.name}-${i}`}>
@@ -174,11 +187,15 @@ export default function UploadPage() {
                   <div className="h-px my-3" style={{ background: "var(--gold-faint)" }} />
                 )}
                 <div className="flex items-center gap-3">
-                  <span className="font-sans text-sm font-light text-ivory flex-1 truncate">
+                  <span
+                    className="font-sans text-sm font-light flex-1 truncate"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
                     {file.name}
                   </span>
                   <span
-                    className="font-sans text-xs text-muted flex-shrink-0"
+                    className="font-sans text-xs flex-shrink-0"
+                    style={{ color: 'var(--muted)' }}
                     dir="ltr"
                   >
                     {formatKB(file.size)}
@@ -186,7 +203,10 @@ export default function UploadPage() {
                   <button
                     type="button"
                     onClick={() => removeFile(i)}
-                    className="font-sans text-[10px] uppercase tracking-label text-muted hover:text-ivory flex-shrink-0 ms-2"
+                    className="font-sans text-[10px] uppercase tracking-label flex-shrink-0 ms-2 transition-colors duration-150"
+                    style={{ color: 'var(--muted)' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--text-primary)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
                   >
                     {t('remove')}
                   </button>
@@ -201,17 +221,20 @@ export default function UploadPage() {
           <button
             type="submit"
             disabled={isDisabled}
-            className={[
-              "font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75",
-              isDisabled ? "opacity-50 cursor-not-allowed" : "",
-            ].join(" ")}
-            style={{ border: "1px solid var(--color-gold)" }}
+            className="font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 active:scale-[0.98] transition-transform duration-75"
+            style={{
+              background: 'var(--btn-primary-bg)',
+              color: 'var(--btn-primary-text)',
+              border: '1px solid var(--btn-primary-bg)',
+              opacity: isDisabled ? 0.5 : 1,
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
+            }}
           >
             {isSubmitting ? t('submitting') : t('submit')}
           </button>
 
           {error && (
-            <p className="font-sans text-xs font-light text-[#C97E7E] mt-4">
+            <p className="font-sans text-xs font-light mt-4" style={{ color: 'var(--error)' }}>
               {error}
             </p>
           )}

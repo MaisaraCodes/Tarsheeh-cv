@@ -57,3 +57,20 @@ export interface CandidateDetail {
   rank: number;
   summary: string;
 }
+
+export interface ParsedProfile {
+  skills?: string[];
+  [key: string]: unknown;
+}
+
+export interface UserJobItem {
+  job_id: string;
+  title: string;
+  status: string;
+  created_at: string;
+  parsed_profile: ParsedProfile | null;
+}
+
+export interface UserJobsResponse {
+  jobs: UserJobItem[];
+}

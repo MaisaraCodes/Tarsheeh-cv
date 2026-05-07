@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn \"#[0-9a-fA-F]\\\\{3,8\\\\}\" \"m:/projects/Tarsheeh-cv/frontend/app\" \"m:/projects/Tarsheeh-cv/frontend/components\" --include=\"*.tsx\" --include=\"*.ts\")"
+    ]
+  }
+}

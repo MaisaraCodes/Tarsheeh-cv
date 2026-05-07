@@ -21,8 +21,8 @@ export default function LanguageToggle() {
     <button
       onClick={toggle}
       disabled={isPending}
-      className="font-sans text-[11px] font-normal uppercase tracking-logo text-muted hover:text-ivory transition-colors duration-200"
-      style={{ opacity: isPending ? 0.5 : 1 }}
+      className="font-sans text-[11px] font-normal uppercase tracking-logo transition-colors duration-200"
+      style={{ color: 'var(--muted)', opacity: isPending ? 0.5 : 1 }}
     >
       {locale === 'ar' ? 'EN' : 'AR'}
     </button>
