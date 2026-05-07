@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { useRouter as useNextRouter } from 'next/navigation';
 import { Link, useRouter } from '@/i18n/navigation';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, ArrowLeft } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import { useAuthGuard } from '@/lib/useAuthGuard';
-import { getJobsByUser, deleteJob, renameJob } from '@/lib/api';
+import { deleteJob, renameJob } from '@/lib/api';
 import type { UserJobItem } from '@/lib/types';
 
 type FilterValue = 'all' | 'processing' | 'complete' | 'failed';
@@ -23,8 +25,7 @@ function relativeTime(dateStr: string, locale: string): string {
 
 function normalizeStatus(status: string): FilterValue {
   if (status === 'completed') return 'complete';
-  if (status === 'processing' || status === 'candidates_pending') return 'processing';
-  if (status === 'failed') return 'failed';
+  if (status === 'error' || status === 'failed') return 'failed';
   return 'processing';
 }
 
@@ -167,21 +168,26 @@ function CardMenu({
 function StatusBadge({ status, t }: { status: string; t: ReturnType<typeof useTranslations> }) {
   const norm = normalizeStatus(status);
 
-  let label = t('statusProcessing');
-  let color = 'var(--gold-text)';
-  let borderColor = 'var(--gold-dim)';
-  let bg = 'var(--gold-faint)';
+  let label: string;
+  let color: string;
+  let borderColor: string;
+  let bg: string;
 
   if (norm === 'complete') {
-    label = t('statusComplete');
+    label = t('status.complete');
     color = '#5A9E6F';
     borderColor = '#5A9E6F';
     bg = 'transparent';
   } else if (norm === 'failed') {
-    label = t('statusFailed');
+    label = t('status.failed');
     color = 'var(--error)';
     borderColor = 'var(--error)';
     bg = 'transparent';
+  } else {
+    label = t('status.processing');
+    color = 'var(--gold-text)';
+    borderColor = 'var(--gold-dim)';
+    bg = 'var(--gold-faint)';
   }
 
   return (
@@ -573,37 +579,54 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
+  const nextRouter = useNextRouter();
   const user = useAuthGuard();
 
   const [jobs, setJobs] = useState<UserJobItem[]>([]);
-  const [loadingJobs, setLoadingJobs] = useState(false);
+  const [loadingJobs, setLoadingJobs] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterValue>('all');
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) return;
-    const userId = user.id;
     let active = true;
 
-    async function load() {
-      setLoadingJobs(true);
-      setFetchError(null);
-      try {
-        const data = await getJobsByUser(userId);
-        if (active) setJobs(data.jobs);
-      } catch {
-        if (active) setFetchError(t('errorState'));
-      } finally {
+    async function loadJobs() {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) {
         if (active) setLoadingJobs(false);
+        return;
       }
+
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('id, title, status, created_at, parsed_profile')
+        .eq('user_id', authUser.id)
+        .order('created_at', { ascending: false });
+
+      if (!active) return;
+
+      if (error) {
+        setFetchError(t('errorState'));
+      } else {
+        const rows = (data ?? []).map(row => ({
+          job_id: row.id as string,
+          title: row.title as string,
+          status: row.status as string,
+          created_at: row.created_at as string,
+          parsed_profile: row.parsed_profile as UserJobItem['parsed_profile'],
+        }));
+        setJobs(rows);
+      }
+      setLoadingJobs(false);
     }
 
-    void load();
+    void loadJobs();
     return () => { active = false; };
-  }, [user, t]);
+  }, [t]);
 
   async function handleConfirmDelete() {
     if (!deletingJobId) return;
@@ -615,8 +638,20 @@ export default function DashboardPage() {
     } catch {
       // Rollback: re-fetch to restore the deleted item
       if (user) {
-        const data = await getJobsByUser(user.id).catch(() => null);
-        if (data) setJobs(data.jobs);
+        const { data } = await supabase
+          .from('jobs')
+          .select('id, title, status, created_at, parsed_profile')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+        if (data) {
+          setJobs(data.map(row => ({
+            job_id: row.id as string,
+            title: row.title as string,
+            status: row.status as string,
+            created_at: row.created_at as string,
+            parsed_profile: row.parsed_profile as UserJobItem['parsed_profile'],
+          })));
+        }
       }
     }
   }
@@ -631,6 +666,7 @@ export default function DashboardPage() {
     return normalizeStatus(job.status) === filter;
   });
 
+  // Auth loading (user=undefined) or jobs loading
   const isLoading = user === undefined || (user !== null && loadingJobs);
 
   return (
@@ -647,8 +683,10 @@ export default function DashboardPage() {
             flexWrap: 'wrap',
           }}
         >
-          <Link
-            href="/"
+          <button
+            type="button"
+            onClick={() => nextRouter.back()}
+            className="flex items-center gap-2"
             style={{
               fontFamily: 'var(--font-sans)',
               fontSize: 11,
@@ -657,14 +695,18 @@ export default function DashboardPage() {
               textTransform: 'uppercase',
               color: 'var(--muted)',
               whiteSpace: 'nowrap',
-              textDecoration: 'none',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
               transition: 'color 0.15s ease',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--gold)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--muted)'; }}
           >
-            ← {t('backHome')}
-          </Link>
+            <ArrowLeft size={14} className="rtl:rotate-180" />
+            {tCommon('back')}
+          </button>
 
           <h1
             className="font-serif"

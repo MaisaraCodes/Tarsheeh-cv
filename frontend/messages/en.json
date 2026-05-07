@@ -1,7 +1,8 @@
 {
   "common": {
     "ctaPrimary": "Post Another Role",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "back": "Back"
   },
   "nav": {
     "toggleLabel": "EN",
@@ -128,6 +129,11 @@
     "statusProcessing": "Processing",
     "statusComplete": "Complete",
     "statusFailed": "Failed",
+    "status": {
+      "processing": "Processing",
+      "complete": "Complete",
+      "failed": "Failed"
+    },
     "skillsMore": "+{count} more",
     "menuEdit": "Edit",
     "menuRename": "Rename",

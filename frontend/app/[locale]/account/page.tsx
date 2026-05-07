@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { useRouter as useNextRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuthGuard } from '@/lib/useAuthGuard';
-import { Link, useRouter } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
 import type { User } from '@supabase/supabase-js';
 
 // ── Shared primitives ─────────────────────────────────────────────────────────
@@ -503,6 +504,8 @@ function DangerZoneSection() {
 export default function AccountPage() {
   const user = useAuthGuard();
   const t = useTranslations('account');
+  const tCommon = useTranslations('common');
+  const nextRouter = useNextRouter();
 
   if (user === undefined) {
     return (
@@ -520,8 +523,10 @@ export default function AccountPage() {
 
         {/* Page title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: '2.5rem' }}>
-          <Link
-            href="/dashboard"
+          <button
+            type="button"
+            onClick={() => nextRouter.back()}
+            className="flex items-center gap-2"
             style={{
               fontFamily: 'var(--font-sans)',
               fontSize: 11,
@@ -529,15 +534,19 @@ export default function AccountPage() {
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               color: 'var(--muted)',
-              textDecoration: 'none',
               whiteSpace: 'nowrap',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
               transition: 'color 0.15s ease',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--gold)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--muted)'; }}
           >
-            ← Dashboard
-          </Link>
+            <ArrowLeft size={14} className="rtl:rotate-180" />
+            {tCommon('back')}
+          </button>
 
           <h1
             className="font-serif"
@@ -553,9 +562,9 @@ export default function AccountPage() {
             {t('title')}
           </h1>
 
-          {/* Spacer to keep title centered */}
-          <div style={{ visibility: 'hidden', fontFamily: 'var(--font-sans)', fontSize: 11, whiteSpace: 'nowrap' }}>
-            ← Dashboard
+          {/* Invisible spacer keeps title visually centered */}
+          <div aria-hidden="true" style={{ visibility: 'hidden', fontSize: 11, whiteSpace: 'nowrap' }}>
+            {tCommon('back')}
           </div>
         </div>
 

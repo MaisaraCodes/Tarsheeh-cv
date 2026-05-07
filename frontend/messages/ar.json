@@ -1,7 +1,8 @@
 {
   "common": {
-    "ctaPrimary": "انشر وظيفة أخرى",
-    "tryAgain": "أعد المحاولة"
+    "ctaPrimary": "أنشيء وظيفة أخرى",
+    "tryAgain": "أعد المحاولة",
+    "back": "رجوع"
   },
   "nav": {
     "toggleLabel": "AR",
@@ -119,15 +120,20 @@
     "filterProcessing": "جارٍ المعالجة",
     "filterComplete": "مكتمل",
     "filterFailed": "فشل",
-    "postNewRole": "أنشر وظيفة جديدة",
+    "postNewRole": "أنشيء وظيفة جديدة",
     "emptyTitle": "لا توجد وظائف منشورة بعد.",
-    "emptySubtext": "أنشر وظيفتك الأولى للبدء.",
+    "emptySubtext": "أنشيء وظيفتك الأولى للبدء.",
     "posted": "نُشر",
     "loading": "جارٍ تحميل وظائفك...",
     "errorState": "تعذّر تحميل وظائفك.",
     "statusProcessing": "جارٍ المعالجة",
     "statusComplete": "مكتمل",
     "statusFailed": "فشل",
+    "status": {
+      "processing": "جارٍ المعالجة",
+      "complete": "مكتمل",
+      "failed": "فشل"
+    },
     "skillsMore": "+{count} أخرى",
     "menuEdit": "تعديل",
     "menuRename": "إعادة التسمية",
