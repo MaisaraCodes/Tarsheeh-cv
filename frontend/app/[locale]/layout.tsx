@@ -3,6 +3,7 @@ import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Nav from '@/components/Nav';
+import ScrollReveal from '@/components/ScrollReveal';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 type Props = {
@@ -23,8 +24,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
+          <ScrollReveal />
           <header
-            className="w-full py-3 sm:py-4"
+            className="header-sticky w-full py-3 sm:py-4"
             style={{ borderBottom: '1px solid var(--gold-dim)' }}
           >
             <div className="container-brand">

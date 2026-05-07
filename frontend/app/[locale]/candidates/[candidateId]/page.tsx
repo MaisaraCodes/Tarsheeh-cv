@@ -60,7 +60,7 @@ export default function CandidateDetailPage() {
       {/* Back link */}
       <Link
         href={backHref}
-        className="inline-block font-sans text-xs uppercase tracking-label transition-colors mb-brand-lg"
+        className="link-underline inline-block font-sans text-xs uppercase tracking-label transition-colors mb-brand-lg"
         style={{ color: 'var(--muted)' }}
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--muted)'; }}
@@ -83,7 +83,7 @@ export default function CandidateDetailPage() {
         >
           {candidate?.name ?? t('loading')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Loading state */}
@@ -130,7 +130,7 @@ export default function CandidateDetailPage() {
                 {t('rankLabel')}
               </p>
               <p
-                className="font-serif text-[28px] font-light leading-none mt-2"
+                className="score-display font-serif text-[28px] font-light leading-none mt-2"
                 style={{ color: 'var(--gold-light)' }}
                 dir="ltr"
               >
@@ -157,7 +157,7 @@ export default function CandidateDetailPage() {
                 {t('scoreLabel')}
               </p>
               <p
-                className="font-serif text-[42px] font-light leading-none mt-2"
+                className="score-display font-serif text-[42px] font-light leading-none mt-2"
                 style={{ color: 'var(--gold-light)' }}
                 dir="ltr"
               >
@@ -172,8 +172,8 @@ export default function CandidateDetailPage() {
             style={{ height: "1px", background: "var(--gold-faint)" }}
           >
             <div
-              className="absolute top-0"
-              style={{ width: `${candidate.score}%`, height: "1px", background: 'var(--gold)', insetInlineStart: 0 }}
+              className="absolute top-0 progress-bar-animated"
+              style={{ width: `${candidate.score}%`, height: "1px", insetInlineStart: 0 }}
             />
           </div>
 
@@ -197,7 +197,7 @@ export default function CandidateDetailPage() {
               {questions.map((question, index) => (
                 <div
                   key={index}
-                  className="p-5 mb-2 flex items-start gap-4 animate-fade-up"
+                  className="question-card p-5 mb-2 flex items-start gap-4 animate-fade-up"
                   style={{
                     background: 'var(--surface-2)',
                     border: "1px solid var(--border-default)",

@@ -42,15 +42,15 @@ function SkeletonCard() {
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-        <div style={{ width: '60%', height: 22, borderRadius: 3, background: 'var(--surface-2)' }} />
-        <div style={{ width: 24, height: 24, borderRadius: 3, background: 'var(--surface-2)' }} />
+        <div style={{ width: '60%', height: 22 }} className="skeleton-bone" />
+        <div style={{ width: 24, height: 24 }} className="skeleton-bone" />
       </div>
       <div style={{ display: 'flex', gap: 6, marginBottom: '1rem' }}>
         {[1, 2, 3].map(i => (
-          <div key={i} style={{ width: 56, height: 20, borderRadius: 999, background: 'var(--surface-2)' }} />
+          <div key={i} style={{ width: 56, height: 20, borderRadius: 999 }} className="skeleton-bone" />
         ))}
       </div>
-      <div style={{ width: '35%', height: 11, borderRadius: 3, background: 'var(--surface-2)' }} />
+      <div style={{ width: '35%', height: 11 }} className="skeleton-bone" />
     </div>
   );
 }
@@ -151,8 +151,8 @@ function CardMenu({
             background: 'var(--surface)',
             border: '1px solid var(--gold-dim)',
             zIndex: 40,
-            animation: 'dropdown-fade-up 150ms ease-out both',
           }}
+          className="dropdown-enter"
         >
           <DropdownMenuItem onClick={() => { setOpen(false); onEdit(); }}>{t('menuEdit')}</DropdownMenuItem>
           <DropdownMenuItem onClick={() => { setOpen(false); onRename(); }}>{t('menuRename')}</DropdownMenuItem>
@@ -268,6 +268,7 @@ function JobCard({
       tabIndex={isRenaming ? -1 : 0}
       onClick={handleCardClick}
       onKeyDown={e => { if (e.key === 'Enter' && !isRenaming) handleCardClick(); }}
+      className="card-hover"
       style={{
         background: 'var(--surface)',
         border: '1px solid var(--border-default)',
@@ -277,7 +278,6 @@ function JobCard({
         display: 'flex',
         flexDirection: 'column',
         gap: '0.75rem',
-        transition: 'border-color 0.15s ease',
         outline: 'none',
       }}
       onMouseEnter={e => {
@@ -724,6 +724,7 @@ export default function DashboardPage() {
 
           <Link
             href="/job"
+            className="btn-glow"
             style={{
               fontFamily: 'var(--font-sans)',
               fontSize: 11,
@@ -736,10 +737,7 @@ export default function DashboardPage() {
               border: '1px solid var(--btn-primary-bg)',
               textDecoration: 'none',
               whiteSpace: 'nowrap',
-              transition: 'opacity 0.15s ease',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '0.85'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
           >
             {t('postNewRole')}
           </Link>

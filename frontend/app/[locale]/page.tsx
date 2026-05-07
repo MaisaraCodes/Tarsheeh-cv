@@ -3,9 +3,9 @@ import { Link } from '@/i18n/navigation';
 
 function SectionHeader({ num, title }: { num: string; title: string }) {
   return (
-    <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
+    <div className="reveal flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
       <span
-        className="font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+        className="section-num font-serif text-[13px] font-light tracking-logo flex-shrink-0"
         style={{ color: 'var(--gold-text)' }}
         dir="ltr"
       >
@@ -17,7 +17,7 @@ function SectionHeader({ num, title }: { num: string; title: string }) {
       >
         {title}
       </h2>
-      <div className="flex-1 h-px" style={{ background: 'var(--gold-dim)' }} />
+      <div className="divider-shimmer flex-1 h-px" style={{ background: 'var(--gold-dim)' }} />
     </div>
   );
 }
@@ -42,7 +42,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col">
       {/* ── Hero ── */}
-      <section className="min-h-[80vh] flex flex-col items-center justify-center px-4 sm:px-6 text-center">
+      <section className="hero-grain relative min-h-[80vh] flex flex-col items-center justify-center px-4 sm:px-6 text-center">
         <p
           className="animate-hero-enter font-serif text-5xl sm:text-7xl tracking-logo leading-none"
           dir="ltr"
@@ -52,7 +52,7 @@ export default async function Home() {
         </p>
 
         <div
-          className="animate-fade-up w-14 h-px my-brand-xl"
+          className="animate-fade-up divider-shimmer w-14 h-px my-brand-xl"
           style={{ animationDelay: '200ms', background: 'var(--gold)' }}
         />
 
@@ -76,7 +76,7 @@ export default async function Home() {
         >
           <Link
             href="/job"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 active:scale-[0.98] transition-transform duration-75"
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
             style={{
               background: 'var(--btn-primary-bg)',
               color: 'var(--btn-primary-text)',
@@ -87,12 +87,9 @@ export default async function Home() {
           </Link>
           <Link
             href="#how-it-works"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 transition-colors duration-200"
+            className="link-underline font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 transition-colors duration-200"
             style={{
               color: 'var(--muted)',
-              textDecoration: 'underline',
-              textDecorationColor: 'var(--gold-dim)',
-              textUnderlineOffset: '3px',
             }}
           >
             {t('learnMore')}
@@ -111,7 +108,7 @@ export default async function Home() {
         >
           <SectionHeader num={t('missionNum')} title={t('missionTitle')} />
           <p
-            className="font-serif text-[26px] font-light text-center w-full max-w-[32rem] mx-auto leading-relaxed"
+            className="reveal font-serif text-[26px] font-light text-center w-full max-w-[32rem] mx-auto leading-relaxed"
             style={{ color: 'var(--muted-light)' }}
           >
             {t('missionBody')}
@@ -126,16 +123,16 @@ export default async function Home() {
         >
           <SectionHeader num={t('howItWorksNum')} title={t('howItWorksTitle')} />
           <p
-            className="font-sans text-sm font-light text-center mb-8"
+            className="reveal font-sans text-sm font-light text-center mb-8"
             style={{ color: 'var(--muted-light)' }}
           >
             {t('howItWorksIntro')}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-[2px]">
+          <div className="reveal-stagger grid grid-cols-2 sm:grid-cols-5 gap-[2px]">
             {pipelineStages.map((stage) => (
               <div
                 key={stage}
-                className="text-center p-4"
+                className="reveal pipeline-stage text-center p-4"
                 style={{ background: 'var(--surface)', border: '1px solid var(--gold-faint)' }}
               >
                 <div
@@ -156,11 +153,11 @@ export default async function Home() {
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
           <SectionHeader num={t('featuresNum')} title={t('featuresTitle')} />
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-[2px]">
+          <div className="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-[2px]">
             {featureCards.map(({ phrase, sub }) => (
               <div
                 key={phrase}
-                className="p-6"
+                className="reveal feature-card p-6"
                 style={{ background: 'var(--surface-2)', border: '1px solid var(--gold-dim)' }}
               >
                 <p
@@ -182,7 +179,7 @@ export default async function Home() {
 
         {/* ── Closing CTA ── */}
         <section
-          className="py-16 flex flex-col items-center"
+          className="reveal py-16 flex flex-col items-center"
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
           <p
@@ -193,7 +190,7 @@ export default async function Home() {
           </p>
           <Link
             href="/job"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 active:scale-[0.98] transition-transform duration-75"
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
             style={{
               background: 'var(--btn-primary-bg)',
               color: 'var(--btn-primary-text)',

@@ -72,7 +72,7 @@ function CircleButton({
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="flex items-center justify-center rounded-full transition-colors duration-150"
+      className="circle-btn flex items-center justify-center rounded-full transition-colors duration-150"
       style={{
         width: 36,
         height: 36,
@@ -137,11 +137,10 @@ function AccountDropdown({
   return (
     <div
       role="menu"
-      className="absolute top-full mt-2 end-0 w-52 z-50 py-1"
+      className="dropdown-enter absolute top-full mt-2 end-0 w-52 z-50 py-1"
       style={{
         background: 'var(--surface)',
         border: '1px solid var(--gold-dim)',
-        animation: 'dropdown-fade-up 180ms ease-out both',
       }}
       onClick={onClose}
     >
@@ -225,7 +224,7 @@ export default function Nav() {
         {showPostAnother && (
           <Link
             href="/job"
-            className="font-sans text-[10px] sm:text-[11px] font-normal uppercase tracking-logo py-2 sm:py-3 px-4 sm:px-8 active:scale-[0.98] transition-transform duration-75 whitespace-nowrap"
+            className="btn-glow font-sans text-[10px] sm:text-[11px] font-normal uppercase tracking-logo py-2 sm:py-3 px-4 sm:px-8 whitespace-nowrap"
             style={{
               color: 'var(--btn-primary-text)',
               background: 'var(--btn-primary-bg)',

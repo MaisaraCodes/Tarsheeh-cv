@@ -119,7 +119,7 @@ export default function ProcessingPage() {
         >
           {t('title')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Sub-header row */}
@@ -155,13 +155,14 @@ export default function ProcessingPage() {
               return (
                 <div
                   key={stage.key}
-                  className="p-4 flex flex-col justify-center items-center text-center min-h-[120px] transition-all duration-500 ease-out"
+                  className="stage-card-enter pipeline-stage p-4 flex flex-col justify-center items-center text-center min-h-[120px] transition-all duration-500 ease-out"
                   style={{
                     background: 'var(--surface)',
                     border: isActive
                       ? "1px solid var(--gold)"
                       : "1px solid var(--gold-faint)",
                     opacity: isPending ? 0.45 : 1,
+                    animationDelay: `${STAGE_KEYS.indexOf(stage) * 100}ms`,
                   }}
                 >
                   {/* State badge */}
@@ -219,8 +220,8 @@ export default function ProcessingPage() {
         </div>
         <div className="w-full relative" style={{ height: "1px", background: "var(--gold-faint)" }}>
           <div
-            className="absolute top-0 transition-all duration-500 ease-out"
-            style={{ width: `${progress}%`, height: "1px", background: 'var(--gold)', insetInlineStart: 0 }}
+            className="absolute top-0 transition-all duration-500 ease-out progress-bar-animated"
+            style={{ width: `${progress}%`, height: "1px", insetInlineStart: 0 }}
           />
         </div>
       </div>
@@ -238,7 +239,7 @@ export default function ProcessingPage() {
             <div className="mt-brand-lg">
               <Link
                 href={`/results/${jobId}`}
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 active:scale-[0.98] transition-transform duration-75"
+                className="btn-glow inline-block font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
                 style={{
                   background: 'var(--btn-primary-bg)',
                   color: 'var(--btn-primary-text)',

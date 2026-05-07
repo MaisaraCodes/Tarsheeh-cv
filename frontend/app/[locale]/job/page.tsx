@@ -53,7 +53,7 @@ export default function JobPage() {
         >
           {t('title')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Intro */}
@@ -108,7 +108,7 @@ export default function JobPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 active:scale-[0.98] transition-transform duration-75"
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
             style={{
               background: 'var(--btn-primary-bg)',
               color: 'var(--btn-primary-text)',

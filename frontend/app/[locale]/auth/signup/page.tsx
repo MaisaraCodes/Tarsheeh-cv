@@ -54,7 +54,7 @@ function GoldButton({ loading, label, loadingLabel }: { loading: boolean; label:
     <button
       type="submit"
       disabled={loading}
-      className="w-full font-sans text-[11px] font-normal uppercase py-3.5 transition-opacity duration-150"
+      className="btn-glow w-full font-sans text-[11px] font-normal uppercase py-3.5 transition-opacity duration-150"
       style={{
         background: 'var(--btn-primary-bg)',
         color: 'var(--btn-primary-text)',
@@ -158,7 +158,7 @@ export default function SignUpPage() {
       className="flex flex-1 items-center justify-center px-4 py-12"
       style={{ background: 'var(--page)' }}
     >
-      <div style={cardStyle}>
+      <div className="auth-card-enter" style={cardStyle}>
         <h1
           className="font-serif text-2xl font-light mb-6"
           style={{ color: 'var(--ink)', letterSpacing: '0.04em' }}

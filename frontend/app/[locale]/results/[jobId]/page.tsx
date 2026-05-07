@@ -64,7 +64,7 @@ export default function ResultsPage() {
         >
           {t('title')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Sub-header row */}
@@ -92,7 +92,7 @@ export default function ResultsPage() {
               {t('topScore')}
             </p>
             <p
-              className="font-serif text-[34px] sm:text-[42px] font-light leading-none"
+              className="score-display font-serif text-[34px] sm:text-[42px] font-light leading-none"
               style={{ color: 'var(--gold-light)' }}
               dir="ltr"
             >
@@ -155,7 +155,7 @@ export default function ResultsPage() {
                 )}
                 <Link
                   href={`/candidates/${candidate.candidate_id}?jobId=${jobId}`}
-                  className="flex items-start gap-4 py-4 cursor-pointer -mx-brand-lg px-brand-lg transition-colors duration-200"
+                  className="result-row flex items-start gap-4 py-4 cursor-pointer -mx-brand-lg px-brand-lg transition-colors duration-200"
                   style={{ background: 'transparent' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
@@ -192,11 +192,10 @@ export default function ResultsPage() {
                       style={{ width: "80px", height: "1px", background: "var(--gold-faint)" }}
                     >
                       <div
-                        className="absolute top-0"
+                        className="absolute top-0 progress-bar-animated"
                         style={{
                           width: `${candidate.score}%`,
                           height: "1px",
-                          background: "var(--gold-light)",
                           insetInlineStart: 0,
                         }}
                       />
@@ -222,7 +221,7 @@ export default function ResultsPage() {
           <button
             onClick={handleDownloadReport}
             disabled={isDownloading}
-            className="font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 active:scale-[0.98] transition-transform duration-75"
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
             style={{
               background: 'var(--btn-primary-bg)',
               color: 'var(--btn-primary-text)',
