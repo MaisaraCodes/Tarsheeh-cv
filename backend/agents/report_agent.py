@@ -103,6 +103,8 @@ INK = colors.HexColor("#2C2C2C")
 MUTED = colors.HexColor("#7A7A7A")
 RULE = colors.HexColor("#D9D2C5")
 
+_CONTENT_W = LETTER[0] - 0.9 * inch - 0.9 * inch  # full type-area width (6.7 in on LETTER)
+
 
 # Font registration (Arabic). Done once on import; safe to call repeatedly.
 _FONTS_DIR = Path(__file__).parent.parent / "assets" / "fonts"
@@ -243,11 +245,11 @@ def _styles(locale: str) -> Dict[str, ParagraphStyle]:
         ),
         "h2": ParagraphStyle(
             "h2", parent=base["Heading2"], fontName=serif_font,
-            fontSize=16, leading=20, textColor=NOIR, spaceBefore=14, spaceAfter=6, alignment=align,
+            fontSize=16, leading=20, textColor=NOIR, spaceBefore=8, spaceAfter=6, alignment=align,
         ),
         "h3": ParagraphStyle(
             "h3", parent=base["Heading3"], fontName=serif_bold,
-            fontSize=12, leading=15, textColor=NOIR, spaceBefore=10, spaceAfter=2, alignment=align,
+            fontSize=12, leading=15, textColor=NOIR, spaceBefore=6, spaceAfter=2, alignment=align,
         ),
         "meta": ParagraphStyle(
             "meta", parent=base["Normal"], fontName=body_font,
@@ -265,7 +267,7 @@ def _styles(locale: str) -> Dict[str, ParagraphStyle]:
         "score": ParagraphStyle(
             "score", parent=base["Normal"], fontName=bold_font,
             fontSize=14, leading=16, textColor=NOIR,
-            alignment=TA_LEFT if is_ar else TA_RIGHT,
+            alignment=TA_RIGHT,
         ),
         "contact": ParagraphStyle(
             "contact", parent=base["Normal"], fontName=body_font,
@@ -314,7 +316,7 @@ def generate_report(
     when = datetime.utcnow().strftime("%Y-%m-%d · %H:%M UTC") if is_ar \
         else datetime.utcnow().strftime("%B %d, %Y · %H:%M UTC")
     story.append(Paragraph(_t(L["generated_fmt"].format(when=when), locale), s["meta"]))
-    story.append(Spacer(1, 0.18 * inch))
+    story.append(Spacer(1, 0.10 * inch))
 
     # ----- Executive Summary (Optional LLM content) -----
     if llm_report:
@@ -361,13 +363,13 @@ def generate_report(
                 [_cell(value, INK, TA_RIGHT), _cell(label, MUTED, TA_RIGHT)]
                 for label, value in rows_def
             ]
-            col_widths = [4.4 * inch, 1.6 * inch]
+            col_widths = [_CONTENT_W - 1.6 * inch, 1.6 * inch]
         else:
             rows = [
                 [_cell(label, MUTED, TA_LEFT), _cell(value, INK, TA_LEFT)]
                 for label, value in rows_def
             ]
-            col_widths = [1.6 * inch, 4.4 * inch]
+            col_widths = [1.6 * inch, _CONTENT_W - 1.6 * inch]
 
         t = Table(rows, colWidths=col_widths)
         t.setStyle(TableStyle([
@@ -400,11 +402,11 @@ def generate_report(
 
             if is_ar:
                 cells = [[score_p, name_p, rank_p]]
-                widths = [1.0 * inch, 4.3 * inch, 0.7 * inch]
+                widths = [1.0 * inch, _CONTENT_W - 1.7 * inch, 0.7 * inch]
                 score_idx, name_idx, rank_idx = 0, 1, 2
             else:
                 cells = [[rank_p, name_p, score_p]]
-                widths = [0.7 * inch, 4.3 * inch, 1.0 * inch]
+                widths = [0.7 * inch, _CONTENT_W - 1.7 * inch, 1.0 * inch]
                 rank_idx, name_idx, score_idx = 0, 1, 2
 
             header = Table(cells, colWidths=widths)
@@ -446,7 +448,7 @@ def generate_report(
 
             block.append(Spacer(1, 0.05 * inch))
             block.append(Table(
-                [[""]], colWidths=[6.0 * inch],
+                [[""]], colWidths=[_CONTENT_W],
                 style=TableStyle([("LINEABOVE", (0, 0), (-1, 0), 0.25, RULE)]),
             ))
             block.append(Spacer(1, 0.08 * inch))
