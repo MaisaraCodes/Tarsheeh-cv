@@ -145,6 +145,9 @@
     "deleteConfirmPlaceholder": "اكتب DELETE للتأكيد",
     "deleteConfirmButton": "حذف الدور",
     "cancelDelete": "إلغاء",
+    "errJobIncomplete": "لم تكتمل هذه الوظيفة.",
+    "errDeleteRole": "فشل حذف الوظيفة.",
+    "errRenameRole": "فشل إعادة تسمية الوظيفة.",
     "actions": {
       "edit": "تعديل",
       "rename": "إعادة تسمية",

@@ -246,7 +246,7 @@ function JobCard({
     } else if (tone === 'processing') {
       router.push(`/processing/${job.job_id}`);
     } else {
-      onError('This job did not complete.');
+      onError(t('errJobIncomplete'));
     }
   }
 
@@ -264,7 +264,7 @@ function JobCard({
     const { error } = await supabase.from('jobs').update({ title: trimmed }).eq('id', job.job_id);
     if (error) {
       setRenameValue(job.title);
-      onError('Failed to rename role.');
+      onError(t('errRenameRole'));
     } else {
       onRenameSuccess(job.job_id, trimmed);
     }
@@ -659,6 +659,7 @@ export default function DashboardPage() {
           job_id: row.id as string,
           title: row.title as string,
           created_at: row.created_at as string,
+          status: '',
           parsed_profile: row.parsed_profile as UserJobItem['parsed_profile'],
           job_results: row.job_results as UserJobItem['job_results'],
         }));
@@ -699,12 +700,13 @@ export default function DashboardPage() {
             job_id: row.id as string,
             title: row.title as string,
             created_at: row.created_at as string,
+            status: '',
             parsed_profile: row.parsed_profile as UserJobItem['parsed_profile'],
             job_results: row.job_results as UserJobItem['job_results'],
           })));
         }
       }
-      showToast('Failed to delete role.');
+      showToast(t('errDeleteRole'));
     }
   }
 
