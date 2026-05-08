@@ -6,6 +6,7 @@ import type {
   ResultsResponse,
   QuestionsResponse,
   RankedCandidate,
+  UserJobsResponse,
 } from "./types";
 
 const jobStartTimes = new Map<string, number>();
@@ -161,4 +162,49 @@ export async function mockGetQuestions(candidateId: string): Promise<QuestionsRe
 export async function mockGetReport(_jobId: string): Promise<Blob> {
   await delay(600);
   return new Blob(["Mock PDF report"], { type: "application/pdf" });
+}
+
+export async function mockGetJobsByUser(_userId: string): Promise<UserJobsResponse> {
+  await delay(400);
+  const isAr = activeLocale() === "ar";
+  return {
+    jobs: [
+      {
+        job_id: "mock-job-1",
+        title: isAr ? "كبير مهندسي البرمجيات" : "Senior Software Engineer",
+        status: "completed",
+        created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        parsed_profile: { skills: ["React", "TypeScript", "Node.js", "PostgreSQL", "Docker", "AWS"] },
+      },
+      {
+        job_id: "mock-job-2",
+        title: isAr ? "مصمم منتج" : "Product Designer",
+        status: "processing",
+        created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+        parsed_profile: { skills: ["Figma", "User Research", "Prototyping"] },
+      },
+      {
+        job_id: "mock-job-3",
+        title: isAr ? "مدير تسويق" : "Marketing Manager",
+        status: "failed",
+        created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        parsed_profile: null,
+      },
+      {
+        job_id: "mock-job-4",
+        title: isAr ? "محلل بيانات" : "Data Analyst",
+        status: "candidates_pending",
+        created_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+        parsed_profile: { skills: ["Python", "SQL", "Tableau"] },
+      },
+    ],
+  };
+}
+
+export async function mockDeleteJob(_jobId: string): Promise<void> {
+  await delay(300);
+}
+
+export async function mockRenameJob(_jobId: string, _title: string): Promise<void> {
+  await delay(300);
 }

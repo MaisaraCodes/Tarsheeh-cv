@@ -3,17 +3,21 @@ import { Link } from '@/i18n/navigation';
 
 function SectionHeader({ num, title }: { num: string; title: string }) {
   return (
-    <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
+    <div className="reveal flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
       <span
-        className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+        className="section-num font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+        style={{ color: 'var(--gold-text)' }}
         dir="ltr"
       >
         {num}
       </span>
-      <h2 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+      <h2
+        className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading flex-shrink-0"
+        style={{ color: 'var(--text-primary)' }}
+      >
         {title}
       </h2>
-      <div className="flex-1 h-px" style={{ background: 'var(--gold-dim)' }} />
+      <div className="divider-shimmer flex-1 h-px" style={{ background: 'var(--gold-dim)' }} />
     </div>
   );
 }
@@ -38,30 +42,30 @@ export default async function Home() {
   return (
     <div className="flex flex-col">
       {/* ── Hero ── */}
-      <section className="min-h-[80vh] flex flex-col items-center justify-center px-4 sm:px-6 text-center">
+      <section className="hero-grain relative min-h-[80vh] flex flex-col items-center justify-center px-4 sm:px-6 text-center">
         <p
           className="animate-hero-enter font-serif text-5xl sm:text-7xl tracking-logo leading-none"
           dir="ltr"
         >
-          <span className="font-light text-gold-pale">TARSHEEH</span>
-          <span className="font-normal text-gold">.CV</span>
+          <span className="font-light" style={{ color: 'var(--text-display)' }}>TARSHEEH</span>
+          <span className="font-normal" style={{ color: 'var(--gold)' }}>.CV</span>
         </p>
 
         <div
-          className="animate-fade-up w-14 h-px bg-gold my-brand-xl"
-          style={{ animationDelay: '200ms' }}
+          className="animate-fade-up divider-shimmer w-14 h-px my-brand-xl"
+          style={{ animationDelay: '200ms', background: 'var(--gold)' }}
         />
 
         <h1
-          className="animate-fade-up font-serif text-3xl sm:text-4xl font-light text-ivory tracking-display leading-tight whitespace-pre-line"
-          style={{ animationDelay: '400ms' }}
+          className="animate-fade-up font-serif text-3xl sm:text-4xl font-light tracking-display leading-tight whitespace-pre-line"
+          style={{ animationDelay: '400ms', color: 'var(--text-primary)' }}
         >
           {t('hero')}
         </h1>
 
         <p
-          className="animate-fade-up mt-brand-lg font-sans text-sm font-light text-muted-light w-full max-w-lg text-center leading-[1.75]"
-          style={{ animationDelay: '600ms' }}
+          className="animate-fade-up mt-brand-lg font-sans text-sm font-light w-full max-w-lg text-center leading-[1.75]"
+          style={{ animationDelay: '600ms', color: 'var(--muted-light)' }}
         >
           {t('subHero')}
         </p>
@@ -72,18 +76,20 @@ export default async function Home() {
         >
           <Link
             href="/job"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
-            style={{ border: '1px solid var(--color-gold)' }}
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
+            style={{
+              background: 'var(--btn-primary-bg)',
+              color: 'var(--btn-primary-text)',
+              border: '1px solid var(--btn-primary-bg)',
+            }}
           >
             {t('ctaPrimary')}
           </Link>
           <Link
             href="#how-it-works"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo text-muted py-3 px-8 transition-colors duration-200 hover:text-ivory"
+            className="link-underline font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8 transition-colors duration-200"
             style={{
-              textDecoration: 'underline',
-              textDecorationColor: 'var(--gold-dim)',
-              textUnderlineOffset: '3px',
+              color: 'var(--muted)',
             }}
           >
             {t('learnMore')}
@@ -101,7 +107,10 @@ export default async function Home() {
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
           <SectionHeader num={t('missionNum')} title={t('missionTitle')} />
-          <p className="font-serif text-[26px] font-light text-muted-light text-center w-full max-w-[32rem] mx-auto leading-relaxed">
+          <p
+            className="reveal font-serif text-[26px] font-light text-center w-full max-w-[32rem] mx-auto leading-relaxed"
+            style={{ color: 'var(--muted-light)' }}
+          >
             {t('missionBody')}
           </p>
         </section>
@@ -113,17 +122,23 @@ export default async function Home() {
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
           <SectionHeader num={t('howItWorksNum')} title={t('howItWorksTitle')} />
-          <p className="font-sans text-sm font-light text-muted-light text-center mb-8">
+          <p
+            className="reveal font-sans text-sm font-light text-center mb-8"
+            style={{ color: 'var(--muted-light)' }}
+          >
             {t('howItWorksIntro')}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-[2px]">
+          <div className="reveal-stagger grid grid-cols-2 sm:grid-cols-5 gap-[2px]">
             {pipelineStages.map((stage) => (
               <div
                 key={stage}
-                className="bg-noir-2 text-center p-4"
-                style={{ border: '1px solid var(--gold-faint)' }}
+                className="reveal pipeline-stage text-center p-4"
+                style={{ background: 'var(--surface)', border: '1px solid var(--gold-faint)' }}
               >
-                <div className="font-serif text-[15px] font-light text-ivory">
+                <div
+                  className="font-serif text-[15px] font-light"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {stage}
                 </div>
               </div>
@@ -138,17 +153,23 @@ export default async function Home() {
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
           <SectionHeader num={t('featuresNum')} title={t('featuresTitle')} />
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-[2px]">
+          <div className="reveal-stagger grid grid-cols-1 sm:grid-cols-3 gap-[2px]">
             {featureCards.map(({ phrase, sub }) => (
               <div
                 key={phrase}
-                className="bg-noir-3 p-6"
-                style={{ border: '1px solid var(--gold-dim)' }}
+                className="reveal feature-card p-6"
+                style={{ background: 'var(--surface-2)', border: '1px solid var(--gold-dim)' }}
               >
-                <p className="font-serif text-[18px] font-light text-ivory leading-snug tracking-[0.02em] mb-3">
+                <p
+                  className="font-serif text-[18px] font-light leading-snug tracking-[0.02em] mb-3"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {phrase}
                 </p>
-                <p className="font-sans text-xs font-light text-muted-light leading-relaxed">
+                <p
+                  className="font-sans text-xs font-light leading-relaxed"
+                  style={{ color: 'var(--muted-light)' }}
+                >
                   {sub}
                 </p>
               </div>
@@ -158,16 +179,23 @@ export default async function Home() {
 
         {/* ── Closing CTA ── */}
         <section
-          className="py-16 flex flex-col items-center"
+          className="reveal py-16 flex flex-col items-center"
           style={{ borderTop: '1px solid var(--gold-dim)' }}
         >
-          <p className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading mb-brand-xl text-center">
+          <p
+            className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading mb-brand-xl text-center"
+            style={{ color: 'var(--text-primary)' }}
+          >
             {t('closingCta')}
           </p>
           <Link
             href="/job"
-            className="font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
-            style={{ border: '1px solid var(--color-gold)' }}
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
+            style={{
+              background: 'var(--btn-primary-bg)',
+              color: 'var(--btn-primary-text)',
+              border: '1px solid var(--btn-primary-bg)',
+            }}
           >
             {t('ctaPrimary')}
           </Link>

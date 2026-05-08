@@ -177,12 +177,13 @@ _LABELS = {
 }
 
 
-def _shape_ar(text: str) -> str:
+def shape_arabic(text: str) -> str:
     """Reshape + bidi an Arabic-or-mixed string for visual rendering in PDF."""
     if not text:
-        return ""
+        return text
     try:
-        return get_display(arabic_reshaper.reshape(text))
+        reshaped = arabic_reshaper.reshape(text)
+        return get_display(reshaped)
     except Exception:
         return text
 
@@ -190,7 +191,7 @@ def _shape_ar(text: str) -> str:
 def _t(text: str, locale: str) -> str:
     """Pass strings through the shaper only when locale is Arabic."""
     if locale == "ar":
-        return _shape_ar(text)
+        return shape_arabic(text)
     return text
 
 
@@ -237,6 +238,11 @@ def _styles(locale: str) -> Dict[str, ParagraphStyle]:
             "score", parent=base["Normal"], fontName=bold_font,
             fontSize=14, leading=16, textColor=NOIR,
             alignment=TA_LEFT if is_ar else TA_RIGHT,
+        ),
+        "contact": ParagraphStyle(
+            "contact", parent=base["Normal"], fontName=body_font,
+            fontSize=9, leading=12, textColor=MUTED, spaceAfter=4,
+            alignment=TA_RIGHT if is_ar else TA_LEFT,
         ),
     }
 
@@ -382,10 +388,22 @@ def generate_report(
                 ("TOPPADDING", (0, 0), (-1, -1), 6),
             ]))
             story.append(header)
-            story.append(Paragraph(_t(summary, locale), s["body"]))
 
             details = candidate_details.get(cid) or {}
             scorecard = details.get("scorecard") or {}
+
+            contact_parts = []
+            if scorecard.get("email"):
+                contact_parts.append(scorecard["email"])
+            if scorecard.get("phone"):
+                contact_parts.append(scorecard["phone"])
+            if scorecard.get("linkedin"):
+                contact_parts.append(scorecard["linkedin"])
+            if contact_parts:
+                story.append(Paragraph("  ·  ".join(contact_parts), s["contact"]))
+
+            story.append(Paragraph(_t(summary, locale), s["body"]))
+
             if scorecard:
                 matching = _format_skills(scorecard.get("matching_skills"), locale)
                 missing = _format_skills(scorecard.get("missing_skills"), locale)

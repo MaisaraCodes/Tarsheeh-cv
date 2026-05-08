@@ -6,11 +6,6 @@ import { useRouter } from "@/i18n/navigation";
 import { postJob } from "@/lib/api";
 import type { JobRequest, Locale } from "@/lib/types";
 
-const inputStyle: React.CSSProperties = {
-  border: "1px solid var(--gold-dim)",
-  borderBottom: "1px solid var(--color-gold)",
-};
-
 export default function JobPage() {
   const router = useRouter();
   const t = useTranslations('job');
@@ -46,19 +41,26 @@ export default function JobPage() {
       {/* Section header */}
       <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
-          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          className="font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+          style={{ color: 'var(--gold-text)' }}
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        <h1
+          className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading flex-shrink-0"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {t('title')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Intro */}
-      <p className="font-serif text-[18px] sm:text-[22px] font-light text-ivory mb-brand-xl">
+      <p
+        className="font-serif text-[18px] sm:text-[22px] font-light mb-brand-xl"
+        style={{ color: 'var(--text-primary)' }}
+      >
         {t('intro')}
       </p>
 
@@ -67,7 +69,10 @@ export default function JobPage() {
 
         {/* Job Title */}
         <div>
-          <label className="block font-sans text-[9px] font-normal uppercase tracking-label text-muted mb-2">
+          <label
+            className="block font-sans text-[9px] font-normal uppercase tracking-label mb-2"
+            style={{ color: 'var(--muted)' }}
+          >
             {t('labelTitle')}
           </label>
           <input
@@ -75,14 +80,17 @@ export default function JobPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={t('placeholderTitle')}
-            className="w-full bg-noir-2 font-sans text-[13px] font-light text-ivory outline-none px-4 py-[0.875rem]"
-            style={inputStyle}
+            className="auth-input w-full text-[13px] px-4 py-[0.875rem]"
+            style={{ borderBottom: "1px solid var(--gold)" }}
           />
         </div>
 
         {/* Job Description */}
         <div className="mt-brand-lg">
-          <label className="block font-sans text-[9px] font-normal uppercase tracking-label text-muted mb-2">
+          <label
+            className="block font-sans text-[9px] font-normal uppercase tracking-label mb-2"
+            style={{ color: 'var(--muted)' }}
+          >
             {t('labelDescription')}
           </label>
           <textarea
@@ -90,8 +98,8 @@ export default function JobPage() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder={t('placeholderDescription')}
             rows={10}
-            className="w-full bg-noir-2 font-sans text-[13px] font-light text-ivory outline-none px-4 py-[0.875rem] resize-none"
-            style={inputStyle}
+            className="auth-input w-full text-[13px] px-4 py-[0.875rem] resize-none"
+            style={{ borderBottom: "1px solid var(--gold)" }}
           />
         </div>
 
@@ -100,17 +108,20 @@ export default function JobPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={[
-              "font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75",
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "",
-            ].join(" ")}
-            style={{ border: "1px solid var(--color-gold)" }}
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
+            style={{
+              background: 'var(--btn-primary-bg)',
+              color: 'var(--btn-primary-text)',
+              border: '1px solid var(--btn-primary-bg)',
+              opacity: isSubmitting ? 0.5 : 1,
+              cursor: isSubmitting ? 'not-allowed' : 'pointer',
+            }}
           >
             {isSubmitting ? t('submitting') : t('submit')}
           </button>
 
           {error && (
-            <p className="font-sans text-xs font-light text-[#C97E7E] mt-4">
+            <p className="font-sans text-xs font-light mt-4" style={{ color: 'var(--error)' }}>
               {error}
             </p>
           )}

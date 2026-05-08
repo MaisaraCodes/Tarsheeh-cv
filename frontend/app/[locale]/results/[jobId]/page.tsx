@@ -31,7 +31,7 @@ export default function ResultsPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      const dateStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const dateStr = new Date().toISOString().split('T')[0];
       a.download = `Tarsheeh_Shortlist_${dateStr}.pdf`;
       document.body.appendChild(a);
       a.click();
@@ -52,24 +52,34 @@ export default function ResultsPage() {
       {/* Section header */}
       <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
-          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          className="font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+          style={{ color: 'var(--gold-text)' }}
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        <h1
+          className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading flex-shrink-0"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {t('title')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Sub-header row */}
       <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
         <div>
-          <p className="font-serif text-[18px] sm:text-[22px] font-light text-ivory">
+          <p
+            className="font-serif text-[18px] sm:text-[22px] font-light"
+            style={{ color: 'var(--text-primary)' }}
+          >
             {t('intro')}
           </p>
-          <p className="font-sans text-xs text-muted uppercase tracking-label mt-2">
+          <p
+            className="font-sans text-xs uppercase tracking-label mt-2"
+            style={{ color: 'var(--muted)' }}
+          >
             {t('tagline')}
           </p>
         </div>
@@ -77,12 +87,13 @@ export default function ResultsPage() {
           <div className="text-end">
             <p
               className="font-sans text-[10px] uppercase tracking-label"
-              style={{ color: "var(--text-muted)" }}
+              style={{ color: "var(--muted)" }}
             >
               {t('topScore')}
             </p>
             <p
-              className="font-serif text-[34px] sm:text-[42px] font-light text-gold-light leading-none"
+              className="score-display font-serif text-[34px] sm:text-[42px] font-light leading-none"
+              style={{ color: 'var(--gold-light)' }}
               dir="ltr"
             >
               {topScore}
@@ -95,7 +106,10 @@ export default function ResultsPage() {
       <div className="mt-brand-xl">
         {results === null && error === null && (
           <div className="flex items-center justify-center py-16">
-            <span className="font-serif text-[18px] font-light text-muted-light">
+            <span
+              className="font-serif text-[18px] font-light"
+              style={{ color: 'var(--muted-light)' }}
+            >
               {t('loading')}
             </span>
           </div>
@@ -103,14 +117,14 @@ export default function ResultsPage() {
 
         {error !== null && results === null && (
           <div className="text-center py-16">
-            <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
+            <p className="font-serif text-[22px]" style={{ color: "var(--error)" }}>
               {t('errorState')}
             </p>
             <div className="mt-brand-lg">
               <Link
                 href="/job"
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
-                style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
+                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200"
+                style={{ border: "1px solid var(--border-default)", color: "var(--muted-light)" }}
               >
                 {tCommon('tryAgain')}
               </Link>
@@ -120,7 +134,10 @@ export default function ResultsPage() {
 
         {results !== null && results.ranked_candidates.length === 0 && (
           <div className="text-center py-16">
-            <p className="font-serif text-[22px] text-muted-light">
+            <p
+              className="font-serif text-[22px]"
+              style={{ color: 'var(--muted-light)' }}
+            >
               {t('empty')}
             </p>
           </div>
@@ -128,8 +145,8 @@ export default function ResultsPage() {
 
         {results !== null && results.ranked_candidates.length > 0 && (
           <div
-            className="bg-noir-2 p-brand-lg"
-            style={{ border: "1px solid var(--gold-dim)" }}
+            className="p-brand-lg"
+            style={{ background: 'var(--surface)', border: "1px solid var(--border-default)" }}
           >
             {results.ranked_candidates.map((candidate: RankedCandidate, i: number) => (
               <div key={candidate.candidate_id} className="animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
@@ -138,13 +155,15 @@ export default function ResultsPage() {
                 )}
                 <Link
                   href={`/candidates/${candidate.candidate_id}?jobId=${jobId}`}
-                  className="flex items-start gap-4 py-4 hover:bg-noir-3 cursor-pointer -mx-brand-lg px-brand-lg transition-colors duration-200"
+                  className="result-row flex items-start gap-4 py-4 cursor-pointer -mx-brand-lg px-brand-lg transition-colors duration-200"
+                  style={{ background: 'transparent' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                 >
                   {/* Rank */}
                   <span
-                    className={`font-serif text-[16px] font-light flex-shrink-0 w-8 ${
-                      candidate.rank === 1 ? "text-gold-light" : "text-muted"
-                    }`}
+                    className="font-serif text-[16px] font-light flex-shrink-0 w-8"
+                    style={{ color: candidate.rank === 1 ? 'var(--gold-light)' : 'var(--muted)' }}
                     dir="ltr"
                   >
                     {String(candidate.rank).padStart(2, "0")}
@@ -152,10 +171,16 @@ export default function ResultsPage() {
 
                   {/* Name + summary */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-serif text-[18px] font-light text-ivory">
+                    <p
+                      className="font-serif text-[18px] font-light"
+                      style={{ color: 'var(--text-primary)' }}
+                    >
                       {candidate.name}
                     </p>
-                    <p className="font-sans text-xs text-muted-light mt-1 leading-relaxed line-clamp-2">
+                    <p
+                      className="font-sans text-xs mt-1 leading-relaxed line-clamp-2"
+                      style={{ color: 'var(--muted-light)' }}
+                    >
                       {candidate.summary}
                     </p>
                   </div>
@@ -167,18 +192,17 @@ export default function ResultsPage() {
                       style={{ width: "80px", height: "1px", background: "var(--gold-faint)" }}
                     >
                       <div
-                        className="absolute top-0"
+                        className="absolute top-0 progress-bar-animated"
                         style={{
                           width: `${candidate.score}%`,
                           height: "1px",
-                          background: "var(--color-gold-light)",
                           insetInlineStart: 0,
                         }}
                       />
                     </div>
                     <span
-                      className="font-serif text-[14px] text-muted-light text-end"
-                      style={{ minWidth: "28px" }}
+                      className="font-serif text-[14px] text-end"
+                      style={{ color: 'var(--muted-light)', minWidth: "28px" }}
                       dir="ltr"
                     >
                       {candidate.score}
@@ -197,17 +221,20 @@ export default function ResultsPage() {
           <button
             onClick={handleDownloadReport}
             disabled={isDownloading}
-            className={[
-              "font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75",
-              isDownloading ? "opacity-50 cursor-not-allowed" : "",
-            ].join(" ")}
-            style={{ border: "1px solid var(--color-gold)" }}
+            className="btn-glow font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
+            style={{
+              background: 'var(--btn-primary-bg)',
+              color: 'var(--btn-primary-text)',
+              border: '1px solid var(--btn-primary-bg)',
+              opacity: isDownloading ? 0.5 : 1,
+              cursor: isDownloading ? 'not-allowed' : 'pointer',
+            }}
           >
             {isDownloading ? t('downloadingReport') : t('ctaReport')}
           </button>
 
           {error !== null && (
-            <p className="font-sans text-xs text-center mt-4" style={{ color: "#C97E7E" }}>
+            <p className="font-sans text-xs text-center mt-4" style={{ color: "var(--error)" }}>
               {error}
             </p>
           )}

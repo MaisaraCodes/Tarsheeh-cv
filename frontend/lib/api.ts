@@ -6,6 +6,7 @@ import type {
   ResultsResponse,
   QuestionsResponse,
   CandidateDetail,
+  UserJobsResponse,
 } from "./types";
 import {
   mockPostJob,
@@ -14,7 +15,11 @@ import {
   mockGetResults,
   mockGetQuestions,
   mockGetReport,
+  mockGetJobsByUser,
+  mockDeleteJob,
+  mockRenameJob,
 } from "./mocks";
+import { supabase } from "@/lib/supabase";
 
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
@@ -29,10 +34,19 @@ async function handleResponse<T>(res: Response): Promise<T> {
 
 export async function postJob(body: JobRequest): Promise<JobResponse> {
   if (USE_MOCK) return mockPostJob(body);
+
+  let userId: string | null = null;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id ?? null;
+  } catch {
+    userId = null;
+  }
+
   const res = await fetch(`${API_URL}/job`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ ...body, user_id: userId }),
   });
   return handleResponse<JobResponse>(res);
 }
@@ -90,4 +104,32 @@ export async function getReport(jobId: string): Promise<Blob> {
     throw new Error(`${res.status}: ${body}`);
   }
   return res.blob();
+}
+
+export async function getJobsByUser(userId: string): Promise<UserJobsResponse> {
+  if (USE_MOCK) return mockGetJobsByUser(userId);
+  const res = await fetch(`${API_URL}/jobs/by-user/${encodeURIComponent(userId)}`);
+  return handleResponse<UserJobsResponse>(res);
+}
+
+export async function deleteJob(jobId: string): Promise<void> {
+  if (USE_MOCK) return mockDeleteJob(jobId);
+  const res = await fetch(`${API_URL}/jobs/${encodeURIComponent(jobId)}`, { method: "DELETE" });
+  if (!res.ok) {
+    const body = await res.text().catch(() => res.statusText);
+    throw new Error(`${res.status}: ${body}`);
+  }
+}
+
+export async function renameJob(jobId: string, title: string): Promise<void> {
+  if (USE_MOCK) return mockRenameJob(jobId, title);
+  const res = await fetch(`${API_URL}/jobs/${encodeURIComponent(jobId)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => res.statusText);
+    throw new Error(`${res.status}: ${body}`);
+  }
 }

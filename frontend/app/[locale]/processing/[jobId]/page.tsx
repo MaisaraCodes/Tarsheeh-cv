@@ -53,8 +53,6 @@ export default function ProcessingPage() {
         }
       } catch (err) {
         if (cancelled) return;
-        // Keep polling on transient failures so a single blip doesn't kick the
-        // user off the page; only surface the error if we never got a status.
         if (!hasReceivedStatus) {
           setError(err instanceof Error ? err.message : tErr('statusFailed'));
         }
@@ -86,8 +84,8 @@ export default function ProcessingPage() {
     if (overallStatus === "failed") {
       return (
         <div className="flex items-center gap-2">
-          <div className="w-[6px] h-[6px] rounded-full" style={{ background: "#C97E7E" }} />
-          <span className="font-sans text-xs uppercase tracking-label" style={{ color: "#C97E7E" }}>
+          <div className="w-[6px] h-[6px] rounded-full" style={{ background: "var(--error)" }} />
+          <span className="font-sans text-xs uppercase tracking-label" style={{ color: "var(--error)" }}>
             {t('indicatorFailed')}
           </span>
         </div>
@@ -95,8 +93,8 @@ export default function ProcessingPage() {
     }
     return (
       <div className="flex items-center gap-2">
-        <div className="w-[6px] h-[6px] rounded-full bg-gold animate-pulse" />
-        <span className="font-sans text-xs text-gold uppercase tracking-label">
+        <div className="w-[6px] h-[6px] rounded-full animate-pulse" style={{ background: "var(--gold)" }} />
+        <span className="font-sans text-xs uppercase tracking-label" style={{ color: "var(--gold)" }}>
           {t('indicatorProcessing')}
         </span>
       </div>
@@ -109,20 +107,27 @@ export default function ProcessingPage() {
       {/* Section header */}
       <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
-          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          className="font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+          style={{ color: 'var(--gold-text)' }}
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading flex-shrink-0">
+        <h1
+          className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading flex-shrink-0"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {t('title')}
         </h1>
-        <div className="flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Sub-header row */}
       <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-        <p className="font-serif text-[18px] sm:text-[22px] font-light text-ivory">
+        <p
+          className="font-serif text-[18px] sm:text-[22px] font-light"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {t('intro')}
         </p>
         <LiveIndicator />
@@ -132,7 +137,10 @@ export default function ProcessingPage() {
       <div className="mt-brand-xl">
         {status === null && error === null ? (
           <div className="min-h-[120px] flex items-center justify-center">
-            <span className="font-serif text-[18px] font-light text-muted-light">
+            <span
+              className="font-serif text-[18px] font-light"
+              style={{ color: 'var(--muted-light)' }}
+            >
               {t('initializing')}
             </span>
           </div>
@@ -147,12 +155,14 @@ export default function ProcessingPage() {
               return (
                 <div
                   key={stage.key}
-                  className="bg-noir-2 p-4 flex flex-col justify-center items-center text-center min-h-[120px] transition-all duration-500 ease-out"
+                  className="stage-card-enter pipeline-stage p-4 flex flex-col justify-center items-center text-center min-h-[120px] transition-all duration-500 ease-out"
                   style={{
+                    background: 'var(--surface)',
                     border: isActive
-                      ? "1px solid var(--color-gold)"
+                      ? "1px solid var(--gold)"
                       : "1px solid var(--gold-faint)",
                     opacity: isPending ? 0.45 : 1,
+                    animationDelay: `${STAGE_KEYS.indexOf(stage) * 100}ms`,
                   }}
                 >
                   {/* State badge */}
@@ -160,24 +170,27 @@ export default function ProcessingPage() {
                     className="font-sans text-[9px] uppercase tracking-label mb-2"
                     style={{
                       color: isActive
-                        ? "var(--color-gold)"
+                        ? "var(--gold)"
                         : isCompleted
-                        ? "var(--text-muted-light)"
-                        : "var(--text-muted)",
+                        ? "var(--muted-light)"
+                        : "var(--muted)",
                     }}
                   >
                     {isActive ? t('badgeActive') : isCompleted ? t('badgeDone') : t('badgePending')}
                   </span>
 
                   {/* Stage name */}
-                  <span className="font-serif text-[16px] font-light text-ivory leading-tight">
+                  <span
+                    className="font-serif text-[16px] font-light leading-tight"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
                     {t(stage.labelKey)}
                   </span>
 
                   {/* Sub-description */}
                   <span
                     className="font-sans text-[10px] mt-2 leading-snug"
-                    style={{ color: "var(--text-muted)" }}
+                    style={{ color: "var(--muted)" }}
                   >
                     {isActive ? t(stage.msgKey) : isCompleted ? t('subDone') : t('subAwaiting')}
                   </span>
@@ -193,17 +206,21 @@ export default function ProcessingPage() {
         <div className="flex justify-between items-center mb-2">
           <span
             className="font-sans text-[10px] uppercase tracking-label"
-            style={{ color: "var(--text-muted)" }}
+            style={{ color: "var(--muted)" }}
           >
             {t('overallProgress')}
           </span>
-          <span className="font-sans text-xs text-gold-light" dir="ltr">
+          <span
+            className="font-sans text-xs"
+            style={{ color: 'var(--gold-light)' }}
+            dir="ltr"
+          >
             {progress}%
           </span>
         </div>
         <div className="w-full relative" style={{ height: "1px", background: "var(--gold-faint)" }}>
           <div
-            className="absolute top-0 bg-gold transition-all duration-500 ease-out"
+            className="absolute top-0 transition-all duration-500 ease-out progress-bar-animated"
             style={{ width: `${progress}%`, height: "1px", insetInlineStart: 0 }}
           />
         </div>
@@ -213,14 +230,21 @@ export default function ProcessingPage() {
       <div className="mt-brand-2xl">
         {overallStatus === "complete" && (
           <div className="text-center">
-            <p className="font-serif text-[28px] font-light text-ivory">
+            <p
+              className="font-serif text-[28px] font-light"
+              style={{ color: 'var(--text-primary)' }}
+            >
               {t('complete')}
             </p>
             <div className="mt-brand-lg">
               <Link
                 href={`/results/${jobId}`}
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-logo text-noir bg-gold py-3 px-8 active:scale-[0.98] transition-transform duration-75"
-                style={{ border: "1px solid var(--color-gold)" }}
+                className="btn-glow inline-block font-sans text-[11px] font-normal uppercase tracking-logo py-3 px-8"
+                style={{
+                  background: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)',
+                  border: '1px solid var(--btn-primary-bg)',
+                }}
               >
                 {t('ctaResults')}
               </Link>
@@ -230,13 +254,13 @@ export default function ProcessingPage() {
 
         {overallStatus === "failed" && (
           <div className="text-center">
-            <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
+            <p className="font-serif text-[22px]" style={{ color: "var(--error)" }}>
               {t('errorState')}
             </p>
             {status?.error_message && (
               <p
                 className="mt-brand-sm font-sans text-xs font-light max-w-xl mx-auto"
-                style={{ color: "var(--text-muted-light)" }}
+                style={{ color: "var(--muted-light)" }}
               >
                 {status.error_message}
               </p>
@@ -244,8 +268,8 @@ export default function ProcessingPage() {
             <div className="mt-brand-lg">
               <Link
                 href="/job"
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
-                style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
+                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200"
+                style={{ border: "1px solid var(--border-default)", color: "var(--muted-light)" }}
               >
                 {tCommon('tryAgain')}
               </Link>
@@ -255,14 +279,14 @@ export default function ProcessingPage() {
 
         {error && overallStatus === undefined && (
           <div className="text-center">
-            <p className="font-sans text-xs font-light" style={{ color: "#C97E7E" }}>
+            <p className="font-sans text-xs font-light" style={{ color: "var(--error)" }}>
               {error}
             </p>
             <div className="mt-brand-lg">
               <Link
                 href="/job"
-                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
-                style={{ border: "1px solid var(--gold-dim)", color: "var(--text-muted-light)" }}
+                className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200"
+                style={{ border: "1px solid var(--border-default)", color: "var(--muted-light)" }}
               >
                 {tCommon('tryAgain')}
               </Link>

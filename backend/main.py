@@ -23,6 +23,7 @@ from backend.routes import (
     results_router,
     questions_router,
     report_router,
+    account_router,
 )
 
 app = FastAPI(title="Tarsheeh.cv API", version="0.2.0")
@@ -56,3 +57,4 @@ app.include_router(status_router)
 app.include_router(results_router)
 app.include_router(questions_router)
 app.include_router(report_router)
+app.include_router(account_router)

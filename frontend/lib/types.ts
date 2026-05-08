@@ -7,6 +7,7 @@ export interface JobRequest {
   title: string;
   description: string;
   locale?: Locale;
+  user_id?: string | null;
 }
 
 export interface JobResponse {
@@ -56,4 +57,26 @@ export interface CandidateDetail {
   score: number;
   rank: number;
   summary: string;
+}
+
+export interface ParsedProfile {
+  skills?: string[];
+  [key: string]: unknown;
+}
+
+export interface JobResultSummary {
+  status: string | null;
+  generated_pdf_url: string | null;
+}
+
+export interface UserJobItem {
+  job_id: string;
+  title: string;
+  created_at: string;
+  parsed_profile: ParsedProfile | null;
+  job_results?: JobResultSummary[] | null;
+}
+
+export interface UserJobsResponse {
+  jobs: UserJobItem[];
 }

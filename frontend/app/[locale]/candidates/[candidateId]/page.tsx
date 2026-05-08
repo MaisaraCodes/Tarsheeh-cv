@@ -28,8 +28,6 @@ export default function CandidateDetailPage() {
 
     let cancelled = false;
 
-    // Fetch independently so a flaky /questions response doesn't hide a
-    // candidate that already loaded successfully.
     getCandidate(candidateId, jobId)
       .then((candidateRes) => {
         if (cancelled) return;
@@ -37,9 +35,7 @@ export default function CandidateDetailPage() {
       })
       .catch((err) => {
         if (cancelled) return;
-        setError(
-          err instanceof Error ? err.message : tErr('loadCandidate'),
-        );
+        setError(err instanceof Error ? err.message : tErr('loadCandidate'));
       });
 
     getQuestions(candidateId)
@@ -48,14 +44,11 @@ export default function CandidateDetailPage() {
         setQuestions(questionsRes.questions);
       })
       .catch(() => {
-        // Swallow questions failure — the candidate panel can still render.
         if (cancelled) return;
         setQuestions([]);
       });
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [jobId, candidateId, tErr]);
 
   const isLoading = candidate === null && questions === null && error === null;
@@ -67,7 +60,10 @@ export default function CandidateDetailPage() {
       {/* Back link */}
       <Link
         href={backHref}
-        className="inline-block font-sans text-xs uppercase tracking-label text-muted hover:text-ivory transition-colors mb-brand-lg"
+        className="link-underline inline-block font-sans text-xs uppercase tracking-label transition-colors mb-brand-lg"
+        style={{ color: 'var(--muted)' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--muted)'; }}
       >
         {backArrow} {t('back')}
       </Link>
@@ -75,24 +71,28 @@ export default function CandidateDetailPage() {
       {/* Section header */}
       <div className="flex items-baseline gap-4 sm:gap-6 mb-8 sm:mb-12">
         <span
-          className="font-serif text-[13px] font-light text-gold tracking-logo flex-shrink-0"
+          className="font-serif text-[13px] font-light tracking-logo flex-shrink-0"
+          style={{ color: 'var(--gold-text)' }}
           dir="ltr"
         >
           {t('num')}
         </span>
-        <h1 className="font-serif text-[22px] sm:text-[28px] font-light text-ivory tracking-heading min-w-0 break-words">
+        <h1
+          className="font-serif text-[22px] sm:text-[28px] font-light tracking-heading min-w-0 break-words"
+          style={{ color: 'var(--text-primary)' }}
+        >
           {candidate?.name ?? t('loading')}
         </h1>
-        <div
-          className="flex-1 h-px"
-          style={{ background: "var(--gold-dim)" }}
-        />
+        <div className="divider-shimmer flex-1 h-px" style={{ background: "var(--gold-dim)" }} />
       </div>
 
       {/* Loading state */}
       {isLoading && (
         <div className="flex items-center justify-center py-16">
-          <span className="font-serif text-[18px] font-light text-muted-light">
+          <span
+            className="font-serif text-[18px] font-light"
+            style={{ color: 'var(--muted-light)' }}
+          >
             {t('loadingFull')}
           </span>
         </div>
@@ -101,17 +101,14 @@ export default function CandidateDetailPage() {
       {/* Error state */}
       {error !== null && (
         <div className="text-center py-16">
-          <p className="font-serif text-[22px]" style={{ color: "#C97E7E" }}>
+          <p className="font-serif text-[22px]" style={{ color: "var(--error)" }}>
             {t('errorState')}
           </p>
           <div className="mt-brand-lg">
             <Link
               href={backHref}
-              className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200 hover:text-ivory"
-              style={{
-                border: "1px solid var(--gold-dim)",
-                color: "var(--color-muted-light)",
-              }}
+              className="inline-block font-sans text-[11px] font-normal uppercase tracking-label py-3 px-8 transition-colors duration-200"
+              style={{ border: "1px solid var(--border-default)", color: "var(--muted-light)" }}
             >
               {t('back')}
             </Link>
@@ -126,11 +123,15 @@ export default function CandidateDetailPage() {
           <div className="mt-brand-lg flex flex-col sm:flex-row items-start sm:justify-between gap-6">
             {/* Rank */}
             <div className="flex-shrink-0">
-              <p className="font-sans text-[10px] uppercase tracking-label text-muted">
+              <p
+                className="font-sans text-[10px] uppercase tracking-label"
+                style={{ color: 'var(--muted)' }}
+              >
                 {t('rankLabel')}
               </p>
               <p
-                className="font-serif text-[28px] font-light text-gold-light leading-none mt-2"
+                className="score-display font-serif text-[28px] font-light leading-none mt-2"
+                style={{ color: 'var(--gold-light)' }}
                 dir="ltr"
               >
                 {String(candidate.rank).padStart(2, "0")}
@@ -139,18 +140,25 @@ export default function CandidateDetailPage() {
 
             {/* Summary */}
             <div className="flex-1 max-w-prose">
-              <p className="font-serif text-[18px] font-light text-ivory leading-relaxed">
+              <p
+                className="font-serif text-[18px] font-light leading-relaxed"
+                style={{ color: 'var(--text-primary)' }}
+              >
                 {candidate.summary}
               </p>
             </div>
 
             {/* Score */}
             <div className="flex-shrink-0 text-end">
-              <p className="font-sans text-[10px] uppercase tracking-label text-muted">
+              <p
+                className="font-sans text-[10px] uppercase tracking-label"
+                style={{ color: 'var(--muted)' }}
+              >
                 {t('scoreLabel')}
               </p>
               <p
-                className="font-serif text-[42px] font-light text-gold-light leading-none mt-2"
+                className="score-display font-serif text-[42px] font-light leading-none mt-2"
+                style={{ color: 'var(--gold-light)' }}
                 dir="ltr"
               >
                 {candidate.score}
@@ -164,17 +172,23 @@ export default function CandidateDetailPage() {
             style={{ height: "1px", background: "var(--gold-faint)" }}
           >
             <div
-              className="absolute top-0 bg-gold"
+              className="absolute top-0 progress-bar-animated"
               style={{ width: `${candidate.score}%`, height: "1px", insetInlineStart: 0 }}
             />
           </div>
 
           {/* Interview Questions section */}
           <div className="mt-brand-2xl">
-            <h2 className="font-serif text-[22px] font-light text-ivory">
+            <h2
+              className="font-serif text-[22px] font-light"
+              style={{ color: 'var(--text-primary)' }}
+            >
               {t('interviewQuestionsTitle')}
             </h2>
-            <p className="font-sans text-xs text-muted uppercase tracking-label mt-2">
+            <p
+              className="font-sans text-xs uppercase tracking-label mt-2"
+              style={{ color: 'var(--muted)' }}
+            >
               {t('interviewTagline')}
             </p>
 
@@ -183,16 +197,23 @@ export default function CandidateDetailPage() {
               {questions.map((question, index) => (
                 <div
                   key={index}
-                  className="bg-noir-3 p-5 mb-2 flex items-start gap-4 animate-fade-up"
+                  className="question-card p-5 mb-2 flex items-start gap-4 animate-fade-up"
                   style={{
-                    border: "1px solid var(--gold-dim)",
+                    background: 'var(--surface-2)',
+                    border: "1px solid var(--border-default)",
                     animationDelay: `${index * 100}ms`,
                   }}
                 >
-                  <span className="font-serif text-gold-light text-[14px] flex-shrink-0">
+                  <span
+                    className="font-serif text-[14px] flex-shrink-0"
+                    style={{ color: 'var(--gold-light)' }}
+                  >
                     {t('questionPrefix')}{index + 1}
                   </span>
-                  <p className="font-sans text-sm font-light text-ivory leading-relaxed">
+                  <p
+                    className="font-sans text-sm font-light leading-relaxed"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
                     {question}
                   </p>
                 </div>
