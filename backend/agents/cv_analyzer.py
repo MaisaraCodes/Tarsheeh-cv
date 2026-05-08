@@ -67,13 +67,35 @@ Your task is to evaluate a Candidate's CV against a Job Profile.
    - HR Best Practices (RAG): {rag_context}
 
 3. Requirements:
-   - Assign an accurate Score from 0 to 100.
-   - Write a detailed Reasoning that explains the candidate's strengths and weaknesses based on the provided RAG Context.
+   - Assign an accurate Score from 0 to 100 using the SCORING RUBRIC below.
+   - Write a detailed, evidence-based Reasoning of at least 4-5 sentences explaining your scoring decision.
+     * Cite specific evidence from the CV: mention concrete projects, internships, technologies, academic background, or experiences that support your evaluation.
+     * Reference the relevant hiring framework principles from the retrieved knowledge base passages when justifying scores.
+     * Identify both matching skills (with evidence) and gaps (with specificity about what's missing).
+     * Avoid generic praise like 'strong candidate' or 'good fit' without justification. Every claim must be tied to evidence in the CV.
    - Extract the Matching Skills and Missing Skills.
    - Extract the following contact information from the CV if present. Set to null if not found:
      - email: the candidate's email address
      - phone: the candidate's phone number including country code
      - linkedin: the candidate's LinkedIn profile URL
+
+SCORING RUBRIC — Use the full 0-100 range. Differentiate candidates within the same tier by applying these modifiers:
+
+Base score by tier:
+- 90-100: All required hard skills + relevant degree + relevant experience
+- 70-89: All required hard skills + relevant degree, OR most skills + strong relevant experience
+- 50-69: Some required hard skills + adjacent degree or self-taught background
+- 30-49: Soft skills only, no required hard skills, no relevant degree
+- 0-29: No relevant skills, no relevant degree, no relevant experience
+
+Within each tier, ADJUST by:
+- +3 to +5 for direct internship in this exact domain
+- +2 to +4 for academic projects matching the role
+- +1 to +3 for a high GPA from a strong program
+- -2 to -5 for missing one critical skill within their tier
+- -3 to -7 for outdated or irrelevant primary experience
+
+Two candidates should rarely receive the exact same score unless they have identical CVs. Use the full granularity available.
 
 Localization directive: {lang_directive}
 

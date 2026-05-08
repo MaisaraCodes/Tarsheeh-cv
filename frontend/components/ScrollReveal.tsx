@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 /**
  * ScrollReveal — uses IntersectionObserver to reveal `.reveal` elements
@@ -9,6 +10,8 @@ import { useEffect } from 'react';
  * Zero-architecture impact: just drop this component once in the layout.
  */
 export default function ScrollReveal() {
+  const pathname = usePathname();
+
   useEffect(() => {
     // ── Scroll-triggered reveal ──
     const observer = new IntersectionObserver(
@@ -23,9 +26,18 @@ export default function ScrollReveal() {
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
 
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    // Give DOM time to update for the new route
+    const timeout = setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    }, 100);
 
-    // ── Sticky header scroll shadow ──
+    return () => {
+      clearTimeout(timeout);
+      observer.disconnect();
+    };
+  }, [pathname]);
+
+  useEffect(() => {
     const header = document.querySelector('.header-sticky');
     function onScroll() {
       if (!header) return;
@@ -39,7 +51,6 @@ export default function ScrollReveal() {
     onScroll(); // initial
 
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', onScroll);
     };
   }, []);

@@ -27,6 +27,7 @@ from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
+    KeepTogether,
     PageBreak,
     Paragraph,
     SimpleDocTemplate,
@@ -178,7 +179,7 @@ _LABELS = {
 
 
 def shape_arabic(text: str) -> str:
-    """Reshape + bidi an Arabic-or-mixed string for visual rendering in PDF."""
+    """Reshape + bidi an Arabic-or-mixed single-line string for PDF rendering."""
     if not text:
         return text
     try:
@@ -188,10 +189,37 @@ def shape_arabic(text: str) -> str:
         return text
 
 
+def shape_arabic_paragraph(text: str, max_chars_per_line: int = 80) -> str:
+    """Reshape and bidi a multi-line Arabic paragraph for ReportLab.
+
+    Applies bidi per-line (after manual wrapping) so ReportLab receives
+    visually-correct lines in the right visual order.  Lines are joined
+    with <br/> for a single Paragraph flowable.
+    """
+    if not text:
+        return text
+    import textwrap
+    try:
+        reshaped = arabic_reshaper.reshape(text)
+        lines = textwrap.wrap(reshaped, width=max_chars_per_line, break_long_words=False)
+        if not lines:
+            return get_display(reshaped)
+        return "<br/>".join(get_display(line) for line in lines)
+    except Exception:
+        return text
+
+
 def _t(text: str, locale: str) -> str:
-    """Pass strings through the shaper only when locale is Arabic."""
+    """Shape single-line text when locale is Arabic."""
     if locale == "ar":
         return shape_arabic(text)
+    return text
+
+
+def _tp(text: str, locale: str) -> str:
+    """Shape multi-line paragraph text when locale is Arabic."""
+    if locale == "ar":
+        return shape_arabic_paragraph(text)
     return text
 
 
@@ -291,13 +319,13 @@ def generate_report(
     # ----- Executive Summary (Optional LLM content) -----
     if llm_report:
         story.append(Paragraph(_t(L["exec_summary"], locale), s["h2"]))
-        story.append(Paragraph(_t(llm_report.executive_summary, locale), s["body"]))
-        
+        story.append(Paragraph(_tp(llm_report.executive_summary, locale), s["body"]))
+
         story.append(Paragraph(_t(L["recommendation"], locale), s["h3"]))
-        story.append(Paragraph(_t(llm_report.top_candidates_recommendation, locale), s["body"]))
-        
+        story.append(Paragraph(_tp(llm_report.top_candidates_recommendation, locale), s["body"]))
+
         story.append(Paragraph(_t(L["insights"], locale), s["h3"]))
-        story.append(Paragraph(_t(llm_report.overall_hiring_insight, locale), s["body"]))
+        story.append(Paragraph(_tp(llm_report.overall_hiring_insight, locale), s["body"]))
         story.append(Spacer(1, 0.1 * inch))
 
     # ----- Role profile -----
@@ -350,7 +378,8 @@ def generate_report(
         ]))
         story.append(t)
 
-    # ----- Ranked candidates -----
+    # ----- Ranked candidates (always start on a fresh page) -----
+    story.append(PageBreak())
     story.append(Paragraph(_t(L["ranked_candidates"], locale), s["h2"]))
     if not ranked_candidates:
         story.append(Paragraph(_t(L["no_candidates"], locale), s["body"]))
@@ -370,7 +399,6 @@ def generate_report(
             score_p = Paragraph(score_str, s["score"])
 
             if is_ar:
-                # Visually: [score][name][rank] with rank on the right margin.
                 cells = [[score_p, name_p, rank_p]]
                 widths = [1.0 * inch, 4.3 * inch, 0.7 * inch]
                 score_idx, name_idx, rank_idx = 0, 1, 2
@@ -387,10 +415,13 @@ def generate_report(
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
                 ("TOPPADDING", (0, 0), (-1, -1), 6),
             ]))
-            story.append(header)
 
             details = candidate_details.get(cid) or {}
             scorecard = details.get("scorecard") or {}
+
+            # Build the full candidate block, then wrap in KeepTogether so it
+            # never splits across pages.
+            block: List[Any] = [header]
 
             contact_parts = []
             if scorecard.get("email"):
@@ -400,9 +431,9 @@ def generate_report(
             if scorecard.get("linkedin"):
                 contact_parts.append(scorecard["linkedin"])
             if contact_parts:
-                story.append(Paragraph("  ·  ".join(contact_parts), s["contact"]))
+                block.append(Paragraph("  ·  ".join(contact_parts), s["contact"]))
 
-            story.append(Paragraph(_t(summary, locale), s["body"]))
+            block.append(Paragraph(_tp(summary, locale), s["body"]))
 
             if scorecard:
                 matching = _format_skills(scorecard.get("matching_skills"), locale)
@@ -411,13 +442,16 @@ def generate_report(
                     f"<b>{_t(L['matching_skills'], locale)}:</b> {_t(matching, locale)}<br/>"
                     f"<b>{_t(L['gaps'], locale)}:</b> {_t(missing, locale)}"
                 )
-                story.append(Paragraph(line, s["body"]))
-            story.append(Spacer(1, 0.05 * inch))
-            story.append(Table(
+                block.append(Paragraph(line, s["body"]))
+
+            block.append(Spacer(1, 0.05 * inch))
+            block.append(Table(
                 [[""]], colWidths=[6.0 * inch],
                 style=TableStyle([("LINEABOVE", (0, 0), (-1, 0), 0.25, RULE)]),
             ))
-            story.append(Spacer(1, 0.08 * inch))
+            block.append(Spacer(1, 0.08 * inch))
+
+            story.append(KeepTogether(block))
 
     # ----- Job description appendix -----
     desc = (job.get("description") or "").strip()
