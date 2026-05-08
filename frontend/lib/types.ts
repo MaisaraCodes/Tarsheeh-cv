@@ -73,6 +73,7 @@ export interface UserJobItem {
   job_id: string;
   title: string;
   created_at: string;
+  status: string;
   parsed_profile: ParsedProfile | null;
   job_results?: JobResultSummary[] | null;
 }
