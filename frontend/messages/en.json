@@ -145,6 +145,9 @@
     "deleteConfirmPlaceholder": "Type DELETE to confirm",
     "deleteConfirmButton": "Delete Role",
     "cancelDelete": "Cancel",
+    "errJobIncomplete": "This job did not complete.",
+    "errDeleteRole": "Failed to delete role.",
+    "errRenameRole": "Failed to rename role.",
     "actions": {
       "edit": "Edit",
       "rename": "Rename",
