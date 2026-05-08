@@ -59,6 +59,10 @@ path = "scripts/post-merge.sh"
 timeoutMs = 180000
 
 [deployment]
-run = ["sh", "-c", "cd backend && uvicorn main:app --host 0.0.0.0 --port 8080"]
-deploymentTarget = "autoscale"
+run = ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port 8080"]
+deploymentTarget = "gce"
 build = ["sh", "-c", "pip install -r backend/requirements.txt"]
+
+[userenv]
+
+[userenv.shared]
