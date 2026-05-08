@@ -144,7 +144,15 @@
     "deleteConfirmBody": "هذا الإجراء سيحذف الدور وجميع البيانات المرتبطة به نهائيًا. لا يمكن التراجع عنه.",
     "deleteConfirmPlaceholder": "اكتب DELETE للتأكيد",
     "deleteConfirmButton": "حذف الدور",
-    "cancelDelete": "إلغاء"
+    "cancelDelete": "إلغاء",
+    "actions": {
+      "edit": "تعديل",
+      "rename": "إعادة تسمية",
+      "delete": "حذف",
+      "deleteConfirm": "هل تريد حذف هذه الوظيفة؟ لا يمكن التراجع عن هذا الإجراء.",
+      "deleteCancel": "إلغاء",
+      "deleteConfirmButton": "حذف"
+    }
   },
   "account": {
     "title": "الحساب",

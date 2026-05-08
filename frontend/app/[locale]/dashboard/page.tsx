@@ -7,7 +7,6 @@ import { Link, useRouter } from '@/i18n/navigation';
 import { MoreHorizontal, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuthGuard } from '@/lib/useAuthGuard';
-import { deleteJob, renameJob } from '@/lib/api';
 import type { UserJobItem } from '@/lib/types';
 
 type FilterValue = 'all' | 'processing' | 'complete' | 'failed';
@@ -21,12 +20,6 @@ function relativeTime(dateStr: string, locale: string): string {
   if (diff < 2592000) return rtf.format(-Math.floor(diff / 86400), 'day');
   if (diff < 31536000) return rtf.format(-Math.floor(diff / 2592000), 'month');
   return rtf.format(-Math.floor(diff / 31536000), 'year');
-}
-
-function normalizeStatus(status: string): FilterValue {
-  if (status === 'completed') return 'complete';
-  if (status === 'error' || status === 'failed') return 'failed';
-  return 'processing';
 }
 
 // ── Skeleton card ─────────────────────────────────────────────────────────────
@@ -97,20 +90,27 @@ function CardMenu({
   onEdit,
   onRename,
   onDelete,
+  onOpenChange,
   t,
 }: {
   onEdit: () => void;
   onRename: () => void;
   onDelete: () => void;
+  onOpenChange: (open: boolean) => void;
   t: ReturnType<typeof useTranslations>;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  function toggle(next: boolean) {
+    setOpen(next);
+    onOpenChange(next);
+  }
+
   useEffect(() => {
     if (!open) return;
     function handlePointerDown(e: PointerEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) toggle(false);
     }
     document.addEventListener('pointerdown', handlePointerDown);
     return () => document.removeEventListener('pointerdown', handlePointerDown);
@@ -121,7 +121,7 @@ function CardMenu({
       <button
         type="button"
         aria-label="Menu"
-        onClick={() => setOpen(p => !p)}
+        onClick={() => toggle(!open)}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -150,13 +150,13 @@ function CardMenu({
             minWidth: 140,
             background: 'var(--surface)',
             border: '1px solid var(--gold-dim)',
-            zIndex: 40,
+            zIndex: 9999,
           }}
           className="dropdown-enter"
         >
-          <DropdownMenuItem onClick={() => { setOpen(false); onEdit(); }}>{t('menuEdit')}</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => { setOpen(false); onRename(); }}>{t('menuRename')}</DropdownMenuItem>
-          <DropdownMenuItem danger onClick={() => { setOpen(false); onDelete(); }}>{t('menuDelete')}</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => { toggle(false); onEdit(); }}>{t('menuEdit')}</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => { toggle(false); onRename(); }}>{t('menuRename')}</DropdownMenuItem>
+          <DropdownMenuItem danger onClick={() => { toggle(false); onDelete(); }}>{t('menuDelete')}</DropdownMenuItem>
         </div>
       )}
     </div>
@@ -165,26 +165,20 @@ function CardMenu({
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 
-function StatusBadge({ status, t }: { status: string; t: ReturnType<typeof useTranslations> }) {
-  const norm = normalizeStatus(status);
-
-  let label: string;
+function StatusBadge({ tone, label }: { tone: FilterValue; label: string }) {
   let color: string;
   let borderColor: string;
   let bg: string;
 
-  if (norm === 'complete') {
-    label = t('status.complete');
+  if (tone === 'complete') {
     color = '#5A9E6F';
     borderColor = '#5A9E6F';
     bg = 'transparent';
-  } else if (norm === 'failed') {
-    label = t('status.failed');
+  } else if (tone === 'failed') {
     color = 'var(--error)';
     borderColor = 'var(--error)';
     bg = 'transparent';
   } else {
-    label = t('status.processing');
     color = 'var(--gold-text)';
     borderColor = 'var(--gold-dim)';
     bg = 'var(--gold-faint)';
@@ -218,14 +212,22 @@ function JobCard({
   job,
   locale,
   t,
+  tone,
+  statusBadgeLabel,
   onRequestDelete,
   onRenameSuccess,
+  onMenuOpenChange,
+  onError,
 }: {
   job: UserJobItem;
   locale: string;
   t: ReturnType<typeof useTranslations>;
+  tone: FilterValue;
+  statusBadgeLabel: string;
   onRequestDelete: (id: string) => void;
   onRenameSuccess: (id: string, title: string) => void;
+  onMenuOpenChange: (open: boolean) => void;
+  onError: (msg: string) => void;
 }) {
   const router = useRouter();
   const [isRenaming, setIsRenaming] = useState(false);
@@ -239,7 +241,13 @@ function JobCard({
 
   function handleCardClick() {
     if (isRenaming) return;
-    router.push(`/results/${job.job_id}`);
+    if (tone === 'complete') {
+      router.push(`/results/${job.job_id}`);
+    } else if (tone === 'processing') {
+      router.push(`/processing/${job.job_id}`);
+    } else {
+      onError('This job did not complete.');
+    }
   }
 
   function handleStartRename() {
@@ -248,18 +256,20 @@ function JobCard({
     setTimeout(() => renameInputRef.current?.focus(), 0);
   }
 
-  async function handleSaveRename(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSaveRename(e?: React.FormEvent) {
+    e?.preventDefault();
     const trimmed = renameValue.trim();
     if (!trimmed || trimmed === job.title) { setIsRenaming(false); return; }
     setRenameSaving(true);
-    try {
-      await renameJob(job.job_id, trimmed);
+    const { error } = await supabase.from('jobs').update({ title: trimmed }).eq('id', job.job_id);
+    if (error) {
+      setRenameValue(job.title);
+      onError('Failed to rename role.');
+    } else {
       onRenameSuccess(job.job_id, trimmed);
-    } finally {
-      setRenameSaving(false);
-      setIsRenaming(false);
     }
+    setRenameSaving(false);
+    setIsRenaming(false);
   }
 
   return (
@@ -270,6 +280,7 @@ function JobCard({
       onKeyDown={e => { if (e.key === 'Enter' && !isRenaming) handleCardClick(); }}
       className="card-hover"
       style={{
+        position: 'relative',
         background: 'var(--surface)',
         border: '1px solid var(--border-default)',
         borderRadius: 6,
@@ -297,6 +308,7 @@ function JobCard({
                 className="auth-input"
                 value={renameValue}
                 onChange={e => setRenameValue(e.target.value)}
+                onBlur={() => void handleSaveRename()}
                 disabled={renameSaving}
                 style={{ fontSize: 15, padding: '4px 8px' }}
               />
@@ -360,12 +372,13 @@ function JobCard({
 
         {!isRenaming && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-            <StatusBadge status={job.status} t={t} />
+            <StatusBadge tone={tone} label={statusBadgeLabel} />
             <CardMenu
               t={t}
               onEdit={() => router.push(`/job?edit=${job.job_id}`)}
               onRename={handleStartRename}
               onDelete={() => onRequestDelete(job.job_id)}
+              onOpenChange={onMenuOpenChange}
             />
           </div>
         )}
@@ -590,6 +603,27 @@ export default function DashboardPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterValue>('all');
   const [deletingJobId, setDeletingJobId] = useState<string | null>(null);
+  const [openMenuJobId, setOpenMenuJobId] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  function statusLabel(job: UserJobItem): { label: string; tone: FilterValue } {
+    const result = Array.isArray(job.job_results) ? job.job_results[0] : job.job_results;
+    if (result?.status === 'complete' && result?.generated_pdf_url) {
+      return { label: t('status.complete'), tone: 'complete' };
+    }
+    if (!result || result.status === null) {
+      const ageMs = Date.now() - new Date(job.created_at).getTime();
+      if (ageMs > 60 * 60 * 1000) {
+        return { label: t('status.failed'), tone: 'failed' };
+      }
+    }
+    return { label: t('status.processing'), tone: 'processing' };
+  }
 
   useEffect(() => {
     let active = true;
@@ -603,7 +637,16 @@ export default function DashboardPage() {
 
       const { data, error } = await supabase
         .from('jobs')
-        .select('id, title, status, created_at, parsed_profile')
+        .select(`
+          id,
+          title,
+          created_at,
+          parsed_profile,
+          job_results (
+            status,
+            generated_pdf_url
+          )
+        `)
         .eq('user_id', authUser.id)
         .order('created_at', { ascending: false });
 
@@ -615,9 +658,9 @@ export default function DashboardPage() {
         const rows = (data ?? []).map(row => ({
           job_id: row.id as string,
           title: row.title as string,
-          status: row.status as string,
           created_at: row.created_at as string,
           parsed_profile: row.parsed_profile as UserJobItem['parsed_profile'],
+          job_results: row.job_results as UserJobItem['job_results'],
         }));
         setJobs(rows);
       }
@@ -633,26 +676,35 @@ export default function DashboardPage() {
     const id = deletingJobId;
     setDeletingJobId(null);
     setJobs(prev => prev.filter(j => j.job_id !== id));
-    try {
-      await deleteJob(id);
-    } catch {
+    const { error } = await supabase.from('jobs').delete().eq('id', id);
+    if (error) {
       // Rollback: re-fetch to restore the deleted item
       if (user) {
         const { data } = await supabase
           .from('jobs')
-          .select('id, title, status, created_at, parsed_profile')
+          .select(`
+            id,
+            title,
+            created_at,
+            parsed_profile,
+            job_results (
+              status,
+              generated_pdf_url
+            )
+          `)
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
         if (data) {
           setJobs(data.map(row => ({
             job_id: row.id as string,
             title: row.title as string,
-            status: row.status as string,
             created_at: row.created_at as string,
             parsed_profile: row.parsed_profile as UserJobItem['parsed_profile'],
+            job_results: row.job_results as UserJobItem['job_results'],
           })));
         }
       }
+      showToast('Failed to delete role.');
     }
   }
 
@@ -663,7 +715,7 @@ export default function DashboardPage() {
   const filteredJobs = jobs.filter(job => {
     if (search && !job.title.toLowerCase().includes(search.toLowerCase())) return false;
     if (filter === 'all') return true;
-    return normalizeStatus(job.status) === filter;
+    return statusLabel(job).tone === filter;
   });
 
   // Auth loading (user=undefined) or jobs loading
@@ -841,14 +893,22 @@ export default function DashboardPage() {
               <div
                 key={job.job_id}
                 className="animate-fade-up"
-                style={{ animationDelay: `${i * 60}ms` }}
+                style={{
+                  animationDelay: `${i * 60}ms`,
+                  position: 'relative',
+                  zIndex: openMenuJobId === job.job_id ? 10 : undefined,
+                }}
               >
                 <JobCard
                   job={job}
                   locale={locale}
                   t={t}
+                  tone={statusLabel(job).tone}
+                  statusBadgeLabel={statusLabel(job).label}
                   onRequestDelete={setDeletingJobId}
                   onRenameSuccess={handleRenameSuccess}
+                  onMenuOpenChange={(open) => setOpenMenuJobId(open ? job.job_id : null)}
+                  onError={showToast}
                 />
               </div>
             ))}
@@ -864,6 +924,29 @@ export default function DashboardPage() {
           onConfirm={handleConfirmDelete}
           onCancel={() => setDeletingJobId(null)}
         />
+      )}
+
+      {/* Error toast */}
+      {toast && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '1.5rem',
+            insetInlineEnd: '1.5rem',
+            zIndex: 200,
+            background: 'var(--surface)',
+            border: '1px solid var(--error)',
+            padding: '10px 16px',
+            fontFamily: 'var(--font-sans)',
+            fontSize: 12,
+            fontWeight: 400,
+            color: 'var(--error)',
+            letterSpacing: '0.04em',
+            pointerEvents: 'none',
+          }}
+        >
+          {toast}
+        </div>
       )}
     </div>
   );

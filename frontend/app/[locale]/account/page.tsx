@@ -340,13 +340,17 @@ function DangerZoneSection() {
     if (confirm !== 'DELETE') return;
     setLoading(true);
     setError('');
-    try {
-      await supabase.auth.signOut();
-      router.push('/');
-    } catch {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setLoading(false); setError(t('errDelete')); return; }
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? '/api';
+    const res = await fetch(`${apiUrl}/account?user_id=${encodeURIComponent(user.id)}`, { method: 'DELETE' });
+    if (!res.ok) {
       setLoading(false);
       setError(t('errDelete'));
+      return;
     }
+    await supabase.auth.signOut();
+    router.push('/');
   }
 
   return (

@@ -19,6 +19,7 @@ import {
   mockDeleteJob,
   mockRenameJob,
 } from "./mocks";
+import { supabase } from "@/lib/supabase";
 
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
@@ -33,10 +34,19 @@ async function handleResponse<T>(res: Response): Promise<T> {
 
 export async function postJob(body: JobRequest): Promise<JobResponse> {
   if (USE_MOCK) return mockPostJob(body);
+
+  let userId: string | null = null;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id ?? null;
+  } catch {
+    userId = null;
+  }
+
   const res = await fetch(`${API_URL}/job`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ ...body, user_id: userId }),
   });
   return handleResponse<JobResponse>(res);
 }

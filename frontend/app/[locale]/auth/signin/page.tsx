@@ -90,7 +90,10 @@ export default function SignInPage() {
       ? { email: identifier.trim(), password }
       : { phone: identifier.trim(), password };
 
-    const { error } = await supabase.auth.signInWithPassword(credentials);
+    const { error } = await supabase.auth.signInWithPassword({
+      ...credentials,
+      options: { persistSession: rememberMe },
+    });
     setLoading(false);
 
     if (error) {
@@ -98,7 +101,6 @@ export default function SignInPage() {
       return;
     }
 
-    void rememberMe; // future: configure session persistence
     router.push('/dashboard');
   }
 

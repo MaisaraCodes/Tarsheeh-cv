@@ -70,6 +70,10 @@ Your task is to evaluate a Candidate's CV against a Job Profile.
    - Assign an accurate Score from 0 to 100.
    - Write a detailed Reasoning that explains the candidate's strengths and weaknesses based on the provided RAG Context.
    - Extract the Matching Skills and Missing Skills.
+   - Extract the following contact information from the CV if present. Set to null if not found:
+     - email: the candidate's email address
+     - phone: the candidate's phone number including country code
+     - linkedin: the candidate's LinkedIn profile URL
 
 Localization directive: {lang_directive}
 

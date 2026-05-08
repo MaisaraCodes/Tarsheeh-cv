@@ -144,7 +144,15 @@
     "deleteConfirmBody": "This will permanently remove the role and all associated data. This cannot be undone.",
     "deleteConfirmPlaceholder": "Type DELETE to confirm",
     "deleteConfirmButton": "Delete Role",
-    "cancelDelete": "Cancel"
+    "cancelDelete": "Cancel",
+    "actions": {
+      "edit": "Edit",
+      "rename": "Rename",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this role? This cannot be undone.",
+      "deleteCancel": "Cancel",
+      "deleteConfirmButton": "Delete"
+    }
   },
   "account": {
     "title": "Account",
