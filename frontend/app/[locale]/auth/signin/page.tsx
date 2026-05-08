@@ -92,7 +92,6 @@ export default function SignInPage() {
 
     const { error } = await supabase.auth.signInWithPassword({
       ...credentials,
-      options: { persistSession: rememberMe },
     });
     setLoading(false);
 
